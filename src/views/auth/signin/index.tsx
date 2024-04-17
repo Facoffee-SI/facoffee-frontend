@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from 'formik';
 import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
-import { FORGOT_PASSWORD, SIGNIN, SIGNUP } from '../../../constants/routes';
+import { FORGOT_PASSWORD, SIGNUP } from '../../../constants/routes';
 
 const onSubmitForm = () => {};
 
@@ -13,12 +13,12 @@ const onClickLink = () => {
 
 function SignIn() {
   return (
-    <div className="container-fluid d-flex flex-column vh-100 p-5">
+    <main className="container-fluid d-flex flex-fill p-5">
       <div
-        className="card d-flex flex-column justify-content-center align-items-center rounded vh-100 p-5"
+        className="card flex-fill justify-content-center align-items-center rounded p-5"
         style={{ backgroundColor: 'var(--clr-tertiary)' }}
       >
-        <div className="card d-flex flex-column align-items-center shadow-lg rounded bg-white vh-50 vw-25 p-5">
+        <div className="card align-items-center shadow-lg rounded bg-white p-5">
           <h3>Login</h3>
           <Formik
             initialValues={{ email: '', password: '' }}
@@ -40,6 +40,7 @@ function SignIn() {
                     name="email"
                     type="email"
                     label="Email"
+                    autoComplete="true"
                     placeholder="Email"
                   />
                 </div>
@@ -48,6 +49,7 @@ function SignIn() {
                     name="password"
                     type="password"
                     label="Password"
+                    autoComplete="current-password"
                     placeholder="Senha"
                   />
                 </div>
@@ -77,24 +79,13 @@ function SignIn() {
                       Faça seu cadastro
                     </Link>
                   </span>
-                  <Link
-                    onClick={onClickLink}
-                    style={{
-                      textDecoration: 'underline',
-                      color: 'black',
-                      textAlign: 'center',
-                    }}
-                    to={SIGNIN}
-                  >
-                    <span>Logar como Administrador</span>
-                  </Link>
                 </div>
               </Form>
             )}
           </Formik>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

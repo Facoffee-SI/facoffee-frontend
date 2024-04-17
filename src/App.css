@@ -2,9 +2,6 @@
 html,
 body,
 main {
-  height: 100vh;
-  width: 100vw;
-
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
 
@@ -17,6 +14,15 @@ main {
   --clr-error: #f82e2e;
 
   background-color: var(--clr-secondary);
+}
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 100vw;
 }
 
 * {

@@ -4,6 +4,6 @@ export const ADMIN_USERS = '/admin/users';
 export const ADD_PRODUCT = '/admin/add';
 export const EDIT_PRODUCT = '/admin/edit';
 export const SEARCH = '/search/:searchKey';
-export const SIGNIN = '/signin';
+export const SIGNIN = '/';
 export const SIGNUP = '/signup';
 export const FORGOT_PASSWORD = '/forgot_password';
