@@ -8,6 +8,7 @@ const AppRouter = () => (
    <Navigation />
     <Routes>
       <Route path={ROUTES.SIGNIN} element={<SignIn></SignIn>}></Route>
+      <Route path={ROUTES.SIGNUP} element={<SignIn></SignIn>}></Route>
       <Route path={ROUTES.FORGOT_PASSWORD} element={<SignIn></SignIn>}></Route>
     </Routes>
   </BrowserRouter>

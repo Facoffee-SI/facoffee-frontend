@@ -1,17 +1,15 @@
 import { Field, Form, Formik } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FORGOT_PASSWORD, SIGNUP } from '../../../constants/routes';
 
 const onSubmitForm = () => {};
 
-const onClickLink = () => {
-  // if (true) {
-  //   e.preventDefault();
-  // }
-};
+const SignIn = () => {
+  const navigate = useNavigate();
 
-function SignIn() {
+  const onSignUp = () => navigate(SIGNUP);
+
   return (
     <main className="container-fluid d-flex flex-fill p-5">
       <div
@@ -34,8 +32,8 @@ function SignIn() {
             onSubmit={onSubmitForm}
           >
             {() => (
-              <Form className="d-flex flex-column align-items-center w-100 p-1">
-                <div>
+              <Form className="d-flex flex-fill flex-column align-items-center p-1">
+                <div className="d-flex flex-column flex-fill">
                   <Field
                     name="email"
                     type="email"
@@ -43,8 +41,6 @@ function SignIn() {
                     autoComplete="true"
                     placeholder="Email"
                   />
-                </div>
-                <div>
                   <Field
                     name="password"
                     type="password"
@@ -53,17 +49,16 @@ function SignIn() {
                     placeholder="Senha"
                   />
                 </div>
-                <br />
                 <div className="d-flex flex-column">
                   <Link
-                    onClick={onClickLink}
+                    onClick={onSignUp}
                     style={{ textDecoration: 'underline', color: 'black' }}
                     to={FORGOT_PASSWORD}
                   >
                     <span>Esqueceu sua senha?</span>
                   </Link>
                   <button
-                    className="button bg-black text-white rounded"
+                    className="btn bg-black text-white rounded p-1"
                     type="submit"
                   >
                     Entrar
@@ -72,7 +67,7 @@ function SignIn() {
                   <span>
                     Não tem uma conta?
                     <Link
-                      onClick={onClickLink}
+                      onClick={onSignUp}
                       style={{ textDecoration: 'underline', color: 'black' }}
                       to={SIGNUP}
                     >
@@ -87,6 +82,6 @@ function SignIn() {
       </div>
     </main>
   );
-}
+};
 
 export default SignIn;
