@@ -11,12 +11,12 @@ const SignIn = () => {
   const onSignUp = () => navigate(SIGNUP);
 
   return (
-    <main className="container-fluid d-flex flex-fill p-5">
+    <main className="container-fluid d-flex flex-fill p-5 g-0">
       <div
-        className="card flex-fill justify-content-center align-items-center rounded p-5"
+        className="card flex-fill justify-content-center align-items-center rounded p-5 g-0"
         style={{ backgroundColor: 'var(--clr-tertiary)' }}
       >
-        <div className="card align-items-center shadow-lg rounded bg-white p-5">
+        <div className="card align-items-center shadow-lg rounded bg-white">
           <h3>Login</h3>
           <Formik
             initialValues={{ email: '', password: '' }}
@@ -32,8 +32,8 @@ const SignIn = () => {
             onSubmit={onSubmitForm}
           >
             {() => (
-              <Form className="d-flex flex-fill flex-column align-items-center p-1">
-                <div className="d-flex flex-column flex-fill">
+              <Form className="d-flex flex-fill flex-column align-items-center">
+                <div className="d-flex flex-column">
                   <Field
                     name="email"
                     type="email"
@@ -63,7 +63,6 @@ const SignIn = () => {
                   >
                     Entrar
                   </button>
-                  <br />
                   <span>
                     Não tem uma conta?
                     <Link
