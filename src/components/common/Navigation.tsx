@@ -34,7 +34,7 @@ const Navigation = () => {
         >
           <img
             className="img-fluid"
-            src="/public/images/facoffee-logo.png"
+            src="/images/facoffee-logo.png"
             alt="Facoffee logo"
             width="56"
             height="56"

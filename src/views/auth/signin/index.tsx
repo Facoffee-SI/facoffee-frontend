@@ -2,13 +2,40 @@ import { Field, Form, Formik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FORGOT_PASSWORD, SIGNUP } from '../../../constants/routes';
+import api from '../../../services/Api';
+import './signin.css';
+import CustomInput from '../../../components/formik/CustomInput';
 
-const onSubmitForm = () => {};
+const SignInSchema = Yup.object({
+  email: Yup.string()
+    .email('Email inválido')
+    .required('Obrigatório preencher o Email.'),
+  password: Yup.string()
+    .required('Obrigatório preencher a Senha.')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
+});
 
 const SignIn = () => {
   const navigate = useNavigate();
 
   const onSignUp = () => navigate(SIGNUP);
+
+  const onSubmitForm = (user: { email: string; password: string }) => {
+    fetchLogin(user);
+  };
+
+  const fetchLogin = async (user: { email: string; password: string }) => {
+    try {
+      const response = await api.post('/auth/user', {
+        email: user.email,
+        password: user.password,
+      });
+
+      console.log(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <main className="container-fluid d-flex flex-fill p-5 g-0">
@@ -16,23 +43,16 @@ const SignIn = () => {
         className="card flex-fill justify-content-center align-items-center rounded p-5 g-0"
         style={{ backgroundColor: 'var(--clr-tertiary)' }}
       >
-        <div className="card align-items-center shadow-lg rounded bg-white">
+        <div className="card justify-content-center align-items-center shadow-lg rounded bg-white w-50 h-50">
           <h3>Login</h3>
           <Formik
             initialValues={{ email: '', password: '' }}
             validateOnMount
-            validationSchema={Yup.object({
-              email: Yup.string()
-                .email('Email inválido')
-                .required('Obrigatório preencher o Email.'),
-              password: Yup.string()
-                .required('Obrigatório preencher a Senha.')
-                .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-            })}
+            validationSchema={SignInSchema}
             onSubmit={onSubmitForm}
           >
             {() => (
-              <Form className="d-flex flex-fill flex-column align-items-center">
+              <Form className="d-flex flex-fill flex-column justify-content-center align-items-center gap-5">
                 <div className="d-flex flex-column">
                   <Field
                     name="email"
@@ -40,13 +60,15 @@ const SignIn = () => {
                     label="Email"
                     autoComplete="true"
                     placeholder="Email"
+                    component={CustomInput}
                   />
                   <Field
                     name="password"
                     type="password"
-                    label="Password"
+                    label="Senha"
                     autoComplete="current-password"
                     placeholder="Senha"
+                    component={CustomInput}
                   />
                 </div>
                 <div className="d-flex flex-column">
