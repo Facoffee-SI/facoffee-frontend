@@ -11,7 +11,7 @@ main {
   --clr-quaternary: #c2b7ae;
   --clr-quinary: #f9f9f7;
   --clr-success: #157347;
-  --clr-error: #f82e2e;
+  --clr-error: #FF2424;
 
   background-color: var(--clr-secondary);
 }

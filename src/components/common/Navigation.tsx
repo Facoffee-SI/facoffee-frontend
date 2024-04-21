@@ -1,13 +1,15 @@
 import { Link } from 'react-router-dom';
-import { SIGNIN, SIGNUP } from '../../constants/routes';
+import {
+  ADMIN_USERS,
+  ADMIN_USERS_EDIT,
+  SIGNIN,
+  SIGNUP,
+} from '../../constants/routes';
 import '../../styles/navigation.css';
 
 const Navigation = () => {
   return (
-    <nav
-      className="navbar-container navbar p-2"
-      style={{ backgroundColor: 'var(--clr-quaternary)' }}
-    >
+    <nav className="navbar-container navbar p-2">
       <button
         className="navbar-toggler"
         type="button"
@@ -23,15 +25,22 @@ const Navigation = () => {
         <ul className="navbar-nav">
           <li className="nav-item">
             <Link className="nav-link" to={SIGNIN}>
-              Teste
+              Login
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ADMIN_USERS}>
+              Usuários
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ADMIN_USERS_EDIT}>
+              Editar Usuário
             </Link>
           </li>
         </ul>
       </div>
-      <a
-        className="navbar-brand rounded"
-        style={{ backgroundColor: 'var(--clr-quinary)' }}
-      >
+      <a className="navbar-brand rounded">
         <img
           className="img-fluid"
           src="/images/facoffee-logo.png"

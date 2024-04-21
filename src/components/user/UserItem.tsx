@@ -11,7 +11,7 @@ type UserItemProps = {
 
 export function UserItem({ id, name, role, email, img }: UserItemProps) {
   return (
-    <Card key={id} className="user-item m-2">
+    <Card key={id} className="user-item m-4">
       <CardHeader className="user-item-header">
         <CardImg
           src={img}

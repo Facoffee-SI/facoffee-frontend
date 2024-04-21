@@ -11,3 +11,11 @@
   width: 100%;
   background-color: #7b7979 !important;
 }
+
+.users-edit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+}
