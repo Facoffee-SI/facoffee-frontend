@@ -1,6 +1,6 @@
 @import './navigation.css';
 @import './signin.css';
-@import './user-list.css';
+@import './user.css';
 
 .primary-container {
   display: flex;

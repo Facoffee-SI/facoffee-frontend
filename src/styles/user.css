@@ -1,0 +1,13 @@
+.user-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px solid white;
+  width: 300px;
+}
+
+.user-item-header {
+  width: 100%;
+  background-color: #7b7979 !important;
+}
