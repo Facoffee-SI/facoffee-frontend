@@ -39,10 +39,7 @@ const SignIn = () => {
 
   return (
     <main className="primary-container p-5">
-      <div
-        className="secondary-container p-5"
-        style={{ backgroundColor: 'var(--clr-tertiary)' }}
-      >
+      <div className="secondary-container p-5">
         <div className="tertiary-container shadow-lg">
           <Formik
             initialValues={{ email: '', password: '' }}

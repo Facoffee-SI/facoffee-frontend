@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navigation from '../components/common/Navigation';
 import SignIn from '../views/auth/signin';
-import UserList from '../views/admin/user-list';
+import Users from '../views/admin/users';
+import UsersEdit from '../views/admin/users/userEdit';
 import * as ROUTES from '../constants/routes';
 
 const AppRouter = () => (
@@ -9,7 +10,11 @@ const AppRouter = () => (
     <Navigation />
     <Routes>
       <Route path={ROUTES.SIGNIN} element={<SignIn></SignIn>}></Route>
-      <Route path={ROUTES.ADMIN_USERS} element={<UserList></UserList>}></Route>
+      <Route path={ROUTES.ADMIN_USERS} element={<Users></Users>}></Route>
+      <Route
+        path={ROUTES.ADMIN_USERS_EDIT}
+        element={<UsersEdit></UsersEdit>}
+      ></Route>
     </Routes>
   </BrowserRouter>
 );

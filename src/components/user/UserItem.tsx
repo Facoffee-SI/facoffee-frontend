@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardImg } from 'react-bootstrap';
-import '../../styles/user.css';
+import '../../styles/users.css';
 
 type UserItemProps = {
   id: number;

@@ -1,6 +1,6 @@
 import { Col, Row } from 'react-bootstrap';
 import '../../../styles/style.css';
-import { UserItem } from '../../../components/users/UserItem';
+import { UserItem } from '../../../components/user/UserItem';
 
 const UserListExample = [
   {
@@ -61,13 +61,10 @@ const UserListExample = [
   },
 ];
 
-const UserList = () => {
+const Users = () => {
   return (
     <main className="primary-container p-5">
-      <div
-        className="secondary-contasiner p-5"
-        style={{ backgroundColor: 'var(--clr-tertiary)' }}
-      >
+      <div className="secondary-container p-5">
         <div className="tertiary-container">
           <h3 className="text-center m-2">Usuários</h3>
           <button className="btn bg-black text-white rounded p-1" type="submit">
@@ -89,4 +86,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default Users;
