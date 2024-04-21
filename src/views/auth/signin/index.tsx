@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { FORGOT_PASSWORD, SIGNUP } from '../../../constants/routes';
 import api from '../../../services/Api';
-import './signin.css';
 import CustomInput from '../../../components/formik/CustomInput';
+import '../../../styles/style.css';
 
 const SignInSchema = Yup.object({
   email: Yup.string()
@@ -38,13 +38,12 @@ const SignIn = () => {
   };
 
   return (
-    <main className="container-fluid d-flex flex-fill p-5 g-0">
+    <main className="primary-container p-5">
       <div
-        className="card flex-fill justify-content-center align-items-center rounded p-5 g-0"
+        className="secondary-container p-5"
         style={{ backgroundColor: 'var(--clr-tertiary)' }}
       >
-        <div className="card justify-content-center align-items-center shadow-lg rounded bg-white w-50 h-50">
-          <h3>Login</h3>
+        <div className="tertiary-container shadow-lg">
           <Formik
             initialValues={{ email: '', password: '' }}
             validateOnMount
@@ -52,8 +51,9 @@ const SignIn = () => {
             onSubmit={onSubmitForm}
           >
             {() => (
-              <Form className="d-flex flex-fill flex-column justify-content-center align-items-center gap-5">
-                <div className="d-flex flex-column">
+              <Form className="signin-form">
+                <h3 className="text-center">Login</h3>
+                <div>
                   <Field
                     name="email"
                     type="email"
@@ -71,7 +71,7 @@ const SignIn = () => {
                     component={CustomInput}
                   />
                 </div>
-                <div className="d-flex flex-column">
+                <div className="d-flex flex-column gap-2">
                   <Link
                     onClick={onSignUp}
                     style={{ textDecoration: 'underline', color: 'black' }}
