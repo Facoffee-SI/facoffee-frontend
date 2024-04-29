@@ -22,3 +22,10 @@
   background-color: var(--clr-quinary);
   border-radius: 10px;
 }
+
+input {
+  height: 2.5rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid grey;
+}

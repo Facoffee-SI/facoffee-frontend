@@ -37,8 +37,8 @@ CustomInput.defaultProps = {
 };
 
 CustomInput.propTypes = {
-  label: PropType.string.isRequired,
   field: PropType.object.isRequired,
+  label: PropType.string.isRequired,
   form: PropType.object.isRequired,
   inputRef: PropType.oneOfType([
     PropType.func,
