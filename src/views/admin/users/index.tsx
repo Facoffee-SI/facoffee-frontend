@@ -67,19 +67,26 @@ const Users = () => {
       <div className="secondary-container p-5">
         <div className="tertiary-container">
           <h3 className="text-center m-2">Usuários</h3>
-          <button className="btn bg-black text-white rounded p-1" type="submit">
-            Criar novo usuário
-          </button>
-          <Row md={2} xs={1} lg={4}>
-            {UserListExample.map((item) => (
-              <Col
-                key={item.id}
-                className="d-flex justify-content-center align-items-center"
+          <div className='p-2'>
+            <div className="d-flex justify-content-end">
+              <button
+                className="btn bg-black text-white rounded p-1"
+                type="submit"
               >
-                <UserItem {...item}></UserItem>
-              </Col>
-            ))}
-          </Row>
+                Criar novo usuário
+              </button>
+            </div>
+            <Row md={2} xs={1} lg={4}>
+              {UserListExample.map((item) => (
+                <Col
+                  key={item.id}
+                  className="d-flex justify-content-center align-items-center"
+                >
+                  <UserItem {...item}></UserItem>
+                </Col>
+              ))}
+            </Row>
+          </div>
         </div>
       </div>
     </main>
