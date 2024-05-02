@@ -1,6 +1,8 @@
 export const SIGNIN = '/';
-export const ADMIN_USERS = '/admin/users'; 
+export const AUTH_USER = '/auth/user';
+export const ADMIN_USERS = '/admin/users';
 export const ADMIN_USERS_EDIT = '/admin/users/edit';
+export const ADMIN_USERS_CREATE = '/admin/users/create';
 
 
 

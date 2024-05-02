@@ -1,11 +1,8 @@
 import { Link } from 'react-router-dom';
-import {
-  ADMIN_USERS,
-  ADMIN_USERS_EDIT,
-  SIGNIN,
-  SIGNUP,
-} from '../../constants/routes';
+import * as ROUTES from '../../constants/routes';
 import '../../styles/navigation.css';
+
+const token = localStorage.getItem('token');
 
 const Navigation = () => {
   return (
@@ -24,17 +21,17 @@ const Navigation = () => {
       <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link className="nav-link" to={SIGNIN}>
+            <Link className="nav-link" to={ROUTES.SIGNIN}>
               Login
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ADMIN_USERS}>
+            <Link className="nav-link" to={ROUTES.ADMIN_USERS}>
               Usuários
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ADMIN_USERS_EDIT}>
+            <Link className="nav-link" to={ROUTES.ADMIN_USERS_EDIT}>
               Editar Usuário
             </Link>
           </li>
@@ -49,9 +46,21 @@ const Navigation = () => {
           height="56"
         />
       </a>
-      <Link className="btn bg-black text-white rounded p-1" to={SIGNUP}>
-        Cadastro
-      </Link>
+      {token ? (
+        <Link
+          className="btn bg-black text-white rounded p-1"
+          to={ROUTES.SIGNIN}
+        >
+          Teste
+        </Link>
+      ) : (
+        <Link
+          className="btn bg-black text-white rounded p-1"
+          to={ROUTES.SIGNIN}
+        >
+          Login
+        </Link>
+      )}
     </nav>
   );
 };
