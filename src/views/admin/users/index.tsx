@@ -1,6 +1,8 @@
 import { Col, Row } from 'react-bootstrap';
 import '../../../styles/style.css';
+import * as ROUTES from '../../../constants/routes';
 import { UserItem } from '../../../components/user/UserItem';
+import { useNavigate } from 'react-router-dom';
 
 const UserListExample = [
   {
@@ -62,16 +64,22 @@ const UserListExample = [
 ];
 
 const Users = () => {
+  const navigate = useNavigate();
+
+  const createUser = () => {
+    return navigate(ROUTES.ADMIN_USERS_CREATE);
+  };
+
   return (
     <main className="primary-container p-5">
       <div className="secondary-container p-5">
         <div className="tertiary-container">
           <h3 className="text-center m-2">Usuários</h3>
-          <div className='p-2'>
+          <div className="p-2">
             <div className="d-flex justify-content-end">
               <button
                 className="btn bg-black text-white rounded p-1"
-                type="submit"
+                onClick={createUser}
               >
                 Criar novo usuário
               </button>

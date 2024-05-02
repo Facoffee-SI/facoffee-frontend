@@ -1,7 +1,7 @@
 import { Field, Form, Formik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import { FORGOT_PASSWORD, SIGNUP } from '../../../constants/routes';
+import * as ROUTES from '../../../constants/routes';
 import api from '../../../services/Api';
 import CustomInput from '../../../components/formik/CustomInput';
 import '../../../styles/style.css';
@@ -18,7 +18,7 @@ const SignInSchema = Yup.object({
 const SignIn = () => {
   const navigate = useNavigate();
 
-  const onSignUp = () => navigate(SIGNUP);
+  const onSignUp = () => navigate(ROUTES.SIGNUP);
 
   const onSubmitForm = (user: { email: string; password: string }) => {
     fetchLogin(user);
@@ -26,12 +26,13 @@ const SignIn = () => {
 
   const fetchLogin = async (user: { email: string; password: string }) => {
     try {
-      const response = await api.post('/auth/user', {
+      const response = await api.post(ROUTES.AUTH_USER, {
         email: user.email,
         password: user.password,
       });
 
-      console.log(response);
+      localStorage.setItem('token', JSON.stringify(response.data.token));
+      navigate(ROUTES.ADMIN_USERS);
     } catch (e) {
       console.error(e);
     }
@@ -72,7 +73,7 @@ const SignIn = () => {
                   <Link
                     onClick={onSignUp}
                     style={{ textDecoration: 'underline', color: 'black' }}
-                    to={FORGOT_PASSWORD}
+                    to={ROUTES.FORGOT_PASSWORD}
                   >
                     <span>Esqueceu sua senha?</span>
                   </Link>
@@ -87,7 +88,7 @@ const SignIn = () => {
                     <Link
                       onClick={onSignUp}
                       style={{ textDecoration: 'underline', color: 'black' }}
-                      to={SIGNUP}
+                      to={ROUTES.SIGNUP}
                     >
                       Faça seu cadastro
                     </Link>
