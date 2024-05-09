@@ -20,6 +20,7 @@
 
 .tertiary-container {
   background-color: var(--clr-quinary);
+  flex: 1 1;
   border-radius: 10px;
 }
 
