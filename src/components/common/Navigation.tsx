@@ -1,10 +1,17 @@
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 import '../../styles/navigation.css';
+import { useState } from 'react';
 
 const token = localStorage.getItem('token');
 
 const Navigation = () => {
+  const [collapseOpen, setCollapseOpen] = useState(false);
+
+  const toggleCollapse = () => {
+    setCollapseOpen(!collapseOpen);
+  };
+
   return (
     <nav className="navbar-container navbar p-2">
       <button
@@ -13,60 +20,61 @@ const Navigation = () => {
         data-bs-toggle="collapse"
         data-bs-target="#navbarNavAltMarkup"
         aria-controls="navbarNavAltMarkup"
-        aria-expanded="false"
+        onClick={toggleCollapse}
+        aria-expanded={collapseOpen ? 'true' : 'false'}
         aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div className={`collapse navbar-collapse ${collapseOpen ? 'show' : ''}`} id="navbarNavAltMarkup">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.SIGNIN}>
+            <Link className="nav-link" to={ROUTES.SIGNIN} onClick={toggleCollapse}>
               Login
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_USERS}>
+            <Link className="nav-link" to={ROUTES.ADMIN_USERS} onClick={toggleCollapse}>
               Usuários
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_USERS_CREATE}>
+            <Link className="nav-link" to={ROUTES.ADMIN_USERS_CREATE} onClick={toggleCollapse}>
               Cadastrar Usuário
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_USERS_EDIT}>
+            <Link className="nav-link" to={ROUTES.ADMIN_USERS_EDIT} onClick={toggleCollapse}>
               Editar Usuário
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_ADD}>
+            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_ADD} onClick={toggleCollapse}>
               Cadastrar Produto
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_EDIT}>
+            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_EDIT} onClick={toggleCollapse}>
               Editar Produto
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_ADD}>
+            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_ADD} onClick={toggleCollapse}>
               Cadastrar Plano
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_EDIT}>
+            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_EDIT} onClick={toggleCollapse}>
               Editar Plano
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_ADD}>
+            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_ADD} onClick={toggleCollapse}>
               Cadastrar Contato
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_EDIT}>
+            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_EDIT} onClick={toggleCollapse}>
               Editar Contato
             </Link>
           </li>

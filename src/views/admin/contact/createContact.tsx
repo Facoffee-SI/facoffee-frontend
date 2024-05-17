@@ -10,7 +10,8 @@ const createContactSchema = Yup.object({
     .required('Obrigatório preencher o email'),
   phone: Yup.string().required('Obrigatório preencher o telefone'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
-  address: Yup.string().required('Obrigatório preencher o endereço')
+  address: Yup.string().required('Obrigatório preencher o endereço'),
+  maps: Yup.string().required('Obrigatório preencher o link do Google Maps'),
 });
 
 const onSubmitForm = () => {};
@@ -27,6 +28,7 @@ const CreateContact = () => {
               phone: '',
               description: '',
               address: '',
+              maps: '',
             }}
             validateOnMount
             validationSchema={createContactSchema}
@@ -44,7 +46,6 @@ const CreateContact = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-
                   <div className="d-flex gap-3">
                     <Field
                       name="email"
@@ -60,7 +61,6 @@ const CreateContact = () => {
                       placeholder="Telefone"
                     />
                   </div>
-
                   <Field
                     name="description"
                     type="string"
@@ -70,7 +70,6 @@ const CreateContact = () => {
                     component={CustomInput}
                     style={{ width: '100%', height: '5.375rem' }} 
                   />
-
                   <Field
                     name="address"
                     type="string"
@@ -79,7 +78,6 @@ const CreateContact = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-
                   <Field
                     name="maps"
                     type="string"
@@ -88,7 +86,6 @@ const CreateContact = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-black text-white rounded p-1"
