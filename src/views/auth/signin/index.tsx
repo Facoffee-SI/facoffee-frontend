@@ -9,10 +9,10 @@ import '../../../styles/style.css';
 const SignInSchema = Yup.object({
   email: Yup.string()
     .email('Email inválido')
-    .required('Obrigatório preencher o Email.'),
+    .required('Obrigatório preencher o email'),
   password: Yup.string()
-    .required('Obrigatório preencher a Senha.')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
+    .required('Obrigatório preencher a senha')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
 });
 
 const SignIn = () => {
@@ -83,16 +83,6 @@ const SignIn = () => {
                   >
                     Entrar
                   </button>
-                  <span>
-                    Não tem uma conta? 
-                    <Link
-                      onClick={onSignUp}
-                      className="form-link"
-                      to={ROUTES.SIGNUP}
-                    >
-                       Faça seu cadastro
-                    </Link>
-                  </span>
                 </div>
               </Form>
             )}

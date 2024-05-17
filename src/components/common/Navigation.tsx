@@ -31,8 +31,43 @@ const Navigation = () => {
             </Link>
           </li>
           <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_USERS_CREATE}>
+              Cadastrar Usuário
+            </Link>
+          </li>
+          <li className="nav-item">
             <Link className="nav-link" to={ROUTES.ADMIN_USERS_EDIT}>
               Editar Usuário
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_ADD}>
+              Cadastrar Produto
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_EDIT}>
+              Editar Produto
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_ADD}>
+              Cadastrar Plano
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_EDIT}>
+              Editar Plano
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_ADD}>
+              Cadastrar Contato
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_EDIT}>
+              Editar Contato
             </Link>
           </li>
         </ul>

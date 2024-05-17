@@ -2,16 +2,14 @@ import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
 
-const UserEditSchema = Yup.object({
+const createProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
-  email: Yup.string()
-    .email('Email inválido')
-    .required('Obrigatório preencher o Email.'),
-  roles: Yup.string().required('Obrigatório preencher cargos'),
-  password: Yup.string()
-    .required('Obrigatório preencher a Senha.')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-  confirmPassword: Yup.string().required('Obrigatório confirmar a senha.'),
+  description: Yup.string()
+    .required('Obrigatório preencher a descrição.'),
+  label: Yup.string().required('Obrigatório preencher a marca'),
+  price: Yup.string().required('Obrigatório preencher o preço'),
+  codebar: Yup.string().required('Obrigatório preencher o código de barras'),
+  category: Yup.string().required('Obrigatório selecionar as categorias'),
 });
 
 const UserExample = [
@@ -28,8 +26,8 @@ const onSubmitForm = () => {};
 const CreateProduct = () => {
   return (
     <main className="primary-container p-5 d-flex">
-      <div className="bg-white p-5" style={{ maxWidth: '112.5rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Cadastro de produto</h3>
+      <div className="bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <h3 className="text-center mb-4">Cadastro de Produto</h3>
         {UserExample.map((item) => (
           <Formik
             key={item.id}
@@ -41,7 +39,7 @@ const CreateProduct = () => {
               confirmPassword: '',
             }}
             validateOnMount
-            validationSchema={UserEditSchema}
+            validationSchema={createProductSchema}
             onSubmit={onSubmitForm}
           >
             {() => (
@@ -66,7 +64,7 @@ const CreateProduct = () => {
                     style={{ width: '100%' }} 
                   />
                   <Field
-                    name="marca"
+                    name="label"
                     type="string"
                     label="Marca"
                     placeholder="Marca"
@@ -90,7 +88,7 @@ const CreateProduct = () => {
                       component={CustomInput}
                     />
                     <Field
-                      name="discountprice"
+                      name="discountSubscription"
                       type="string"
                       label="Desconto para assinantes"
                       placeholder="Desconto para assinantes"
@@ -138,9 +136,9 @@ const CreateProduct = () => {
                     <button
                       className="btn bg-black text-white rounded p-1"
                       type="submit"
-                      style={{ width: '100%' }} // Ajuste do width do botão
+                      style={{ width: '100%' }}
                     >
-                      criar produto
+                      Cadastrar
                     </button>
                   </div>
                 </div>

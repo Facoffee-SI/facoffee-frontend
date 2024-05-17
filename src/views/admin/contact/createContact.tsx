@@ -9,9 +9,9 @@ const UserEditSchema = Yup.object({
     .required('Obrigatório preencher o Email.'),
   roles: Yup.string().required('Obrigatório preencher cargos'),
   password: Yup.string()
-    .required('Obrigatório preencher a Senha.')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-  confirmPassword: Yup.string().required('Obrigatório confirmar a senha.'),
+    .required('Obrigatório preencher a senha')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+  confirmPassword: Yup.string().required('Obrigatório confirmar a senha'),
 });
 
 const UserExample = [
@@ -28,8 +28,8 @@ const onSubmitForm = () => {};
 const CreateContact = () => {
   return (
     <main className="primary-container p-5 d-flex">
-      <div className="bg-white p-5" style={{ maxWidth: '112.5rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Edição de informações de contato</h3>
+      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <h3 className="text-center mb-4">Cadastro de Informações de Contato</h3>
         {UserExample.map((item) => (
           <Formik
             key={item.id}
@@ -101,7 +101,7 @@ const CreateContact = () => {
                       type="submit"
                       style={{ width: '100%' }} // Ajuste do width do botão
                     >
-                      Editar informações de usuário
+                      Cadastrar informações de Contato
                     </button>
                   </div>
                 </div>

@@ -1,9 +1,9 @@
 import { Row } from 'react-bootstrap';
 import '../../../styles/style.css';
 import * as ROUTES from '../../../constants/routes';
-import { UserList } from '../../../components/user/UserList';
 import { useNavigate } from 'react-router-dom';
-import api from '../../../services/Api';
+// import { UserList } from '../../../components/user/UserList';
+// import api from '../../../services/Api';
 
 // const userList = await api.get('user').then((obj) => {
 //   return obj.data;

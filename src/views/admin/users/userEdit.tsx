@@ -9,9 +9,9 @@ const UserEditSchema = Yup.object({
     .required('Obrigatório preencher o Email.'),
   roles: Yup.string().required('Obrigatório preencher cargos'),
   password: Yup.string()
-    .required('Obrigatório preencher a Senha.')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-  confirmPassword: Yup.string().required('Obrigatório confirmar a senha.'),
+    .required('Obrigatório preencher a senha')
+    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+  confirmPassword: Yup.string().required('Obrigatório confirmar a senha'),
 });
 
 const UserExample = [

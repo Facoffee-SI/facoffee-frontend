@@ -19,17 +19,17 @@ const UserExample = [
     id: 1,
     name: '',
     role: 'Vendedor | Gerente',
-    email: '',
+    email: 'rafaelpereira@mail.com',
  },
 ];
 
 const onSubmitForm = () => {};
 
-const CreateContact = () => {
+const EditPlan = () => {
   return (
     <main className="primary-container p-5 d-flex">
-      <div className="bg-white p-5" style={{ maxWidth: '112.5rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Cadastro de informações de contato</h3>
+      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <h3 className="text-center mb-4">Edição de Plano</h3>
         {UserExample.map((item) => (
           <Formik
             key={item.id}
@@ -56,25 +56,6 @@ const CreateContact = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-
-
-                  <div className="d-flex gap-3">
-                    <Field
-                      name="email"
-                      type="string"
-                      label="Email"
-                      placeholder="Email"
-                      component={CustomInput}
-                    />
-                    <Field
-                      name="telefone"
-                      type="string"
-                      label="telefone"
-                      placeholder="telefone"
-                      component={CustomInput}
-                    />
-                  </div>
-
                   <Field
                     name="description"
                     type="string"
@@ -84,24 +65,65 @@ const CreateContact = () => {
                     component={CustomInput}
                     style={{ width: '100%', height: '9.375rem' }} 
                   />
-
-                <Field
-                    name="maps"
+                  <Field
+                    name="product"
                     type="string"
-                    label="GoogleMaps"
-                    placeholder="GoogleMaps (Link)"
+                    label="Produto"
+                    placeholder="Produto"
+                    component={CustomInput}
+                    style={{ width: '100%' }} 
+                  />
+
+                  <div className="d-flex gap-3">
+                    <Field
+                      name="princemonth"
+                      type="string"
+                      label="Preço mensal"
+                      placeholder="Preço mensal"
+                      component={CustomInput}
+                    />
+                    <Field
+                      name="priceyear"
+                      type="string"
+                      label="Preço anual"
+                      placeholder="Preço anual"
+                      component={CustomInput}
+                    />
+                  </div>
+
+                  <Field
+                    name="status"
+                    type="string"
+                    label="Ativo"
+                    placeholder="Ativo"
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
     
-
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-black text-white rounded p-1"
                       type="submit"
-                      style={{ width: '100%' }} // Ajuste do width do botão
+                      style={{ width: '100%'}}
                     >
-                      Cadastrar informações de usuário
+                      Selecionar Imagem
+                    </button>
+                  </div>
+
+                  <div className="d-flex justify-content-center gap-4">
+                    <button
+                      className="btn bg-danger text-white rounded p-1"
+                      type="submit"
+                      style={{ width: '50%' }}
+                    >
+                      Remover
+                    </button>
+                    <button
+                      className="btn bg-black text-white rounded p-1"
+                      type="submit"
+                      style={{ width: '50%' }}
+                    >
+                      Editar
                     </button>
                   </div>
                 </div>
@@ -114,4 +136,4 @@ const CreateContact = () => {
   );
 };
 
-export default CreateContact;
+export default EditPlan;

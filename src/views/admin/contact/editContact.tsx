@@ -19,17 +19,17 @@ const UserExample = [
     id: 1,
     name: '',
     role: 'Vendedor | Gerente',
-    email: 'rafaelpereira@mail.com',
+    email: '',
  },
 ];
 
 const onSubmitForm = () => {};
 
-const EditPlan = () => {
+const CreateContact = () => {
   return (
     <main className="primary-container p-5 d-flex">
-      <div className="bg-white p-5" style={{ maxWidth: '112.5rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Edição de plano</h3>
+      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <h3 className="text-center mb-4">Edição de Informações de Contato</h3>
         {UserExample.map((item) => (
           <Formik
             key={item.id}
@@ -56,6 +56,25 @@ const EditPlan = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
+
+
+                  <div className="d-flex gap-3">
+                    <Field
+                      name="email"
+                      type="string"
+                      label="Email"
+                      placeholder="Email"
+                      component={CustomInput}
+                    />
+                    <Field
+                      name="telefone"
+                      type="string"
+                      label="telefone"
+                      placeholder="telefone"
+                      component={CustomInput}
+                    />
+                  </div>
+
                   <Field
                     name="description"
                     type="string"
@@ -65,65 +84,24 @@ const EditPlan = () => {
                     component={CustomInput}
                     style={{ width: '100%', height: '9.375rem' }} 
                   />
-                  <Field
-                    name="product"
-                    type="string"
-                    label="Produto"
-                    placeholder="Produto"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
-                  />
 
-                  <div className="d-flex gap-3">
-                    <Field
-                      name="princemonth"
-                      type="string"
-                      label="Preço mensal"
-                      placeholder="Preço mensal"
-                      component={CustomInput}
-                    />
-                    <Field
-                      name="priceyear"
-                      type="string"
-                      label="Preço anual"
-                      placeholder="Preço anual"
-                      component={CustomInput}
-                    />
-                  </div>
-
-                  <Field
-                    name="status"
+                <Field
+                    name="maps"
                     type="string"
-                    label="Ativo"
-                    placeholder="Ativo"
+                    label="GoogleMaps"
+                    placeholder="GoogleMaps (Link)"
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
     
-                  <div className="d-flex justify-content-center gap-4">
-                    <button
-                      className="btn bg-black text-white rounded p-1"
-                      type="submit"
-                      style={{ width: 'auto'}}
-                    >
-                      Selecionar Imagem
-                    </button>
-                  </div>
 
                   <div className="d-flex justify-content-center gap-4">
                     <button
-                      className="btn bg-danger text-white rounded p-1"
-                      type="submit"
-                      style={{ width: '50%' }} // Ajuste do width do botão
-                    >
-                      Remover usuário
-                    </button>
-                    <button
                       className="btn bg-black text-white rounded p-1"
                       type="submit"
-                      style={{ width: '50%' }} // Ajuste do width do botão
+                      style={{ width: '100%' }}
                     >
-                      Editar plano
+                      Editar informações de Contato
                     </button>
                   </div>
                 </div>
@@ -136,4 +114,4 @@ const EditPlan = () => {
   );
 };
 
-export default EditPlan;
+export default CreateContact;

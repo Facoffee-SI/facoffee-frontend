@@ -25,11 +25,11 @@ const UserExample = [
 
 const onSubmitForm = () => {};
 
-const CreatePlan = () => {
+const EditProduct = () => {
   return (
     <main className="primary-container p-5 d-flex">
-      <div className="bg-white p-5" style={{ maxWidth: '112.5rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Cadastro de plano</h3>
+      <div className="bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <h3 className="text-center mb-4">Edição de Produto</h3>
         {UserExample.map((item) => (
           <Formik
             key={item.id}
@@ -63,48 +63,72 @@ const CreatePlan = () => {
                     autoComplete="true"
                     placeholder="Descrição"
                     component={CustomInput}
-                    style={{ width: '100%', height: '9.375rem' }} 
+                    style={{ width: '100%' }} 
                   />
                   <Field
-                    name="product"
+                    name="marca"
                     type="string"
-                    label="Produto"
-                    placeholder="Produto"
+                    label="Marca"
+                    placeholder="Marca"
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-
+                  <Field
+                    name="price"
+                    type="string"
+                    label="Preço"
+                    placeholder="Preço"
+                    component={CustomInput}
+                    style={{ width: '100%' }} 
+                  />
                   <div className="d-flex gap-3">
                     <Field
-                      name="princemonth"
+                      name="discount"
                       type="string"
-                      label="Preço mensal"
-                      placeholder="Preço mensal"
+                      label="Desconto"
+                      placeholder="Desconto"
                       component={CustomInput}
                     />
                     <Field
-                      name="priceyear"
+                      name="discountprice"
                       type="string"
-                      label="Preço anual"
-                      placeholder="Preço anual"
+                      label="Desconto para assinantes"
+                      placeholder="Desconto para assinantes"
                       component={CustomInput}
                     />
                   </div>
-
                   <Field
-                    name="status"
+                    name="codebar"
                     type="string"
-                    label="Ativo"
-                    placeholder="Ativo"
+                    label="Código de barras"
+                    placeholder="Código de barras"
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-    
+
+                  <Field
+                    name="category"
+                    type="string"
+                    label="Categorias"
+                    placeholder="Categorias"
+                    component={CustomInput}
+                    style={{ width: '100%' }} 
+                  />
+
+                  <Field
+                    name="quantity"
+                    type="string"
+                    label="Quantidade"
+                    placeholder="Quantidade"
+                    component={CustomInput}
+                    style={{ width: '100%' }} 
+                  />
+
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-black text-white rounded p-1"
                       type="submit"
-                      style={{ width: 'auto'}}
+                      style={{ width: '100%'}}
                     >
                       Selecionar Imagem
                     </button>
@@ -112,11 +136,18 @@ const CreatePlan = () => {
 
                   <div className="d-flex justify-content-center gap-4">
                     <button
+                      className="btn bg-danger text-white rounded p-1"
+                      type="submit"
+                      style={{ width: '50%' }}
+                    >
+                      Remover
+                    </button>
+                    <button
                       className="btn bg-black text-white rounded p-1"
                       type="submit"
-                      style={{ width: '100%' }} // Ajuste do width do botão
+                      style={{ width: '50%' }} // Ajuste do width do botão
                     >
-                      Criar plano
+                      Editar
                     </button>
                   </div>
                 </div>
@@ -129,4 +160,4 @@ const CreatePlan = () => {
   );
 };
 
-export default CreatePlan;
+export default EditProduct;
