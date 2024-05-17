@@ -1,10 +1,10 @@
 import { Field, Form, Formik } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import * as ROUTES from '../../../constants/routes';
-import api from '../../../services/Api';
-import CustomInput from '../../../components/formik/CustomInput';
-import '../../../styles/style.css';
+import * as ROUTES from '../../constants/routes';
+import api from '../../services/Api';
+import CustomInput from '../../components/formik/CustomInput';
+import '../../styles/style.css';
 
 const SignInSchema = Yup.object({
   email: Yup.string()

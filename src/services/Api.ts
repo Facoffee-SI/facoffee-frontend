@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjYTdiNTRkMi02NGRlLTQ0NmQtYjFjMy1lYzFhYjEyNGQxYjUiLCJpYXQiOjE3MTM1Njc1MTl9.xJWtZpD1aPKpl8fM8CTmhucQwh4WfOAPCjNlNcB6nNQ";
+const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZjg4MjdiNi0xNDU2LTExZWYtYThmNS0wMjQyYWMxNjAwMDIiLCJpYXQiOjE3MTU5ODU2NDV9.9tUQPD4MmUUmS5N8vvGHNHzkBL8yN8W-QE63QENzzg8";
 
 const api = axios.create({
     baseURL: "http://localhost:3000",

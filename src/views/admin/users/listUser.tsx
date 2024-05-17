@@ -2,12 +2,12 @@ import { Row } from 'react-bootstrap';
 import '../../../styles/style.css';
 import * as ROUTES from '../../../constants/routes';
 import { useNavigate } from 'react-router-dom';
-// import { UserList } from '../../../components/user/UserList';
-// import api from '../../../services/Api';
+import { UserList } from '../../../components/user/UserList';
+import api from '../../../services/Api';
 
-// const userList = await api.get('user').then((obj) => {
-//   return obj.data;
-// });
+const userList = await api.get('user').then((obj) => {
+  return obj.data;
+});
 
 const Users = () => {
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const Users = () => {
               </button>
             </div>
             <Row md={2} xs={1} lg={4}>
-              {/* <UserList userList={userList}></UserList> */}
+              <UserList userList={userList}></UserList>
             </Row>
           </div>
         </div>
