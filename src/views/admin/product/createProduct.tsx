@@ -1,6 +1,8 @@
 import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
+import { useState } from 'react';
+import './styles.css'
 
 const createProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -15,6 +17,13 @@ const createProductSchema = Yup.object({
 const onSubmitForm = () => {};
 
 const CreateProduct = () => {
+  const [images, setImages] = useState<File[]>([]);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImages = Array.from(event.target.files || []);
+    setImages(selectedImages);
+  };
+
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
@@ -114,17 +123,38 @@ const CreateProduct = () => {
                   component={CustomInput}
                   style={{ width: '100%' }} 
                 />
-
                 <div className="d-flex justify-content-center gap-4">
-                  <button
-                    className="btn bg-black text-white rounded p-1"
-                    type="button"
-                    style={{ width: '100%'}}
-                  >
-                    Selecionar imagens
-                  </button>
+                  <div
+                    style={{ width: '100%'}}>
+                    <input
+                      id="images"
+                      name="images"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageChange}
+                      style={{ display: 'none' }}
+                    />
+                    <button
+                      className="btn bg-black text-white rounded p-1"
+                      type="button"
+                      onClick={() => document.getElementById('images')?.click()}
+                      style={{ width: '100%'}}
+                    >
+                      Selecionar imagens
+                    </button>
+                  </div>
                 </div>
-
+                <div className="image-container">
+                  {images.map((image, index) => (
+                    <img
+                      key={index}
+                      src={URL.createObjectURL(image)}
+                      alt={`Imagem ${index + 1}`}
+                      className="image-preview"
+                    />
+                  ))}
+                </div>
                 <div className="d-flex justify-content-center gap-4">
                   <button
                     className="btn bg-black text-white rounded p-1"
