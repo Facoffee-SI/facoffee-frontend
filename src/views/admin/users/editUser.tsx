@@ -97,7 +97,7 @@ const UsersEdit = () => {
                     placeholder="Cargos"
                     component={CustomInput}
                   />
-                  <div className="d-flex gap-3">
+                  <div className="d-flex flex-column flex-md-row gap-3">
                     <Field
                       name="password"
                       type="password"
