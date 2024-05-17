@@ -1,9 +1,10 @@
+import * as Yup from 'yup';
+import { useRef, useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
-import * as Yup from 'yup';
 import { userImageDefault } from './userImageDefault';
 
-const UserEditSchema = Yup.object({
+const userEditSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   email: Yup.string()
     .email('Email inválido')
@@ -18,8 +19,28 @@ const UserEditSchema = Yup.object({
 const onSubmitForm = () => {};
 
 const CreateUser = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [profileImage, setProfileImage] = useState(userImageDefault);
+
+  const handleImageClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
-    <main className="primary-container p-5 d-flex justify-content-center align-items-center">
+    <main className="primary-container p-3 d-flex justify-content-center align-items-center">
       <div className="card p-5" style={{ maxWidth: '50.75rem' }}>
         <h3 className="text-center mb-2">Cadastro de Usuário</h3>
           <Formik
@@ -31,18 +52,28 @@ const CreateUser = () => {
               confirmPassword: '',
             }}
             validateOnMount
-            validationSchema={UserEditSchema}
+            validationSchema={userEditSchema}
             onSubmit={onSubmitForm}
           >
             {() => (
               <Form className="users-edit-form">
                 <div className="d-flex flex-column gap-3">
-                  <img
-                    src={userImageDefault}
-                    alt={'Imagem de perfil'}
-                    height="100px"
-                    style={{ objectFit: 'none' }}
-                  ></img>
+                  <div className="d-flex flex-column align-items-center">
+                    <img
+                      src={profileImage ?? userImageDefault}
+                      alt="Imagem de perfil"
+                      height="100px"
+                      width="100px"
+                      style={{ objectFit: 'contain', cursor: 'pointer', borderRadius: '50%' }}
+                      onClick={handleImageClick}
+                    />
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                  </div>
                   <Field
                     name="name"
                     type="string"

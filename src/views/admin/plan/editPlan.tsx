@@ -2,26 +2,14 @@ import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
 
-const UserEditSchema = Yup.object({
+const editPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
-  email: Yup.string()
-    .email('Email inválido')
-    .required('Obrigatório preencher o Email.'),
-  roles: Yup.string().required('Obrigatório preencher cargos'),
-  password: Yup.string()
-    .required('Obrigatório preencher a Senha.')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-  confirmPassword: Yup.string().required('Obrigatório confirmar a senha.'),
+  description: Yup.string().required('Obrigatório preencher a descrição'),
+  product: Yup.string().required('Obrigatório selecionar os produtos'),
+  priceMonth: Yup.string().required('Obrigatório preencher o preço mensal'),
+  priceYear: Yup.string().required('Obrigatório preencher o preço anual'),
+  status: Yup.string().required('Obrigatório preencher o status'),
 });
-
-const UserExample = [
-  {
-    id: 1,
-    name: '',
-    role: 'Vendedor | Gerente',
-    email: 'rafaelpereira@mail.com',
- },
-];
 
 const onSubmitForm = () => {};
 
@@ -30,18 +18,17 @@ const EditPlan = () => {
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
         <h3 className="text-center mb-2">Edição de Plano</h3>
-        {UserExample.map((item) => (
           <Formik
-            key={item.id}
             initialValues={{
-              name: item.name,
-              email: item.email,
-              roles: '',
-              password: '',
-              confirmPassword: '',
+              name: '',
+              description: '',
+              product: '',
+              priceMonth: '',
+              priceYear: '',
+              status: '',
             }}
             validateOnMount
-            validationSchema={UserEditSchema}
+            validationSchema={editPlanSchema}
             onSubmit={onSubmitForm}
           >
             {() => (
@@ -76,14 +63,14 @@ const EditPlan = () => {
 
                   <div className="d-flex gap-3">
                     <Field
-                      name="princemonth"
+                      name="priceMonth"
                       type="string"
                       label="Preço mensal"
                       placeholder="Preço mensal"
                       component={CustomInput}
                     />
                     <Field
-                      name="priceyear"
+                      name="priceYear"
                       type="string"
                       label="Preço anual"
                       placeholder="Preço anual"
@@ -130,7 +117,6 @@ const EditPlan = () => {
               </Form>
             )}
           </Formik>
-        ))}
       </div>
     </main>
   );
