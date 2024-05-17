@@ -29,7 +29,7 @@ const onSubmitForm = () => {};
 const CreateUser = () => {
   return (
     <main className="primary-container p-5 d-flex justify-content-center align-items-center">
-      <div className="card p-5" style={{ maxWidth: '600px' }}>
+      <div className="card p-5" style={{ maxWidth: '50.75rem' }}>
         <h3 className="text-center mb-4">Cadastro de Usuário</h3>
         {UserExample.map((item) => (
           <Formik
