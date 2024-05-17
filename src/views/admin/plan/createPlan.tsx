@@ -29,7 +29,7 @@ const CreatePlan = () => {
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Cadastro de Plano</h3>
+        <h3 className="text-center mb-2">Cadastro de Plano</h3>
         {UserExample.map((item) => (
           <Formik
             key={item.id}
@@ -106,7 +106,7 @@ const CreatePlan = () => {
                       type="submit"
                       style={{ width: '100%'}}
                     >
-                      Selecionar Imagem
+                      Selecionar imagem
                     </button>
                   </div>
 

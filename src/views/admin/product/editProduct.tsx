@@ -2,49 +2,40 @@ import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
 
-const UserEditSchema = Yup.object({
+const editProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
-  email: Yup.string()
-    .email('Email inválido')
-    .required('Obrigatório preencher o Email.'),
-  roles: Yup.string().required('Obrigatório preencher cargos'),
-  password: Yup.string()
-    .required('Obrigatório preencher a Senha.')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres.'),
-  confirmPassword: Yup.string().required('Obrigatório confirmar a senha.'),
+  description: Yup.string().required('Obrigatório preencher a descrição'),
+  brand: Yup.string().required('Obrigatório preencher a marca'),
+  price: Yup.string().required('Obrigatório preencher o preço'),
+  codebar: Yup.string().required('Obrigatório preencher o código de barras'),
+  category: Yup.string().required('Obrigatório selecionar as categorias'),
+  quantity: Yup.string().required('Obrigatório preencher a quantidade'),
 });
-
-const UserExample = [
-  {
-    id: 1,
-    name: '',
-    role: 'Vendedor | Gerente',
-    email: 'rafaelpereira@mail.com',
- },
-];
 
 const onSubmitForm = () => {};
 
 const EditProduct = () => {
   return (
     <main className="primary-container p-5 d-flex">
-      <div className="bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Edição de Produto</h3>
-        {UserExample.map((item) => (
-          <Formik
-            key={item.id}
-            initialValues={{
-              name: item.name,
-              email: item.email,
-              roles: '',
-              password: '',
-              confirmPassword: '',
-            }}
-            validateOnMount
-            validationSchema={UserEditSchema}
-            onSubmit={onSubmitForm}
-          >
-            {() => (
+      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <h3 className="text-center mb-2">Edição de Produto</h3>
+        <Formik
+          initialValues={{
+            name: '',
+            description: '',
+            brand: '',
+            price: '',
+            codebar: '',
+            category: '',
+            quantity: '',
+            discount: '',
+            discountSubscription: '',
+          }}
+          validateOnMount
+          validationSchema={editProductSchema}
+          onSubmit={onSubmitForm}
+        >
+          {() => (
               <Form className="users-edit-form">
                 <div className="d-flex flex-column gap-3">
                   <Field
@@ -66,7 +57,7 @@ const EditProduct = () => {
                     style={{ width: '100%' }} 
                   />
                   <Field
-                    name="marca"
+                    name="brand"
                     type="string"
                     label="Marca"
                     placeholder="Marca"
@@ -130,7 +121,7 @@ const EditProduct = () => {
                       type="submit"
                       style={{ width: '100%'}}
                     >
-                      Selecionar Imagem
+                      Selecionar imagens
                     </button>
                   </div>
 
@@ -145,7 +136,7 @@ const EditProduct = () => {
                     <button
                       className="btn bg-black text-white rounded p-1"
                       type="submit"
-                      style={{ width: '50%' }} // Ajuste do width do botão
+                      style={{ width: '50%' }}
                     >
                       Editar
                     </button>
@@ -154,7 +145,6 @@ const EditProduct = () => {
               </Form>
             )}
           </Formik>
-        ))}
       </div>
     </main>
   );
