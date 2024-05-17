@@ -28,94 +28,92 @@ const onSubmitForm = () => {};
 
 const CreateUser = () => {
   return (
-    <main className="primary-container p-5">
-      <div className="secondary-container p-5">
-        <div className="tertiary-container">
-          <h3 className="text-center m-2">Cadastro de Usuário</h3>
-          {UserExample.map((item) => (
-            <Formik
-              key={item.id}
-              initialValues={{
-                name: item.name,
-                email: item.email,
-                roles: '',
-                password: '',
-                confirmPassword: '',
-              }}
-              validateOnMount
-              validationSchema={UserEditSchema}
-              onSubmit={onSubmitForm}
-            >
-              {() => (
-                <Form className="users-edit-form">
-                  <div className="d-flex flex-column gap-3">
-                    <img
-                      src={item.img}
-                      alt={item.name}
-                      height="100px"
-                      style={{ objectFit: 'none' }}
-                    ></img>
+    <main className="primary-container p-5 d-flex justify-content-center align-items-center">
+      <div className="card p-5" style={{ maxWidth: '600px' }}>
+        <h3 className="text-center mb-4">Cadastro de Usuário</h3>
+        {UserExample.map((item) => (
+          <Formik
+            key={item.id}
+            initialValues={{
+              name: item.name,
+              email: item.email,
+              roles: '',
+              password: '',
+              confirmPassword: '',
+            }}
+            validateOnMount
+            validationSchema={UserEditSchema}
+            onSubmit={onSubmitForm}
+          >
+            {() => (
+              <Form className="users-edit-form">
+                <div className="d-flex flex-column gap-3">
+                  <img
+                    src={item.img}
+                    alt={item.name}
+                    height="100px"
+                    style={{ objectFit: 'none' }}
+                  ></img>
+                  <Field
+                    name="name"
+                    type="string"
+                    label="Nome Completo"
+                    autoComplete="true"
+                    placeholder="Nome Completo"
+                    component={CustomInput}
+                  />
+                  <Field
+                    name="email"
+                    type="email"
+                    label="Email"
+                    autoComplete="true"
+                    placeholder="Email"
+                    component={CustomInput}
+                  />
+                  <Field
+                    name="roles"
+                    type="string"
+                    label="Cargos"
+                    placeholder="Cargos"
+                    component={CustomInput}
+                  />
+                  <div className="d-flex gap-3">
                     <Field
-                      name="name"
-                      type="string"
-                      label="Nome Completo"
-                      autoComplete="true"
-                      placeholder="Nome Completo"
+                      name="password"
+                      type="password"
+                      label="Senha"
+                      autoComplete="current-password"
+                      placeholder="Senha"
                       component={CustomInput}
                     />
                     <Field
-                      name="email"
-                      type="email"
-                      label="Email"
-                      autoComplete="true"
-                      placeholder="Email"
+                      name="confirmPassword"
+                      type="password"
+                      label="Confirmação de senha"
+                      autoComplete="current-password"
+                      placeholder="Confirme sua senha"
                       component={CustomInput}
                     />
-                    <Field
-                      name="roles"
-                      type="string"
-                      label="Cargos"
-                      placeholder="Cargos"
-                      component={CustomInput}
-                    />
-                    <div className="d-flex gap-3">
-                      <Field
-                        name="password"
-                        type="password"
-                        label="Senha"
-                        autoComplete="current-password"
-                        placeholder="Senha"
-                        component={CustomInput}
-                      />
-                      <Field
-                        name="confirmPassword"
-                        type="password"
-                        label="Confirmação de senha"
-                        autoComplete="current-password"
-                        placeholder="Confirme sua senha"
-                        component={CustomInput}
-                      />
-                    </div>
-                    <div className="d-flex justify-content-center gap-4">
-                      <button
-                        className="btn bg-danger text-white rounded p-1 w-100"
-                        type="submit"
-                      >
-                        Remover usuário
-                      </button>
-                      <button
-                        className="btn bg-black text-white rounded p-1 w-100"
-                        type="submit"
-                      >
-                        Editar usuário
-                      </button>
-                    </div>
                   </div>
-                </Form>
-              )}
-            </Formik>
-          ))}
-        </div>
+                  <div className="d-flex justify-content-center gap-4">
+                    <button
+                      className="btn bg-danger text-white rounded p-1 w-100"
+                      type="submit"
+                    >
+                      Remover usuário
+                    </button>
+                    <button
+                      className="btn bg-black text-white rounded p-1 w-100"
+                      type="submit"
+                    >
+                      Editar usuário
+                    </button>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        ))}
       </div>
     </main>
   );

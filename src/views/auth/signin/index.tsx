@@ -39,9 +39,9 @@ const SignIn = () => {
   };
 
   return (
-    <main className="primary-container p-5">
-      <div className="secondary-container p-5">
-        <div className="tertiary-container shadow-lg">
+    <main className="primary-container">
+      <div className="card-container">
+        <div className="card shadow-lg">
           <Formik
             initialValues={{ email: '', password: '' }}
             validateOnMount
@@ -51,7 +51,7 @@ const SignIn = () => {
             {() => (
               <Form className="signin-form">
                 <h3 className="text-center">Login</h3>
-                <div>
+                <div className="form-group">
                   <Field
                     name="email"
                     type="email"
@@ -69,10 +69,10 @@ const SignIn = () => {
                     component={CustomInput}
                   />
                 </div>
-                <div className="d-flex flex-column gap-2">
+                <div className="form-group">
                   <Link
                     onClick={onSignUp}
-                    style={{ textDecoration: 'underline', color: 'black' }}
+                    className="form-link"
                     to={ROUTES.FORGOT_PASSWORD}
                   >
                     <span>Esqueceu sua senha?</span>
@@ -84,13 +84,13 @@ const SignIn = () => {
                     Entrar
                   </button>
                   <span>
-                    Não tem uma conta?
+                    Não tem uma conta? 
                     <Link
                       onClick={onSignUp}
-                      style={{ textDecoration: 'underline', color: 'black' }}
+                      className="form-link"
                       to={ROUTES.SIGNUP}
                     >
-                      Faça seu cadastro
+                       Faça seu cadastro
                     </Link>
                   </span>
                 </div>
