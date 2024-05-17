@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
+import CurrencyInput from 'react-currency-input-field';
 import * as Yup from 'yup';
 
 const editPlanSchema = Yup.object({
@@ -31,7 +32,7 @@ const EditPlan = () => {
             validationSchema={editPlanSchema}
             onSubmit={onSubmitForm}
           >
-            {() => (
+            {({ setFieldValue }) => (
               <Form className="users-edit-form">
                 <div className="d-flex flex-column gap-3">
                   <Field
@@ -50,7 +51,7 @@ const EditPlan = () => {
                     autoComplete="true"
                     placeholder="Descrição"
                     component={CustomInput}
-                    style={{ width: '100%', height: '9.375rem' }} 
+                    style={{ width: '100%', height: '5.375rem' }} 
                   />
                   <Field
                     name="product"
@@ -60,24 +61,26 @@ const EditPlan = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-
                   <div className="d-flex gap-3">
-                    <Field
+                    <CurrencyInput
                       name="priceMonth"
-                      type="string"
-                      label="Preço mensal"
                       placeholder="Preço mensal"
-                      component={CustomInput}
+                      decimalsLimit={2}
+                      prefix="R$ "
+                      intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+                      onValueChange={(value) => setFieldValue('priceMonth', value)}
+                      style={{ width: '100%' }}
                     />
-                    <Field
+                    <CurrencyInput
                       name="priceYear"
-                      type="string"
-                      label="Preço anual"
                       placeholder="Preço anual"
-                      component={CustomInput}
+                      decimalsLimit={2}
+                      prefix="R$ "
+                      intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+                      onValueChange={(value) => setFieldValue('priceYear', value)}
+                      style={{ width: '100%' }}
                     />
                   </div>
-
                   <Field
                     name="status"
                     type="string"
@@ -86,7 +89,6 @@ const EditPlan = () => {
                     component={CustomInput}
                     style={{ width: '100%' }} 
                   />
-    
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-black text-white rounded p-1"
@@ -96,7 +98,6 @@ const EditPlan = () => {
                       Selecionar imagem
                     </button>
                   </div>
-
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-danger text-white rounded p-1"

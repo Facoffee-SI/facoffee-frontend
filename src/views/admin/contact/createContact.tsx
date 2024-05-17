@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
+import InputMask from 'react-input-mask';
 
 const createContactSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -52,12 +53,11 @@ const CreateContact = () => {
                       placeholder="Email"
                       component={CustomInput}
                     />
-                    <Field
+                    <InputMask
+                      mask="(99) 99999-9999"
                       name="phone"
                       type="string"
-                      label="Telefone"
                       placeholder="Telefone"
-                      component={CustomInput}
                     />
                   </div>
 
@@ -68,7 +68,7 @@ const CreateContact = () => {
                     autoComplete="true"
                     placeholder="Descrição"
                     component={CustomInput}
-                    style={{ width: '100%', height: '9.375rem' }} 
+                    style={{ width: '100%', height: '5.375rem' }} 
                   />
 
                   <Field
@@ -83,10 +83,9 @@ const CreateContact = () => {
                   <Field
                     name="maps"
                     type="string"
-                    label="GoogleMaps"
+                    label="Google Maps"
                     placeholder="Google Maps (Link)"
                     component={CustomInput}
-                    disabled="true"
                     style={{ width: '100%' }} 
                   />
 

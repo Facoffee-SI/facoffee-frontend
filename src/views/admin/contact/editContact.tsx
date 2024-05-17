@@ -68,7 +68,7 @@ const CreateContact = () => {
                     autoComplete="true"
                     placeholder="Descrição"
                     component={CustomInput}
-                    style={{ width: '100%', height: '9.375rem' }} 
+                    style={{ width: '100%', height: '5.375rem' }} 
                   />
 
                   <Field
