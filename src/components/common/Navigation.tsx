@@ -91,10 +91,10 @@ const Navigation = () => {
       </a>
       {token ? (
         <Link
-          className="btn bg-black text-white rounded p-1"
+          className="btn bg-black text-white rounded p-2"
           to={ROUTES.SIGNIN}
         >
-          Teste
+          Login
         </Link>
       ) : (
         <Link
