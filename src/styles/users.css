@@ -1,0 +1,20 @@
+.user-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px solid white;
+}
+
+.user-card-header {
+  width: 100%;
+  background-color: #7b7979 !important;
+}
+
+.users-edit-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem;
+}

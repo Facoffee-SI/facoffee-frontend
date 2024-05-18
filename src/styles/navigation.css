@@ -1,0 +1,8 @@
+.navbar-container {
+  background-color: var(--clr-quaternary);
+  width: 100vw;
+}
+
+.navbar-brand {
+  background-color: var(--clr-quinary);
+}
