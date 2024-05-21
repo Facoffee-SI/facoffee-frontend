@@ -12,20 +12,22 @@ function UserCard({ userObject }: Props) {
     .map((role: UserRole) => role.roleName)
     .join(' | ');
 
+  const profileImage = userObject.user.profilePicture 
+    ?? userImageDefault;
+
   return (
-    <Card key={userObject.user.id} className="user-card m-4">
+    <Card key={userObject.user.id} className="user-card">
       <CardHeader className="user-card-header">
         <CardImg
-          src={userImageDefault}
+          className="user-profile-picture"
+          src={profileImage}
           alt={userObject.user.name}
-          height="100px"
-          style={{ objectFit: 'none' }}
-        ></CardImg>
+        />
       </CardHeader>
       <Card.Body>
         <Card.Title className="fw-bold">{userObject.user.name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">{userRoles}</Card.Subtitle>
-        <Card.Text>{userObject.user.email}</Card.Text>
+        <Card.Text className="card-email">{userObject.user.email}</Card.Text>
       </Card.Body>
     </Card>
   );

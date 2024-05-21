@@ -2,19 +2,44 @@ import { Row } from 'react-bootstrap';
 import '../../../styles/style.css';
 import * as ROUTES from '../../../constants/routes';
 import { useNavigate } from 'react-router-dom';
-import { UserList } from '../../../components/user/UserList';
+import { UserList, UserObject } from '../../../components/user/UserList';
 import api from '../../../services/Api';
-
-const userList = await api.get('user').then((obj) => {
-  return obj.data;
-});
+import { useEffect, useState } from 'react';
 
 const Users = () => {
   const navigate = useNavigate();
+  const [userList, setUserList] = useState<UserObject[]>([]);
 
   const createUser = () => {
     return navigate(ROUTES.ADMIN_USERS_CREATE);
   };
+
+  useEffect(() => {
+    const fetchUserList = async () => {
+      try {
+        const response = await api.get('user');
+        const usersWithImages: UserObject[] = await Promise.all(response.data.map(async (user: UserObject) => {
+          try {
+            const imageResponse = await api.get(`/user/image/${user.user.id}`);
+            const uint8Array = new Uint8Array(imageResponse.data.data);
+            const blob = new Blob([uint8Array], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(blob);
+            user.user.profilePicture = imageUrl;
+            return user;
+          } catch (error) {
+            console.error('Error fetching image for user:', error);
+            user.user.profilePicture = null;
+            return user;
+          }
+        }));
+        setUserList(usersWithImages);
+      } catch (error) {
+        console.error('Error fetching user list:', error);
+      }
+    };
+
+    fetchUserList();
+  }, []);
 
   return (
     <main className="primary-container p-5">
@@ -30,9 +55,11 @@ const Users = () => {
                 Criar novo usuário
               </button>
             </div>
-            <Row md={2} xs={1} lg={4}>
-              <UserList userList={userList}></UserList>
-            </Row>
+            <div className='user-list-container'>
+              <Row>
+                <UserList userList={userList}></UserList>
+              </Row>
+            </div>
           </div>
         </div>
       </div>
