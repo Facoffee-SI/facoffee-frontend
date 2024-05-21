@@ -1,26 +1,58 @@
 import * as Yup from 'yup';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import { userImageDefault } from './userImageDefault';
+import { useLocation } from 'react-router-dom';
+import { Role, RolesResponse, UserObject } from '../../../components/common/Models';
+import api from '../../../services/Api';
+import CustomSelect from '../../../components/formik/CustomSelect';
 
 const userEditSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   email: Yup.string()
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
-  roles: Yup.string().required('Obrigatório preencher cargos'),
+  roles: Yup.array().min(1, 'Obrigatório preencher cargos'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
     .min(6, 'A senha deve ter no mínimo 6 caracteres'),
   confirmPassword: Yup.string().required('Obrigatório confirmar a senha')
+    .oneOf([Yup.ref('password')], 'As senhas devem ser iguais'),
 });
 
 const onSubmitForm = () => {};
 
 const UsersEdit = () => {
+  const location = useLocation();
+  const userObject: UserObject | null = location.state?.userObject;
+  
+  const userRoles = userObject?.userRoles.map((item) => ({
+    value: item.roleId,
+    label: item.roleName
+  })) || [];
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [profileImage, setProfileImage] = useState(userImageDefault);
+  const [rolesList, setRolesList] = useState<Role[]>([]);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await api.get('role');
+        const rolesList = response.data.map((item: RolesResponse) => ({
+          value: item.role.id,
+          label: item.role.name
+        }));
+
+        setRolesList(rolesList);
+      } catch (error) {
+        console.error('Erro ao buscar os cargos:', error);
+      }
+    };
+    fetchRoles();
+  }, []);
+  
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -45,9 +77,9 @@ const UsersEdit = () => {
         <h3 className="text-center mb-2">Edição de Usuário</h3>
           <Formik
             initialValues={{
-              name: '',
-              email: '',
-              roles: '',
+              name: userObject?.user.name ?? '',
+              email: userObject?.user.email ?? '',
+              roles: userRoles,
               password: '',
               confirmPassword: '',
             }}
@@ -92,10 +124,11 @@ const UsersEdit = () => {
                   />
                   <Field
                     name="roles"
-                    type="string"
                     label="Cargos"
-                    placeholder="Cargos"
-                    component={CustomInput}
+                    options={rolesList}
+                    isMulti
+                    placeholder="Selecione os cargos"
+                    component={CustomSelect}
                   />
                   <div className="d-flex flex-column flex-md-row gap-3">
                     <Field

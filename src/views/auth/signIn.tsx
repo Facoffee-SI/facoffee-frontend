@@ -5,6 +5,7 @@ import * as ROUTES from '../../constants/routes';
 import api from '../../services/Api';
 import CustomInput from '../../components/formik/CustomInput';
 import '../../styles/style.css';
+import { toast } from 'react-toastify';
 
 const SignInSchema = Yup.object({
   email: Yup.string()
@@ -34,7 +35,15 @@ const SignIn = () => {
       localStorage.setItem('token', JSON.stringify(response.data.token));
       navigate(ROUTES.ADMIN_USERS);
     } catch (e) {
-      console.error(e);
+        toast.error('Login incorreto. Verifique suas credenciais e tente novamente.', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
     }
   };
 

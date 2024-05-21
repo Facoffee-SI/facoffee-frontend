@@ -1,13 +1,16 @@
 import { Card, CardHeader, CardImg } from 'react-bootstrap';
 import '../../styles/users.css';
-import { UserObject, UserRole } from './UserList';
+import { UserObject, UserRole } from '../common/Models';
 import { userImageDefault } from '../../views/admin/users/userImageDefault';
+import { useNavigate } from 'react-router-dom';
+import * as ROUTES from '../../constants/routes';
 
 export interface Props {
   userObject: UserObject;
 }
 
 function UserCard({ userObject }: Props) {
+  const navigate = useNavigate();
   const userRoles = userObject.userRoles
     .map((role: UserRole) => role.roleName)
     .join(' | ');
@@ -15,8 +18,12 @@ function UserCard({ userObject }: Props) {
   const profileImage = userObject.user.profilePicture 
     ?? userImageDefault;
 
+  const editUser = () => {
+    return navigate(ROUTES.ADMIN_USERS_EDIT, { state: { userObject } });
+  };
+
   return (
-    <Card key={userObject.user.id} className="user-card">
+    <Card onClick={editUser} key={userObject.user.id} className="user-card">
       <CardHeader className="user-card-header">
         <CardImg
           className="user-profile-picture"
