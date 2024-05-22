@@ -13,6 +13,8 @@ import CreateContact from '../views/admin/contact/createContact';
 import EditContact from '../views/admin/contact/editContact';
 import Categories from '../views/admin/category/listCategories';
 import CreateCategory from '../views/admin/category/createCategory';
+import Roles from '../views/admin/role/listRoles';
+import CreateRole from '../views/admin/role/createRole';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -59,6 +61,14 @@ const AppRouter = () => (
       <Route
         path={ROUTES.ADMIN_CATEGORY_ADD}
         element={<CreateCategory></CreateCategory>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_ROLES}
+        element={<Roles></Roles>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_ROLE_ADD}
+        element={<CreateRole></CreateRole>}
       ></Route>
     </Routes>
   </BrowserRouter>

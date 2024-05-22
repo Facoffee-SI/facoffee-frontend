@@ -17,6 +17,9 @@ export const ADMIN_PLAN_EDIT = '/admin/plan/edit';
 export const ADMIN_CATEGORIES = '/admin/categories'
 export const ADMIN_CATEGORY_ADD = '/admin/catedory/add'
 
+export const ADMIN_ROLES = '/admin/roles'
+export const ADMIN_ROLE_ADD = '/admin/roles/add'
+
 export const ADMIN_CONTACT = '/admin/contacts';
 export const ADMIN_CONTACT_ADD = '/admin/contact/add';
 export const ADMIN_CONTACT_EDIT = '/admin/contact/edit';

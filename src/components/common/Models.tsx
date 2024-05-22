@@ -27,10 +27,22 @@ export interface User {
 
   export interface RolesResponse {
     role: Role,
-    rolePermission: string;
+    rolePermissions: PermissionRoleObject[];
+  }
+
+  export interface PermissionRoleObject {
+    permissionId: number;
+    action: string;
+    tableName: string;
   }
 
   export interface CategoryObject {
     id: string;
     name: string;
+  }
+
+  export interface PermissionObject {
+    id: number;
+    action: string;
+    tableName: string;
   }

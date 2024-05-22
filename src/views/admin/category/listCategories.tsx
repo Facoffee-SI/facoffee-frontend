@@ -46,7 +46,7 @@ const Categories = () => {
 
   return (
     <main className="primary-container p-5">
-      <div className="secondary-container p-5">
+      <div className="secondary-container p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
         <div className="tertiary-container">
           <h3 className="text-center m-4">Categorias</h3>
           <div className="p-4">
