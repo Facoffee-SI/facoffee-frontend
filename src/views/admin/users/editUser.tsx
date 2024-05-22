@@ -44,6 +44,7 @@ const UsersEdit = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [profileImage, setProfileImage] = useState<string | File>(userObject?.user.profilePicture ?? userImageDefault);
   const [rolesList, setRolesList] = useState<Role[]>([]);
+  const [isRemoving, setIsRemoving] = useState(false);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -82,7 +83,26 @@ const UsersEdit = () => {
     }
   };
 
-  const onSubmitForm = async (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
+  const handleSubmit = async (
+    values: FormValues,
+    formikHelpers: FormikHelpers<FormValues>,
+  ) => {
+    try {
+      if (isRemoving) {
+        await api.delete(`/user/${userObject?.user.id}`);
+        navigate(ROUTES.ADMIN_USERS);
+        setIsRemoving(false);
+      } else {
+        await onSubmitForm(values, formikHelpers);
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar/remover o usuário');
+    } finally {
+      formikHelpers.setSubmitting(false);
+    }
+  };
+
+  const onSubmitForm = async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
     try {
       const userUpdatePayload = {
         name: values.name,
@@ -106,7 +126,7 @@ const UsersEdit = () => {
     } catch (error) {
       console.error('Erro ao atualizar o usuário');
     } finally {
-      setSubmitting(false);
+      formikHelpers.setSubmitting(false);
     }
   };
 
@@ -125,7 +145,7 @@ const UsersEdit = () => {
             }}
             validateOnMount
             validationSchema={userEditSchema}
-            onSubmit={onSubmitForm}
+            onSubmit={handleSubmit}
           >
             {({ setFieldValue }) => (
               <Form className="users-edit-form">
@@ -192,6 +212,7 @@ const UsersEdit = () => {
                     <button
                       className="btn bg-danger text-white rounded p-1 w-100"
                       type="submit"
+                      onClick={() => setIsRemoving(true)} 
                     >
                       Remover usuário
                     </button>

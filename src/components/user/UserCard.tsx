@@ -22,6 +22,11 @@ function UserCard({ userObject }: Props) {
     return navigate(ROUTES.ADMIN_USERS_EDIT, { state: { userObject } });
   };
 
+  const truncatedName = userObject.user.name.length > 15
+  ? userObject.user.name.substring(0, 15) + "..."
+  : userObject.user.name;
+
+
   return (
     <Card onClick={editUser} key={userObject.user.id} className="user-card">
       <CardHeader className="user-card-header">
@@ -32,7 +37,7 @@ function UserCard({ userObject }: Props) {
         />
       </CardHeader>
       <Card.Body>
-        <Card.Title className="fw-bold">{userObject.user.name}</Card.Title>
+        <Card.Title className="fw-bold">{truncatedName}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">{userRoles}</Card.Subtitle>
         <Card.Text className="card-email">{userObject.user.email}</Card.Text>
       </Card.Body>
