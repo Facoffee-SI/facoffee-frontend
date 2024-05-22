@@ -53,7 +53,7 @@ const CreateUser = () => {
         }));
         setRolesList(rolesList);
       } catch (error) {
-        console.error('Erro ao buscar os cargos:', error);
+        console.error('Erro ao buscar os cargos');
       }
     };
     fetchRoles();

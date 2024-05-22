@@ -29,3 +29,8 @@ export interface User {
     role: Role,
     rolePermission: string;
   }
+
+  export interface CategoryObject {
+    id: string;
+    name: string;
+  }

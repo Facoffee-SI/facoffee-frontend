@@ -11,6 +11,8 @@ import CreatePlan from '../views/admin/plan/createPlan';
 import EditPlan from '../views/admin/plan/editPlan';
 import CreateContact from '../views/admin/contact/createContact';
 import EditContact from '../views/admin/contact/editContact';
+import Categories from '../views/admin/categories/listCategories';
+import CreateCategory from '../views/admin/categories/createCategory';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -49,6 +51,14 @@ const AppRouter = () => (
       <Route
         path={ROUTES.ADMIN_CONTACT_EDIT}
         element={<EditContact></EditContact>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_CATEGORIES}
+        element={<Categories></Categories>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_CATEGORY_ADD}
+        element={<CreateCategory></CreateCategory>}
       ></Route>
     </Routes>
   </BrowserRouter>
