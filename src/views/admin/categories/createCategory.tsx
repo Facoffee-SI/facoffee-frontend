@@ -54,7 +54,7 @@ const CreateCategory = () => {
                       type="submit"
                       style={{ width: '100%' }}
                     >
-                      Cadastrar Categoria
+                      Cadastrar
                     </button>
                   </div>
                 </div>

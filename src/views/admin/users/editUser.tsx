@@ -8,6 +8,7 @@ import { Role, RolesResponse, UserObject } from '../../../components/common/Mode
 import api from '../../../services/Api';
 import CustomSelect from '../../../components/formik/CustomSelect';
 import * as ROUTES from '../../../constants/routes';
+import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
 
 const userEditSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -45,6 +46,7 @@ const UsersEdit = () => {
   const [profileImage, setProfileImage] = useState<string | File>(userObject?.user.profilePicture ?? userImageDefault);
   const [rolesList, setRolesList] = useState<Role[]>([]);
   const [isRemoving, setIsRemoving] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -89,9 +91,7 @@ const UsersEdit = () => {
   ) => {
     try {
       if (isRemoving) {
-        await api.delete(`/user/${userObject?.user.id}`);
-        navigate(ROUTES.ADMIN_USERS);
-        setIsRemoving(false);
+        setShowModal(true);
       } else {
         await onSubmitForm(values, formikHelpers);
       }
@@ -130,8 +130,25 @@ const UsersEdit = () => {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      await api.delete(`/user/${userObject?.user.id}`);
+      navigate(ROUTES.ADMIN_USERS);
+      setIsRemoving(false);
+      setShowModal(false);
+    } catch (error) {
+      console.error('Erro ao remover o usuário');
+    }
+  };
+
   return (
     <main className="primary-container p-3 d-flex justify-content-center align-items-center">
+      <ConfirmationModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleDeleteUser}
+        text="Deseja realmente excluir o usuário?"
+      />
       <div className="card p-5" style={{ maxWidth: '50.75rem' }}>
         <h3 className="text-center mb-2">Edição de Usuário</h3>
           <Formik

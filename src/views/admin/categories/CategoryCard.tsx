@@ -1,7 +1,8 @@
-import { Button, Col } from "react-bootstrap";
-import api from "../../../services/Api";
 import { useState } from "react";
+import { Button, Col } from "react-bootstrap";
 import { CategoryObject } from "../../../components/common/Models";
+import { ConfirmationModal } from "../../../components/common/ConfirmationModal";
+import api from "../../../services/Api";
 import './styles.css'
 
 interface CategoryCardProps {
@@ -15,6 +16,7 @@ interface CategoryCardProps {
 const CategoryCard = ({ category, onEdit, onRemove, isEditing }: CategoryCardProps) => {
   const [categoryName, setCategoryName] = useState(category.name);
   const [isEditingState, setIsEditingState] = useState(isEditing);
+  const [showModal, setShowModal] = useState(false);
 
   const handleEdit = () => {
     setIsEditingState(true);
@@ -41,6 +43,12 @@ const CategoryCard = ({ category, onEdit, onRemove, isEditing }: CategoryCardPro
 
   return (
     <Col className="mb-3">
+      <ConfirmationModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={handleRemove}
+        text="Deseja realmente excluir a categoria?"
+      />
       <div className="card p-3 shadow">
         {isEditingState ? (
           <>
@@ -64,7 +72,7 @@ const CategoryCard = ({ category, onEdit, onRemove, isEditing }: CategoryCardPro
               <Button variant="warning" onClick={handleEdit}>
                 Editar
               </Button>
-              <Button variant="danger" onClick={handleRemove}>
+              <Button variant="danger" onClick={() => setShowModal(true)} >
                 Remover
               </Button>
             </div>
