@@ -7,6 +7,7 @@ export interface User {
     name: string;
     profilePicture: string | null;
     updatedAt: string;
+    password?: string;
   }
   
   export interface UserRole {

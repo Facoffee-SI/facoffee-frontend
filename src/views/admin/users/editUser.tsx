@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
 import { useEffect, useRef, useState } from 'react';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import { userImageDefault } from './userImageDefault';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Role, RolesResponse, UserObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import CustomSelect from '../../../components/formik/CustomSelect';
+import * as ROUTES from '../../../constants/routes';
 
 const userEditSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -21,10 +22,18 @@ const userEditSchema = Yup.object({
     .oneOf([Yup.ref('password')], 'As senhas devem ser iguais'),
 });
 
-const onSubmitForm = () => {};
+interface FormValues {
+  name: string;
+  email: string;
+  roles: { value: string; label: string }[];
+  password: string;
+  confirmPassword: string;
+  profileImage: string | File;
+}
 
 const UsersEdit = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const userObject: UserObject | null = location.state?.userObject;
   
   const userRoles = userObject?.userRoles.map((item) => ({
@@ -33,7 +42,7 @@ const UsersEdit = () => {
   })) || [];
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState(userImageDefault);
+  const [profileImage, setProfileImage] = useState<string | File>(userObject?.user.profilePicture ?? userImageDefault);
   const [rolesList, setRolesList] = useState<Role[]>([]);
 
   useEffect(() => {
@@ -47,12 +56,12 @@ const UsersEdit = () => {
 
         setRolesList(rolesList);
       } catch (error) {
-        console.error('Erro ao buscar os cargos:', error);
+        console.error('Erro ao buscar os cargos');
       }
     };
+
     fetchRoles();
-  }, []);
-  
+  }, [userObject]);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -60,14 +69,44 @@ const UsersEdit = () => {
     }
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: unknown) => void) => {
     const file = event.target.files?.[0];
     if (file) {
+      setFieldValue('profileImage', file);
       const reader = new FileReader();
       reader.onload = () => {
         setProfileImage(reader.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmitForm = async (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
+    try {
+      const userUpdatePayload = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        roleIds: values.roles,
+      };
+      await api.patch(`/user/${userObject?.user.id}`, userUpdatePayload);
+
+      if (values.profileImage instanceof File) {
+        const formData = new FormData();
+        formData.append('profilePicture', values.profileImage);
+        await api.post(`/user/image/${userObject?.user.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+        });
+      }
+
+      navigate(ROUTES.ADMIN_USERS);
+    } catch (error) {
+      console.error('Erro ao atualizar o usuário');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -82,17 +121,18 @@ const UsersEdit = () => {
               roles: userRoles,
               password: '',
               confirmPassword: '',
+              profileImage: profileImage,
             }}
             validateOnMount
             validationSchema={userEditSchema}
             onSubmit={onSubmitForm}
           >
-            {() => (
+            {({ setFieldValue }) => (
               <Form className="users-edit-form">
                 <div className="d-flex flex-column gap-3">
                   <div className="d-flex flex-column align-items-center">
                     <img
-                      src={profileImage ?? userImageDefault}
+                      src={typeof profileImage === 'string' ? profileImage : URL.createObjectURL(profileImage)}
                       alt="Imagem de perfil"
                       height="100px"
                       width="100px"
@@ -103,7 +143,7 @@ const UsersEdit = () => {
                       type="file"
                       ref={fileInputRef}
                       style={{ display: 'none' }}
-                      onChange={handleFileChange}
+                      onChange={(event) => handleFileChange(event, setFieldValue)}
                     />
                   </div>
                   <Field
