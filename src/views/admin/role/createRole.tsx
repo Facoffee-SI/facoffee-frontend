@@ -4,19 +4,36 @@ import * as Yup from 'yup';
 import * as ROUTES from '../../../constants/routes';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/Api';
+import { useEffect, useState } from 'react';
+import { PermissionObject, RolePayload } from '../../../components/common/Models';
+import CustomSelect from '../../../components/formik/CustomSelect';
 
 const createCategorySchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
+  permissions: Yup.array().of(Yup.number().required()).min(1, 'Selecione pelo menos uma permissão')
 });
 
 const CreateRole = () => {
   const navigate = useNavigate();
+  const [permissions, setPermissions] = useState<PermissionObject[]>([]);
 
-  const onSubmitForm = async (values: { name: string }, { setSubmitting }: FormikHelpers<{ name: string }>) => {
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      try {
+        const response = await api.get('/permission');
+        setPermissions(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar permissões');
+      }
+    };
+
+    fetchPermissions();
+  }, []);
+
+  const onSubmitForm = async (values: RolePayload, { setSubmitting }: FormikHelpers<RolePayload>) => {
     try {
-      await api.post('category', { name: values.name });
-
-      navigate(ROUTES.ADMIN_CATEGORIES);
+      await api.post('role', { name: values.name, permissionIds: values.permissions });
+      navigate(ROUTES.ADMIN_ROLES);
     } catch (error) {
       console.error('Erro ao cadastrar a categoria');
     } finally {
@@ -24,13 +41,19 @@ const CreateRole = () => {
     }
   };
 
+  const permissionOptions = permissions.map((permission) => ({
+    value: permission.id,
+    label: `${permission.action} - ${permission.tableName}`, 
+  }));
+
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '30.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Cadastro de Categoria</h3>
+        <h3 className="text-center mb-4">Cadastro de Cargo</h3>
           <Formik
             initialValues={{
               name: '',
+              permissions: [] as number[],
             }}
             validateOnMount
             validationSchema={createCategorySchema}
@@ -47,6 +70,14 @@ const CreateRole = () => {
                     placeholder="Nome"
                     component={CustomInput}
                     style={{ width: '100%' }} 
+                  />
+                  <Field
+                    name="permissions"
+                    label="Permissões"
+                    options={permissionOptions}
+                    isMulti
+                    placeholder="Permissões"
+                    component={CustomSelect}
                   />
                   <div className="d-flex justify-content-center gap-4">
                     <button

@@ -14,7 +14,7 @@ const Roles = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const createRole = () => {
-    navigate(ROUTES.ADMIN_ROLES);
+    navigate(ROUTES.ADMIN_ROLE_ADD);
   };
 
   const fetchRoles = async () => {
