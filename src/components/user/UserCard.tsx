@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardImg } from 'react-bootstrap';
 import '../../styles/users.css';
 import { UserObject, UserRole } from '../common/Models';
-import { userImageDefault } from '../../views/admin/users/userImageDefault';
+import { userImageDefault } from '../../views/admin/user/userImageDefault';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../constants/routes';
 
