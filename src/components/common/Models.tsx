@@ -52,6 +52,20 @@ export interface RolePayload {
   permissions: number[]
 }
 
+export interface ProductEditObject {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  barCode: string;
+  description: string;
+  quantity: number;
+  discountValue: number;
+  isDiscountPercentage: boolean;
+  categoryId: string;
+  category?: CategoryObject;
+}
+
 export interface ProductObject {
   name: string;
   brand: string;

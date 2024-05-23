@@ -15,6 +15,7 @@ import Categories from '../views/admin/category/listCategories';
 import CreateCategory from '../views/admin/category/createCategory';
 import Roles from '../views/admin/role/listRoles';
 import CreateRole from '../views/admin/role/createRole';
+import Products from '../views/admin/product/listProduct';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -30,7 +31,11 @@ const AppRouter = () => (
         path={ROUTES.ADMIN_USERS_CREATE}
         element={<CreateUser></CreateUser>}
       ></Route>
-       <Route
+      <Route
+        path={ROUTES.ADMIN_PRODUCTS}
+        element={<Products></Products>}
+      ></Route>
+      <Route
         path={ROUTES.ADMIN_PRODUCT_ADD}
         element={<CreateProduct></CreateProduct>}
       ></Route>
