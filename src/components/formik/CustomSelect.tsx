@@ -33,7 +33,9 @@ export const CustomSelect = ({
   const getValue = () => {
     if (options) {
       return isMulti
-        ? options.filter((option) => field.value.indexOf(option.value) >= 0)
+        ? options.filter((option) => {
+          return Array.isArray(field.value) && field.value.indexOf(option.value) >= 0;
+        })
         : options.find((option) => option.value === field.value);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

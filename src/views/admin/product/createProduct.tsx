@@ -1,27 +1,66 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './styles.css'
+import { CategoryObject, ProductObject } from '../../../components/common/Models';
+import api from '../../../services/Api';
+import CustomSelect from '../../../components/formik/CustomSelect';
+import CurrencyInput from 'react-currency-input-field';
+import { useNavigate } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 
 const createProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
   brand: Yup.string().required('Obrigatório preencher a marca'),
   price: Yup.string().required('Obrigatório preencher o preço'),
-  codebar: Yup.string().required('Obrigatório preencher o código de barras'),
-  category: Yup.string().required('Obrigatório selecionar as categorias'),
-  quantity: Yup.string().required('Obrigatório preencher a quantidade'),
+  barCode: Yup.number().required('Preencha corretamente o código de barras'),
+  categoryId: Yup.string().required('Obrigatório preencher a categoria'),
+  quantity: Yup.number().required('Preencha corretamente a quantidade'),
 });
 
-const onSubmitForm = () => {};
-
 const CreateProduct = () => {
+  const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
+  const [categories, setCategories] = useState<CategoryObject[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/category');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar categorias');
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const categoriesOptions = categories.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImages = Array.from(event.target.files || []);
     setImages(selectedImages);
+  };
+
+  const onSubmitForm = async (values: ProductObject,
+    { setSubmitting }: FormikHelpers<ProductObject>) => {
+    try {
+      values.price = parseFloat(
+        values.price.toString().replace(/\./g, '').replace(',', '.')
+      );
+      await api.post('product', values);
+      navigate(ROUTES.ADMIN_PRODUCT_EDIT);
+    } catch (error) {
+      console.error('Erro ao cadastrar o produto');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -33,18 +72,18 @@ const CreateProduct = () => {
             name: '',
             description: '',
             brand: '',
-            price: '',
-            codebar: '',
-            category: '',
-            quantity: '',
-            discount: '',
-            discountSubscription: '',
+            price: '' as unknown as number,
+            barCode: '',
+            categoryId: '',
+            quantity: '' as unknown as number,
+            discountValue: '' as unknown as number,
+            isDiscountPercentage: false,
           }}
           validateOnMount
           validationSchema={createProductSchema}
           onSubmit={onSubmitForm}
         >
-          {() => (
+          {({ setFieldValue }) => (
             <Form className="users-edit-form">
               <div className="d-flex flex-column gap-3">
                 <Field
@@ -73,51 +112,60 @@ const CreateProduct = () => {
                   component={CustomInput}
                   style={{ width: '100%' }} 
                 />
-                <Field
+                <CurrencyInput
                   name="price"
-                  type="string"
-                  label="Preço"
                   placeholder="Preço"
-                  component={CustomInput}
-                  style={{ width: '100%' }} 
-                />
-                <div className="d-flex gap-3">
-                  <Field
-                    name="discount"
-                    type="string"
-                    label="Desconto"
-                    placeholder="Desconto"
-                    component={CustomInput}
-                  />
-                  <Field
-                    name="discountSubscription"
-                    type="string"
-                    label="Desconto para assinantes"
-                    placeholder="Desconto para assinantes"
-                    component={CustomInput}
-                  />
+                  decimalsLimit={2}
+                  prefix="R$ "
+                  intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+                  onValueChange={(value) => setFieldValue('price', value)}
+                  style={{ width: '100%' }}
+                /> 
+                <div className="row">
+                  <div className="col-md-2 align-self-center">
+                      <div className="form-group p-2">
+                        <Field
+                          type="checkbox"
+                          name="isDiscountPercentage"
+                          id="isDiscountPercentage"
+                          className="form-check-input"
+                        />
+                        <div> 
+                          <label className="form-check-label" htmlFor="isDiscountPercentage">
+                            Porcentagem?
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-10">
+                      <Field
+                        name="discountValue"
+                        type="number"
+                        label="Desconto"
+                        placeholder="Desconto"
+                        component={CustomInput}
+                      />
+                    </div>
                 </div>
                 <Field
-                  name="codebar"
-                  type="string"
+                  name="barCode"
+                  type="number"
                   label="Código de barras"
                   placeholder="Código de barras"
                   component={CustomInput}
                   style={{ width: '100%' }} 
                 />
-
                 <Field
-                  name="category"
-                  type="string"
+                  name="categoryId"
                   label="Categorias"
+                  options={categoriesOptions}
+                  isMulti={false}
                   placeholder="Categorias"
-                  component={CustomInput}
-                  style={{ width: '100%' }} 
+                  component={CustomSelect}
                 />
-
                 <Field
                   name="quantity"
-                  type="string"
+                  type="number"
                   label="Quantidade"
                   placeholder="Quantidade"
                   component={CustomInput}

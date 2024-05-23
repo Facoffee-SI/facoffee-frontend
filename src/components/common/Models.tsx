@@ -47,8 +47,20 @@ export interface PermissionObject {
   tableName: string;
 }
 
-
 export interface RolePayload {
   name: string,
   permissions: number[]
+}
+
+export interface ProductObject {
+  name: string;
+  brand: string;
+  price: number;
+  barCode: string;
+  description: string;
+  quantity: number;
+  discountValue: number;
+  isDiscountPercentage: boolean;
+  categoryId: string;
+  category?: CategoryObject;
 }
