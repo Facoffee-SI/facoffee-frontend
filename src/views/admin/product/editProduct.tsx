@@ -14,9 +14,8 @@ const editProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
   brand: Yup.string().required('Obrigatório preencher a marca'),
-  price: Yup.string().required('Obrigatório preencher o preço'),
+  price: Yup.number().required('Obrigatório preencher o preço'),
   barCode: Yup.number().required('Preencha corretamente o código de barras'),
-  categoryId: Yup.string().required('Obrigatório preencher a categoria'),
   quantity: Yup.number().required('Preencha corretamente a quantidade'),
 });
 
@@ -46,9 +45,8 @@ const EditProduct = () => {
         console.error('Erro ao buscar categorias');
       }
     };
-    console.log(product)
     fetchCategories();
-  }, [product]);
+  }, []);
 
   const categoriesOptions = categories.map((category) => ({
     value: category.id,
@@ -75,9 +73,14 @@ const EditProduct = () => {
   const onSubmitForm = async (values: ProductObject,
     { setSubmitting }: FormikHelpers<ProductObject>) => {
     try {
-      values.price = parseFloat(
-        values.price.toString().replace(/\./g, '').replace(',', '.')
-      );
+      if (!values.categoryId) {
+        values.categoryId = product?.category?.id || '';
+      }
+
+      if (values.isDiscountPercentage === false) {
+        delete values.discountValue;
+      }
+
       await api.patch(`product/${product?.id}`, values);
       navigate(ROUTES.ADMIN_PRODUCT_EDIT);
     } catch (error) {
@@ -87,6 +90,7 @@ const EditProduct = () => {
     }
   };
 
+  const priceAsNumber = parseFloat(product?.price.toString() || '');
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
@@ -102,7 +106,7 @@ const EditProduct = () => {
             name: product?.name || '',
             description: product?.description || '', 
             brand: product?.brand || '',
-            price: product?.price || 0,
+            price: priceAsNumber,
             barCode: product?.barCode || '',
             categoryId: product?.categoryId || '', 
             quantity: product?.quantity || 0,
@@ -144,13 +148,16 @@ const EditProduct = () => {
                 />
                 <CurrencyInput
                   name="price"
-                  placeholder="Preço"
+                  placeholder={product ? `R$ ${product.price}` : "Preço"}
                   decimalsLimit={2}
                   prefix="R$ "
                   intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                  onValueChange={(value) => setFieldValue('price', value)}
-                  style={{ width: '100%' }}
-                /> 
+                  onValueChange={(value) => {
+                    value 
+                      ? setFieldValue('price', parseFloat(value.toString().replace(/\./g, '').replace(',', '.')))
+                      : setFieldValue('price', value);
+                  }}
+                />
                 <div className="row">
                   <div className="col-md-2 align-self-center">
                       <div className="form-group p-2">
@@ -190,7 +197,7 @@ const EditProduct = () => {
                   label="Categorias"
                   options={categoriesOptions}
                   isMulti={false}
-                  placeholder="Categorias"
+                  placeholder={product?.category ? `${product.category?.name}` : "Categorias"}
                   component={CustomSelect}
                 />
                 <Field
@@ -236,7 +243,7 @@ const EditProduct = () => {
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-danger text-white rounded p-1"
-                      type="submit"
+                      type="button"
                       style={{ width: '50%' }}
                       onClick={() => setShowModal(true)} 
                     >

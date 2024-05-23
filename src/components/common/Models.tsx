@@ -73,7 +73,7 @@ export interface ProductObject {
   barCode: string;
   description: string;
   quantity: number;
-  discountValue: number;
+  discountValue?: number;
   isDiscountPercentage: boolean;
   categoryId: string;
   category?: CategoryObject;
