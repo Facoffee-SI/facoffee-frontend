@@ -1,11 +1,10 @@
 .image-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
   
-  .image-preview {
-    max-width: 15.625rem;
-    height: auto;
-  }
-  
+.image-preview {
+  max-width: 15.625rem;
+  height: auto;
+}

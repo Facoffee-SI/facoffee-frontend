@@ -31,7 +31,7 @@ const EditProduct = () => {
   const [isRemoving, setIsRemoving] = useState(false);
 
   useEffect(() => {
-    if(!product) {
+    if (!product) {
       navigate(ROUTES.ADMIN_PRODUCTS);
     }
   }, [product, navigate]);
@@ -82,7 +82,19 @@ const EditProduct = () => {
       }
 
       await api.patch(`product/${product?.id}`, values);
-      navigate(ROUTES.ADMIN_PRODUCT_EDIT);
+      if (images.length > 0) {
+        const imageUploadPromises = images.map((image) => {
+          const formData = new FormData();
+          formData.append('image', image);
+          return api.post(`/product/image/${product?.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        });
+        await Promise.all(imageUploadPromises);
+      }
+      navigate(ROUTES.ADMIN_PRODUCTS);
     } catch (error) {
       console.error('Erro ao cadastrar o produto');
     } finally {

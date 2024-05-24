@@ -54,7 +54,24 @@ const CreateProduct = () => {
       values.price = parseFloat(
         values.price.toString().replace(/\./g, '').replace(',', '.')
       );
-      await api.post('product', values);
+
+      if (values.isDiscountPercentage === false) {
+        delete values.discountValue;
+      }
+
+      const response = await api.post('product', values);
+      if (images.length > 0) {
+        const imageUploadPromises = images.map((image) => {
+          const formData = new FormData();
+          formData.append('image', image);
+          return api.post(`/product/image/${response.data.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        });
+        await Promise.all(imageUploadPromises);
+      }
       navigate(ROUTES.ADMIN_PRODUCT_EDIT);
     } catch (error) {
       console.error('Erro ao cadastrar o produto');

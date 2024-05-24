@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { ProductEditObject } from '../../../components/common/Models';
 import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
 import api from '../../../services/Api';
@@ -29,6 +29,10 @@ const ProductCard = ({ product, onRemove }: ProductCardProps) => {
     }
   };
 
+  const formatPrice = (price: number) => {
+    return `R$ ${price.toString().replace('.', ',')}`;
+  };
+
   return (
     <Col className="mb-3">
       <ConfirmationModal
@@ -38,17 +42,23 @@ const ProductCard = ({ product, onRemove }: ProductCardProps) => {
         text="Deseja realmente excluir o produto?"
       />
       <div className="card p-3 shadow">
-        <>
-          <h5 className="card-title">{product.name}</h5>
-          <div className="d-flex justify-content-end">
+        <Row>
+          <Col xs={12} md={8}>
+            <h5 className="card-title">{product.name}</h5>
+            <div className="d-flex">
+              <p className="card-text mb-0 me-4">{product.category?.name}</p>
+              <p className="card-text mb-0">{formatPrice(product.price)}</p>
+            </div>
+          </Col>
+          <Col xs={12} md={4} className="d-flex justify-content-end" style={{ height: '45px' }}>
             <Button variant="warning" onClick={handleEdit}>
               Editar
             </Button>
             <Button variant="danger" onClick={() => setShowModal(true)}>
               Remover
             </Button>
-          </div>
-        </>
+          </Col>
+        </Row>
       </div>
     </Col>
   );
