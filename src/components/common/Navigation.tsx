@@ -54,11 +54,6 @@ const Navigation = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PRODUCT_EDIT} onClick={toggleCollapse}>
-              Editar Produto
-            </Link>
-          </li>
-          <li className="nav-item">
             <Link className="nav-link" to={ROUTES.ADMIN_PLAN_ADD} onClick={toggleCollapse}>
               Cadastrar Plano
             </Link>
@@ -70,12 +65,7 @@ const Navigation = () => {
           </li>
           <li className="nav-item">
             <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_ADD} onClick={toggleCollapse}>
-              Cadastrar Contato
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_CONTACT_EDIT} onClick={toggleCollapse}>
-              Editar Contato
+              Cadastrar informações de Contato
             </Link>
           </li>
         </ul>

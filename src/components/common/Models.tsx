@@ -78,3 +78,13 @@ export interface ProductObject {
   categoryId: string;
   category?: CategoryObject;
 }
+
+export interface ContactObject {
+  id?: string;
+  name: string;
+  description: string;
+  phone: string;
+  address: string;
+  email: string;
+  linkGoogleMaps: string;
+}
