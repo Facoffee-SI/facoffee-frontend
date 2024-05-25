@@ -1,7 +1,12 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import CurrencyInput from 'react-currency-input-field';
 import * as Yup from 'yup';
+import { PlanObject } from '../../../components/common/Models';
+import api from '../../../services/Api';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
 
 const createPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -12,9 +17,46 @@ const createPlanSchema = Yup.object({
   status: Yup.string().required('Obrigatório preencher o status'),
 });
 
-const onSubmitForm = () => {};
-
 const CreatePlan = () => {
+  const navigate = useNavigate();
+  const [images, setImages] = useState<File[]>([]);
+
+  const onSubmitForm = async (values: PlanObject,
+    { setSubmitting }: FormikHelpers<PlanObject>) => {
+    try {
+      values.priceMonth = parseFloat(
+        values.priceMonth.toString().replace(/\./g, '').replace(',', '.')
+      );
+      values.priceYear = parseFloat(
+        values.priceMonth.toString().replace(/\./g, '').replace(',', '.')
+      );
+
+      const response = await api.post('plan', values);
+      if (images.length > 0) {
+        const imageUploadPromises = images.map((image) => {
+          const formData = new FormData();
+          formData.append('image', image);
+          return api.post(`/plan/image/${response.data.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        });
+        await Promise.all(imageUploadPromises);
+      }
+      navigate(ROUTES.ADMIN_PRODUCT_EDIT);
+    } catch (error) {
+      console.error('Erro ao cadastrar o plano');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImages = Array.from(event.target.files || []);
+    setImages(selectedImages);
+  };
+
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
@@ -23,10 +65,9 @@ const CreatePlan = () => {
             initialValues={{
               name: '',
               description: '',
-              product: '',
-              priceMonth: '',
-              priceYear: '',
-              status: '',
+              priceMonth: '' as unknown as number,
+              priceYear: '' as unknown as number,
+              active: false,
             }}
             validateOnMount
             validationSchema={createPlanSchema}
@@ -81,22 +122,48 @@ const CreatePlan = () => {
                       style={{ width: '100%' }}
                     />
                   </div>
-                  <Field
-                    name="status"
-                    type="string"
-                    label="Ativo"
-                    placeholder="Ativo"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
-                  />
+                  <div className="d-flex align-items-center">
+                    <Field
+                      type="checkbox"
+                      name="active"
+                      id="active"
+                      className="form-check-input me-2"
+                    />
+                    <label className="form-check-label" htmlFor="active">
+                      Plano Ativo?
+                    </label>
+                  </div>
                   <div className="d-flex justify-content-center gap-4">
-                    <button
-                      className="btn bg-black text-white rounded p-1"
-                      type="submit"
-                      style={{ width: '100%'}}
-                    >
-                      Selecionar imagem
-                    </button>
+                    <div
+                      style={{ width: '100%'}}>
+                      <input
+                        id="images"
+                        name="images"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }}
+                      />
+                        <button
+                          className="btn bg-black text-white rounded p-1"
+                          type="button"
+                          onClick={() => document.getElementById('images')?.click()}
+                          style={{ width: '100%'}}
+                        >
+                          Selecionar imagens
+                        </button>
+                    </div>
+                  </div>
+                  <div className="image-container">
+                    {images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={URL.createObjectURL(image)}
+                        alt={`Imagem ${index + 1}`}
+                        className="image-preview"
+                      />
+                    ))}
                   </div>
                   <div className="d-flex justify-content-center gap-4">
                     <button

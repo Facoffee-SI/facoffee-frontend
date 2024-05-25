@@ -16,6 +16,7 @@ import CreateCategory from '../views/admin/category/createCategory';
 import Roles from '../views/admin/role/listRoles';
 import CreateRole from '../views/admin/role/createRole';
 import Products from '../views/admin/product/listProduct';
+import Plans from '../views/admin/plan/listPlan';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -42,6 +43,10 @@ const AppRouter = () => (
       <Route
         path={ROUTES.ADMIN_PRODUCT_EDIT}
         element={<EditProduct></EditProduct>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_PLANS}
+        element={<Plans></Plans>}
       ></Route>
       <Route
         path={ROUTES.ADMIN_PLAN_ADD}

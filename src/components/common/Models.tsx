@@ -88,3 +88,20 @@ export interface ContactObject {
   email: string;
   linkGoogleMaps: string;
 }
+
+export interface PlanEditObject {
+  id: string;
+  name: string;
+  priceMonth: number;
+  priceYear: number;
+  description: string;
+  active: boolean;
+}
+
+export interface PlanObject {
+  name: string;
+  priceMonth: number;
+  priceYear: number;
+  description: string;
+  active: boolean;
+}

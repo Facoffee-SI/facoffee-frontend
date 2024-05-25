@@ -54,13 +54,8 @@ const Navigation = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_ADD} onClick={toggleCollapse}>
-              Cadastrar Plano
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.ADMIN_PLAN_EDIT} onClick={toggleCollapse}>
-              Editar Plano
+            <Link className="nav-link" to={ROUTES.ADMIN_PLANS} onClick={toggleCollapse}>
+              Planos
             </Link>
           </li>
           <li className="nav-item">
