@@ -96,6 +96,8 @@ export interface PlanEditObject {
   priceYear: number;
   description: string;
   active: boolean;
+  productIds: string[],
+  products?: ProductEditObject[]
 }
 
 export interface PlanObject {

@@ -110,7 +110,7 @@ const CreateProduct = () => {
                   autoComplete="true"
                   placeholder="Nome Completo"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <Field
                   name="description"
@@ -119,7 +119,7 @@ const CreateProduct = () => {
                   autoComplete="true"
                   placeholder="Descrição"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <Field
                   name="brand"
@@ -127,7 +127,7 @@ const CreateProduct = () => {
                   label="Marca"
                   placeholder="Marca"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <CurrencyInput
                   name="price"
@@ -170,7 +170,7 @@ const CreateProduct = () => {
                   label="Código de barras"
                   placeholder="Código de barras"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <Field
                   name="categoryId"

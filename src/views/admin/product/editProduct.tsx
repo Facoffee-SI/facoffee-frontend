@@ -120,7 +120,7 @@ const EditProduct = () => {
             brand: product?.brand || '',
             price: priceAsNumber,
             barCode: product?.barCode || '',
-            categoryId: product?.categoryId || '', 
+            categoryId: product?.categoryId || '',
             quantity: product?.quantity || 0,
             discountValue: product?.discountValue || 0,
             isDiscountPercentage: product?.isDiscountPercentage || false,
@@ -139,7 +139,7 @@ const EditProduct = () => {
                   autoComplete="true"
                   placeholder="Nome Completo"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <Field
                   name="description"
@@ -148,7 +148,7 @@ const EditProduct = () => {
                   autoComplete="true"
                   placeholder="Descrição"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <Field
                   name="brand"
@@ -156,7 +156,7 @@ const EditProduct = () => {
                   label="Marca"
                   placeholder="Marca"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <CurrencyInput
                   name="price"
@@ -202,7 +202,7 @@ const EditProduct = () => {
                   label="Código de barras"
                   placeholder="Código de barras"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <Field
                   name="categoryId"
@@ -218,7 +218,7 @@ const EditProduct = () => {
                   label="Quantidade"
                   placeholder="Quantidade"
                   component={CustomInput}
-                  style={{ width: '100%' }} 
+                  style={{ width: '100%' }}
                 />
                 <div className="d-flex justify-content-center gap-4">
                   <div
@@ -257,7 +257,7 @@ const EditProduct = () => {
                       className="btn bg-danger text-white rounded p-1"
                       type="button"
                       style={{ width: '50%' }}
-                      onClick={() => setShowModal(true)} 
+                      onClick={() => setShowModal(true)}
                     >
                       Remover
                     </button>

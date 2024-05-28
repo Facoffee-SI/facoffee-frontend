@@ -2,24 +2,44 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import CurrencyInput from 'react-currency-input-field';
 import * as Yup from 'yup';
-import { PlanObject } from '../../../components/common/Models';
+import { PlanObject, ProductEditObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
+import CustomSelect from '../../../components/formik/CustomSelect';
 
 const createPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
-  product: Yup.string().required('Obrigatório selecionar os produtos'),
+  productIds: Yup.string().required('Obrigatório preencher a categoria'),
   priceMonth: Yup.string().required('Obrigatório preencher o preço mensal'),
   priceYear: Yup.string().required('Obrigatório preencher o preço anual'),
-  status: Yup.string().required('Obrigatório preencher o status'),
+  active: Yup.string().required('Obrigatório preencher o status'),
 });
 
 const CreatePlan = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
+  const [products, setProducts] = useState<ProductEditObject[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get('/product');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos');
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const productsOptions = products.map((product) => ({
+    value: product.id,
+    label: product.name,
+  }));
 
   const onSubmitForm = async (values: PlanObject,
     { setSubmitting }: FormikHelpers<PlanObject>) => {
@@ -44,7 +64,7 @@ const CreatePlan = () => {
         });
         await Promise.all(imageUploadPromises);
       }
-      navigate(ROUTES.ADMIN_PRODUCT_EDIT);
+      navigate(ROUTES.ADMIN_PLANS);
     } catch (error) {
       console.error('Erro ao cadastrar o plano');
     } finally {
@@ -95,12 +115,12 @@ const CreatePlan = () => {
                     style={{ width: '100%', height: '5.375rem' }} 
                   />
                   <Field
-                    name="product"
-                    type="string"
-                    label="Produto"
-                    placeholder="Produto"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
+                    name="productIds"
+                    label="Produtos"
+                    options={productsOptions}
+                    isMulti={true}
+                    placeholder="Produtos"
+                    component={CustomSelect}
                   />
                   <div className="d-flex gap-3">
                     <CurrencyInput

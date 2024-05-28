@@ -1,35 +1,144 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import CurrencyInput from 'react-currency-input-field';
 import * as Yup from 'yup';
+import { useEffect, useState } from 'react';
+import { PlanEditObject, ProductEditObject } from '../../../components/common/Models';
+import api from '../../../services/Api';
+import CustomSelect from '../../../components/formik/CustomSelect';
+import { useLocation, useNavigate } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
+import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
 
 const editPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
-  product: Yup.string().required('Obrigatório selecionar os produtos'),
+  productIds: Yup.string().required('Obrigatório preencher a categoria'),
   priceMonth: Yup.string().required('Obrigatório preencher o preço mensal'),
   priceYear: Yup.string().required('Obrigatório preencher o preço anual'),
-  status: Yup.string().required('Obrigatório preencher o status'),
+  active: Yup.string().required('Obrigatório preencher o status'),
 });
 
-const onSubmitForm = () => {};
+const removePlanSchema = Yup.object();
 
 const EditPlan = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [images, setImages] = useState<File[]>([]);
+  const [products, setProducts] = useState<ProductEditObject[]>([]);
+  const plan = location.state?.plan as PlanEditObject | undefined;
+  const [showModal, setShowModal] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+
+
+  useEffect(() => {
+    if (!plan) {
+      navigate(ROUTES.ADMIN_PLANS);
+    }
+  }, [plan, navigate]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await api.get('/product');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar produtos');
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const productsOptions = products.map((product) => ({
+    value: product.id,
+    label: product.name,
+  }));
+
+  const onSubmitForm = async (values: PlanEditObject,
+    { setSubmitting }: FormikHelpers<PlanEditObject>) => {
+    try {
+      console.log(values)
+      values.priceMonth = parseFloat(
+        values.priceMonth.toString().replace(/\./g, '').replace(',', '.')
+      );
+      values.priceYear = parseFloat(
+        values.priceMonth.toString().replace(/\./g, '').replace(',', '.')
+      );
+
+      const response = await api.patch(`plan/${plan?.id}`, values);
+      if (images.length > 0) {
+        const imageUploadPromises = images.map((image) => {
+          const formData = new FormData();
+          formData.append('image', image);
+          return api.post(`/plan/image/${response.data.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        });
+        await Promise.all(imageUploadPromises);
+      }
+      navigate(ROUTES.ADMIN_PLANS);
+    } catch (error) {
+      console.error('Erro ao cadastrar o plano');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleRemove = async () => {
+    setIsRemoving(true);
+    try {
+      await api.delete(`/plan/${plan?.id}`);
+      navigate(ROUTES.ADMIN_PLANS);
+    } catch (error) {
+      console.error('Erro ao remover plano.');
+    } finally {
+      setIsRemoving(false);
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedImages = Array.from(event.target.files || []);
+    setImages(selectedImages);
+  };
+
+  // const getInitialSelectedProductIds = () => {
+  //   if (plan && plan.productIds && products) {
+  //     return plan.productIds.map(productId => {
+  //       const product = products.find(p => p.id === productId);
+  //       if (product) {
+  //         return { value: productId, label: product.name };
+  //       }
+  //       return null;
+  //     }).filter(item => item !== null);
+  //   }
+  //   return [];
+  // };
+
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
         <h3 className="text-center mb-2">Edição de Plano</h3>
+          <ConfirmationModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            onConfirm={handleRemove}
+            text="Deseja realmente excluir o produto?"
+          />
           <Formik
             initialValues={{
-              name: '',
-              description: '',
-              product: '',
-              priceMonth: '',
-              priceYear: '',
-              status: '',
+              id: plan?.id || '',
+              name: plan?.name || '',
+              description: plan?.description || '',
+              productIds: plan?.productIds || [],
+              priceMonth: plan?.priceMonth || 0,
+              priceYear: plan?.priceYear || 0,
+              active: plan?.active || false,
             }}
             validateOnMount
-            validationSchema={editPlanSchema}
+            validationSchema={isRemoving ? removePlanSchema : editPlanSchema}
             onSubmit={onSubmitForm}
           >
             {({ setFieldValue }) => (
@@ -54,12 +163,12 @@ const EditPlan = () => {
                     style={{ width: '100%', height: '5.375rem' }} 
                   />
                   <Field
-                    name="product"
-                    type="string"
-                    label="Produto"
-                    placeholder="Produto"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
+                    name="productIds"
+                    label="Produtos"
+                    options={productsOptions}
+                    isMulti={true}
+                    placeholder="Produtos"
+                    component={CustomSelect}
                   />
                   <div className="d-flex gap-3">
                     <CurrencyInput
@@ -81,22 +190,48 @@ const EditPlan = () => {
                       style={{ width: '100%' }}
                     />
                   </div>
-                  <Field
-                    name="status"
-                    type="string"
-                    label="Ativo"
-                    placeholder="Ativo"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
-                  />
+                  <div className="d-flex align-items-center">
+                    <Field
+                      type="checkbox"
+                      name="active"
+                      id="active"
+                      className="form-check-input me-2"
+                    />
+                    <label className="form-check-label" htmlFor="active">
+                      Plano Ativo?
+                    </label>
+                  </div>
                   <div className="d-flex justify-content-center gap-4">
-                    <button
-                      className="btn bg-black text-white rounded p-1"
-                      type="submit"
-                      style={{ width: '100%'}}
-                    >
-                      Selecionar imagem
-                    </button>
+                    <div
+                      style={{ width: '100%'}}>
+                      <input
+                        id="images"
+                        name="images"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }}
+                      />
+                        <button
+                          className="btn bg-black text-white rounded p-1"
+                          type="button"
+                          onClick={() => document.getElementById('images')?.click()}
+                          style={{ width: '100%'}}
+                        >
+                          Selecionar imagens
+                        </button>
+                    </div>
+                  </div>
+                  <div className="image-container">
+                    {images.map((image, index) => (
+                      <img
+                        key={index}
+                        src={URL.createObjectURL(image)}
+                        alt={`Imagem ${index + 1}`}
+                        className="image-preview"
+                      />
+                    ))}
                   </div>
                   <div className="d-flex justify-content-center gap-4">
                     <button
