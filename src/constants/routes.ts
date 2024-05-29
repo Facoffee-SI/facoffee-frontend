@@ -20,9 +20,11 @@ export const ADMIN_CATEGORY_ADD = '/admin/catedory/add'
 export const ADMIN_ROLES = '/admin/roles'
 export const ADMIN_ROLE_ADD = '/admin/roles/add'
 
-export const ADMIN_CONTACT = '/admin/contacts';
 export const ADMIN_CONTACT_ADD = '/admin/contact/add';
 export const ADMIN_CONTACT_EDIT = '/admin/contact/edit';
+
+export const ADMIN_ABOUT_ADD = '/admin/about/add';
+export const ADMIN_ABOUT_EDIT = '/admin/about/edit'
 
 export const SEARCH = '/search/:searchKey';
 export const FORGOT_PASSWORD = '/forgotPassword';

@@ -63,6 +63,11 @@ const Navigation = () => {
               Cadastrar informações de Contato
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.ADMIN_ABOUT_ADD} onClick={toggleCollapse}>
+              Cadastrar informações da tela "Sobre Nós"
+            </Link>
+          </li>
         </ul>
       </div>
       <a className="navbar-brand rounded">

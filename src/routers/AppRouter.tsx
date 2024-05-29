@@ -17,6 +17,8 @@ import Roles from '../views/admin/role/listRoles';
 import CreateRole from '../views/admin/role/createRole';
 import Products from '../views/admin/product/listProduct';
 import Plans from '../views/admin/plan/listPlan';
+import CreateAbout from '../views/admin/about/createAbout';
+import EditAbout from '../views/admin/about/editAbout';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -79,6 +81,14 @@ const AppRouter = () => (
       <Route
         path={ROUTES.ADMIN_ROLE_ADD}
         element={<CreateRole></CreateRole>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_ABOUT_ADD}
+        element={<CreateAbout></CreateAbout>}
+      ></Route>
+      <Route
+        path={ROUTES.ADMIN_ABOUT_EDIT}
+        element={<EditAbout></EditAbout>}
       ></Route>
     </Routes>
   </BrowserRouter>

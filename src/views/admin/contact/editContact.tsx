@@ -36,8 +36,8 @@ const EditContact = () => {
         }
         setLoading(false);
       } catch (error) {
-        console.error('Erro ao buscar contato.', error);
-        setLoading(true);
+        console.error('Erro ao buscar contato.');
+        setLoading(false);
       }
     };
 

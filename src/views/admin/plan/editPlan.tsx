@@ -13,7 +13,6 @@ import { ConfirmationModal } from '../../../components/common/ConfirmationModal'
 const editPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
-  productIds: Yup.string().required('Obrigatório preencher a categoria'),
   priceMonth: Yup.string().required('Obrigatório preencher o preço mensal'),
   priceYear: Yup.string().required('Obrigatório preencher o preço anual'),
   active: Yup.string().required('Obrigatório preencher o status'),
@@ -58,15 +57,8 @@ const EditPlan = () => {
   const onSubmitForm = async (values: PlanEditObject,
     { setSubmitting }: FormikHelpers<PlanEditObject>) => {
     try {
-      console.log(values)
-      values.priceMonth = parseFloat(
-        values.priceMonth.toString().replace(/\./g, '').replace(',', '.')
-      );
-      values.priceYear = parseFloat(
-        values.priceMonth.toString().replace(/\./g, '').replace(',', '.')
-      );
-
-      const response = await api.patch(`plan/${plan?.id}`, values);
+      const { id, ...patchPayload} = values;
+      const response = await api.patch(`plan/${id}`, patchPayload);
       if (images.length > 0) {
         const imageUploadPromises = images.map((image) => {
           const formData = new FormData();
@@ -104,29 +96,16 @@ const EditPlan = () => {
     setImages(selectedImages);
   };
 
-  // const getInitialSelectedProductIds = () => {
-  //   if (plan && plan.productIds && products) {
-  //     return plan.productIds.map(productId => {
-  //       const product = products.find(p => p.id === productId);
-  //       if (product) {
-  //         return { value: productId, label: product.name };
-  //       }
-  //       return null;
-  //     }).filter(item => item !== null);
-  //   }
-  //   return [];
-  // };
-
   return (
     <main className="primary-container p-5 d-flex">
       <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+        <ConfirmationModal
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          onConfirm={handleRemove}
+          text="Deseja realmente excluir o plano?"
+        />
         <h3 className="text-center mb-2">Edição de Plano</h3>
-          <ConfirmationModal
-            isOpen={showModal}
-            onClose={() => setShowModal(false)}
-            onConfirm={handleRemove}
-            text="Deseja realmente excluir o produto?"
-          />
           <Formik
             initialValues={{
               id: plan?.id || '',
@@ -160,7 +139,7 @@ const EditPlan = () => {
                     autoComplete="true"
                     placeholder="Descrição"
                     component={CustomInput}
-                    style={{ width: '100%', height: '5.375rem' }} 
+                    style={{ width: '100%', height: '5.375rem' }}
                   />
                   <Field
                     name="productIds"
@@ -173,21 +152,29 @@ const EditPlan = () => {
                   <div className="d-flex gap-3">
                     <CurrencyInput
                       name="priceMonth"
-                      placeholder="Preço mensal"
+                      placeholder={plan ? `R$ ${plan.priceMonth}` : "Preço mensal"}
                       decimalsLimit={2}
                       prefix="R$ "
                       intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                      onValueChange={(value) => setFieldValue('priceMonth', value)}
                       style={{ width: '100%' }}
+                      onValueChange={(value) => {
+                        value
+                          ? setFieldValue('priceMonth', parseFloat(value.toString().replace(/\./g, '').replace(',', '.')))
+                          : setFieldValue('priceMonth', value);
+                      }}
                     />
                     <CurrencyInput
                       name="priceYear"
-                      placeholder="Preço anual"
+                      placeholder={plan ? `R$ ${plan.priceYear}` : "Preço anual"}
                       decimalsLimit={2}
                       prefix="R$ "
                       intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                      onValueChange={(value) => setFieldValue('priceYear', value)}
                       style={{ width: '100%' }}
+                      onValueChange={(value) => {
+                        value
+                          ? setFieldValue('priceYear', parseFloat(value.toString().replace(/\./g, '').replace(',', '.')))
+                          : setFieldValue('priceYear', value);
+                      }}
                     />
                   </div>
                   <div className="d-flex align-items-center">
@@ -236,8 +223,9 @@ const EditPlan = () => {
                   <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-danger text-white rounded p-1"
-                      type="submit"
+                      type="button"
                       style={{ width: '50%' }}
+                      onClick={() => setShowModal(true)}
                     >
                       Remover
                     </button>

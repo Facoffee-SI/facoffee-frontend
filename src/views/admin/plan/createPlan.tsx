@@ -12,7 +12,6 @@ import CustomSelect from '../../../components/formik/CustomSelect';
 const createPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   description: Yup.string().required('Obrigatório preencher a descrição'),
-  productIds: Yup.string().required('Obrigatório preencher a categoria'),
   priceMonth: Yup.string().required('Obrigatório preencher o preço mensal'),
   priceYear: Yup.string().required('Obrigatório preencher o preço anual'),
   active: Yup.string().required('Obrigatório preencher o status'),

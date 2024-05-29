@@ -94,7 +94,6 @@ const RoleCard = ({ role, onEdit, onRemove, isEditing }: RoleCardProps) => {
               onChange={(e) => setRoleName(e.target.value)}
               className="form-control mb-2"
             />
-            {/* Lista de permissões */}
             <div className="mb-2">
               <h6>Permissões:</h6>
               {permissions.map((permission) => (
