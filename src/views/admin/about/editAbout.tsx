@@ -1,13 +1,14 @@
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import FroalaEditor from 'froala-editor';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-import 'froala-editor/css/froala_style.min.css';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import api from '../../../services/Api';
 import Loading from '../../../components/common/Loading';
+import 'froala-editor/js/plugins.pkgd.min.js';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import 'froala-editor/css/froala_style.min.css';
 
 const createAbout = Yup.object();
 
@@ -15,7 +16,7 @@ const EditAbout = () => {
   const navigate = useNavigate();
   const [editorInstance, setEditorInstance] = useState<FroalaEditor | null>(null);
   const [loading, setLoading] = useState(false);
-  const [aboutUsContent, setAboutUsContent] = useState('');
+  const [aboutContent, setAboutContent] = useState('');
 
   const initFroalaEditor = () => {
     const froala = new FroalaEditor('#froala-editor', {
@@ -34,7 +35,7 @@ const EditAbout = () => {
   }, [editorInstance]);
 
   useEffect(() => {
-    const fetchAboutUs = async () => {
+    const fetchAbout = async () => {
       try {
         setLoading(true);
         const response = await api.get('about');
@@ -42,21 +43,21 @@ const EditAbout = () => {
           navigate(ROUTES.ADMIN_ABOUT_ADD);
           return;
         }
-        setAboutUsContent(response.data[0].description);
+        setAboutContent(response.data[0].description);
         setLoading(false);
       } catch (error) {
         console.error('Erro ao buscar "Sobre Nós"');
         setLoading(false);
       }
     };
-    fetchAboutUs();
+    fetchAbout();
   }, [navigate]);
 
   useEffect(() => {
-    if (editorInstance && aboutUsContent) {
-      editorInstance.html.set(aboutUsContent);
+    if (editorInstance && aboutContent) {
+      editorInstance.html.set(aboutContent);
     }
-  }, [editorInstance, aboutUsContent]);
+  }, [editorInstance, aboutContent]);
 
   const onSubmitForm = async () => {
     try {

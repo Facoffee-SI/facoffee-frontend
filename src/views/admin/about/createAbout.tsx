@@ -1,13 +1,14 @@
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import FroalaEditor from 'froala-editor';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
-import 'froala-editor/css/froala_style.min.css';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import api from '../../../services/Api';
 import Loading from '../../../components/common/Loading';
+import 'froala-editor/js/plugins.pkgd.min.js';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import 'froala-editor/css/froala_style.min.css';
 
 const createAbout = Yup.object();
 
@@ -33,7 +34,7 @@ const CreateAbout = () => {
   }, [editorInstance]);
 
   useEffect(() => {
-    const fetchAboutUs = async () => {
+    const fetchAbout = async () => {
       try {
         setLoading(true);
         const response = await api.get('about');
@@ -46,7 +47,7 @@ const CreateAbout = () => {
         setLoading(false);
       }
     };
-    fetchAboutUs();
+    fetchAbout();
   }, [navigate]);
 
   const onSubmitForm = async () => {

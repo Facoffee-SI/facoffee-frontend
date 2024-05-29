@@ -7,6 +7,10 @@ import api from '../../../services/Api';
 import { ContactObject } from '../../../components/common/Models';
 import { useEffect, useState } from 'react';
 import Loading from '../../../components/common/Loading';
+import FroalaEditor from 'froala-editor';
+import 'froala-editor/js/plugins.pkgd.min.js';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import 'froala-editor/css/froala_style.min.css';
 
 const createContactSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -14,7 +18,6 @@ const createContactSchema = Yup.object({
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
   phone: Yup.string().required('Obrigatório preencher o telefone'),
-  description: Yup.string().required('Obrigatório preencher a descrição'),
   address: Yup.string().required('Obrigatório preencher o endereço'),
   linkGoogleMaps: Yup.string().required('Obrigatório preencher o link do Google Maps'),
 });
@@ -22,13 +25,14 @@ const createContactSchema = Yup.object({
 const CreateContact = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [editorInstance, setEditorInstance] = useState<FroalaEditor | null>(null);
 
   useEffect(() => {
     const fetchContact = async () => {
       try {
         setLoading(true);
         const response = await api.get('contact');
-        if(response.data.length) {
+        if (response.data.length) {
           navigate(ROUTES.ADMIN_CONTACT_EDIT);
         }
         setLoading(false);
@@ -40,10 +44,32 @@ const CreateContact = () => {
     fetchContact();
   }, [navigate]);
 
+  const initFroalaEditor = () => {
+    const froala = new FroalaEditor('#froala-editor', {
+      placeholderText: 'Insira a descrição...'
+    });
+    setEditorInstance(froala);
+  };
 
-  const onSubmitForm = async (values: ContactObject, { setSubmitting }: FormikHelpers<ContactObject>) => {
+  useEffect(() => {
+    initFroalaEditor();
+    return () => {
+      if (editorInstance) {
+        editorInstance.destroy();
+      }
+    };
+  }, [editorInstance]);
+
+  const onSubmitForm = async (
+    values: ContactObject,
+    { setSubmitting }: FormikHelpers<ContactObject>
+  ) => {
     try {
-      await api.post('contact', values);
+      const editorContent = editorInstance?.html.get();
+      await api.post('contact', {
+        ...values,
+        description: editorContent,
+      });
       navigate(ROUTES.ADMIN_CONTACT_EDIT);
     } catch (error) {
       console.error('Erro ao cadastrar ou editar o contato');
@@ -54,10 +80,13 @@ const CreateContact = () => {
 
   return (
     <>
-    {loading && <Loading />}
-    <main className="primary-container p-5 d-flex">
-      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Cadastrar de Informações de Contato</h3>
+      {loading && <Loading />}
+      <main className="primary-container p-5 d-flex">
+        <div
+          className="card bg-white p-5"
+          style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}
+        >
+          <h3 className="text-center mb-4">Cadastrar de Informações de Contato</h3>
           <Formik
             initialValues={{
               name: '',
@@ -71,74 +100,66 @@ const CreateContact = () => {
             validationSchema={createContactSchema}
             onSubmit={onSubmitForm}
           >
-          {() => (
-            <Form className="users-edit-form">
-              <div className="d-flex flex-column gap-3">
-                <Field
-                  name="name"
-                  type="string"
-                  label="Nome"
-                  autoComplete="true"
-                  placeholder="Nome"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <div className="d-flex gap-3">
+            {() => (
+              <Form className="users-edit-form">
+                <div className="d-flex flex-column gap-3">
                   <Field
-                    name="email"
+                    name="name"
                     type="string"
-                    label="Email"
-                    placeholder="Email"
+                    label="Nome"
+                    autoComplete="true"
+                    placeholder="Nome"
                     component={CustomInput}
+                    style={{ width: '100%' }}
+                  />
+                  <div className="d-flex gap-3">
+                    <Field
+                      name="email"
+                      type="string"
+                      label="Email"
+                      placeholder="Email"
+                      component={CustomInput}
+                    />
+                    <Field
+                      name="phone"
+                      type="number"
+                      label="Telefone"
+                      placeholder="Telefone"
+                      component={CustomInput}
+                    />
+                  </div>
+                  <div id="froala-editor"></div>
+                  <Field
+                    name="address"
+                    type="string"
+                    label="Endereço"
+                    placeholder="Endereço"
+                    component={CustomInput}
+                    style={{ width: '100%' }}
                   />
                   <Field
-                    name="phone"
-                    type="number"
-                    label="Telefone"
-                    placeholder="Telefone"
+                    name="linkGoogleMaps"
+                    type="string"
+                    label="Google Maps"
+                    placeholder="Google Maps (Link)"
                     component={CustomInput}
-                  />
-                </div>
-                <Field
-                  name="description"
-                  type="string"
-                  label="Descrição"
-                  autoComplete="true"
-                  placeholder="Descrição"
-                  component={CustomInput}
-                  style={{ width: '100%', height: '5.375rem' }}
-                />
-                <Field
-                  name="address"
-                  type="string"
-                  label="Endereço"
-                  placeholder="Endereço"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <Field
-                  name="linkGoogleMaps"
-                  type="string"
-                  label="Google Maps"
-                  placeholder="Google Maps (Link)"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <div className="d-flex justify-content-center gap-4">
-                  <button
-                    className="btn bg-black text-white rounded p-1"
-                    type="submit"
                     style={{ width: '100%' }}
-                  >
-                    Cadastrar informações de Contato
-                  </button>
+                  />
+                  <div className="d-flex justify-content-center gap-4">
+                    <button
+                      className="btn bg-black text-white rounded p-1"
+                      type="submit"
+                      style={{ width: '100%' }}
+                    >
+                      Cadastrar informações de Contato
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </Form>
-          )}
+              </Form>
+            )}
           </Formik>
-      </div>
-    </main>
+        </div>
+      </main>
     </>
   );
 };
