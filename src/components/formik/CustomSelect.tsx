@@ -38,7 +38,6 @@ export const CustomSelect = ({
         })
         : options.find((option) => option.value === field.value);
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return isMulti ? [] : ('' as any);
     }
   };

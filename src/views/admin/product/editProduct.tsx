@@ -149,7 +149,10 @@ const EditProduct = () => {
         <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
           <ConfirmationModal
             isOpen={showModal}
-            onClose={() => setShowModal(false)}
+            onClose={() => {
+              setShowModal(false);
+              setIsRemoving(false);
+            }}
             onConfirm={handleRemove}
             text="Deseja realmente excluir o produto?"
           />

@@ -8,6 +8,8 @@ import api from '../../../services/Api';
 import CustomSelect from '../../../components/formik/CustomSelect';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const userEditSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -15,11 +17,6 @@ const userEditSchema = Yup.object({
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
   roles: Yup.array().min(1, 'Obrigatório preencher cargos'),
-  // Yup.array().of(
-  //   Yup.object().shape({
-  //     value: Yup.string().required(),
-  //     label: Yup.string().required(),
-  //   })).min(1, 'Obrigatório preencher cargos'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
     .min(6, 'A senha deve ter no mínimo 6 caracteres'),
@@ -99,102 +96,129 @@ const CreateUser = () => {
       }
 
       navigate(ROUTES.ADMIN_USERS);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao cadastrar o usuário');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Verifique as informações inseridas e tente novamente.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <main className="primary-container p-3 d-flex justify-content-center align-items-center">
-      <div className="card p-5" style={{ maxWidth: '50.75rem' }}>
-        <h3 className="text-center mb-2">Cadastro de Usuário</h3>
-        <Formik
-          initialValues={{
-            name: '',
-            email: '',
-            roles: [{ value: '', label: '' }],
-            password: '',
-            confirmPassword: '',
-            profileImage: profileImage,
-          }}
-          validateOnMount
-          validationSchema={userEditSchema}
-          onSubmit={onSubmitForm}
-        >
-          {({ setFieldValue }) => (
-            <Form className="users-edit-form">
-              <div className="d-flex flex-column gap-3">
-                <div className="d-flex flex-column align-items-center">
-                  <img
-                    src={typeof profileImage === 'string' ? profileImage : URL.createObjectURL(profileImage)}
-                    alt="Imagem de perfil"
-                    height="100px"
-                    width="100px"
-                    style={{ objectFit: 'contain', cursor: 'pointer', borderRadius: '50%' }}
-                    onClick={handleImageClick}
-                  />
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    style={{ display: 'none' }}
-                    onChange={(event) => handleFileChange(event, setFieldValue)}
-                  />
-                </div>
-                <Field
-                  name="name"
-                  type="string"
-                  label="Nome Completo"
-                  autoComplete="true"
-                  placeholder="Nome Completo"
-                  component={CustomInput}
-                />
-                <Field
-                  name="email"
-                  type="email"
-                  label="Email"
-                  autoComplete="true"
-                  placeholder="Email"
-                  component={CustomInput}
-                />
-                <Field
-                  name="roles"
-                  label="Cargos"
-                  options={rolesList}
-                  isMulti
-                  placeholder="Selecione os cargos"
-                  component={CustomSelect}
-                />
-                <div className="d-flex flex-column flex-md-row gap-3">
+    <>
+      <ToastContainer />
+      <main className="primary-container p-3 d-flex justify-content-center align-items-center">
+        <div className="card p-5" style={{ maxWidth: '50.75rem' }}>
+          <h3 className="text-center mb-2">Cadastro de Usuário</h3>
+          <Formik
+            initialValues={{
+              name: '',
+              email: '',
+              roles: [{ value: '', label: '' }],
+              password: '',
+              confirmPassword: '',
+              profileImage: profileImage,
+            }}
+            validateOnMount
+            validationSchema={userEditSchema}
+            onSubmit={onSubmitForm}
+          >
+            {({ setFieldValue }) => (
+              <Form className="users-edit-form">
+                <div className="d-flex flex-column gap-3">
+                  <div className="d-flex flex-column align-items-center">
+                    <img
+                      src={typeof profileImage === 'string' ? profileImage : URL.createObjectURL(profileImage)}
+                      alt="Imagem de perfil"
+                      height="100px"
+                      width="100px"
+                      style={{ objectFit: 'contain', cursor: 'pointer', borderRadius: '50%' }}
+                      onClick={handleImageClick}
+                    />
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={(event) => handleFileChange(event, setFieldValue)}
+                    />
+                  </div>
                   <Field
-                    name="password"
-                    type="password"
-                    label="Senha"
-                    autoComplete="current-password"
-                    placeholder="Senha"
+                    name="name"
+                    type="string"
+                    label="Nome Completo"
+                    autoComplete="true"
+                    placeholder="Nome Completo"
                     component={CustomInput}
                   />
                   <Field
-                    name="confirmPassword"
-                    type="password"
-                    label="Confirmação de senha"
-                    autoComplete="current-password"
-                    placeholder="Confirme sua senha"
+                    name="email"
+                    type="email"
+                    label="Email"
+                    autoComplete="true"
+                    placeholder="Email"
                     component={CustomInput}
                   />
+                  <Field
+                    name="roles"
+                    label="Cargos"
+                    options={rolesList}
+                    isMulti
+                    placeholder="Selecione os cargos"
+                    component={CustomSelect}
+                  />
+                  <div className="d-flex flex-column flex-md-row gap-3">
+                    <Field
+                      name="password"
+                      type="password"
+                      label="Senha"
+                      autoComplete="current-password"
+                      placeholder="Senha"
+                      component={CustomInput}
+                    />
+                    <Field
+                      name="confirmPassword"
+                      type="password"
+                      label="Confirmação de senha"
+                      autoComplete="current-password"
+                      placeholder="Confirme sua senha"
+                      component={CustomInput}
+                    />
+                  </div>
+                  <div className="d-flex justify-content-center gap-4">
+                    <button className="btn bg-black text-white rounded p-1 w-100" type="submit">
+                      Cadastrar
+                    </button>
+                  </div>
                 </div>
-                <div className="d-flex justify-content-center gap-4">
-                  <button className="btn bg-black text-white rounded p-1 w-100" type="submit">
-                    Cadastrar
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </main>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </main>
+    </>
   );
 };
 
