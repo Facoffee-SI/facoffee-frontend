@@ -38,11 +38,6 @@ const Navigation = () => {
           {token ? (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.SIGNIN} onClick={handleLogout}>
-                  Deslogar
-                </Link>
-              </li>
-              <li className="nav-item">
                 <Link className="nav-link" to={ROUTES.ADMIN_USERS} onClick={toggleCollapse}>
                   Usuários
                 </Link>
@@ -75,6 +70,11 @@ const Navigation = () => {
               <li className="nav-item">
                 <Link className="nav-link" to={ROUTES.ADMIN_ABOUT_ADD} onClick={toggleCollapse}>
                   Cadastrar informações da tela "Sobre Nós"
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={ROUTES.SIGNIN} onClick={handleLogout}>
+                  Deslogar
                 </Link>
               </li>
             </>
