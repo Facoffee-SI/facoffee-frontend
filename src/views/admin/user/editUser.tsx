@@ -175,7 +175,7 @@ const UsersEdit = () => {
 
   return (
     <>
-      <ToastContainer />    
+      <ToastContainer />
       <main className="primary-container p-3 d-flex justify-content-center align-items-center">
         <ConfirmationModal
           isOpen={showModal}

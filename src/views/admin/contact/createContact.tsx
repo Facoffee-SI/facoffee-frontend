@@ -11,6 +11,8 @@ import FroalaEditor from 'froala-editor';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'froala-editor/css/froala_style.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const createContactSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -71,8 +73,31 @@ const CreateContact = () => {
         description: editorContent,
       });
       navigate(ROUTES.ADMIN_CONTACT_EDIT);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao cadastrar ou editar o contato');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Verifique as informações inseridas e tente novamente.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+      
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -80,6 +105,7 @@ const CreateContact = () => {
 
   return (
     <>
+      <ToastContainer />
       {loading && <Loading />}
       <main className="primary-container p-5 d-flex">
         <div

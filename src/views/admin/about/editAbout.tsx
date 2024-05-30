@@ -9,6 +9,8 @@ import Loading from '../../../components/common/Loading';
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'froala-editor/css/froala_style.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const createAbout = Yup.object();
 
@@ -66,13 +68,37 @@ const EditAbout = () => {
         description: editorContent,
       });
       navigate(ROUTES.ADMIN_ABOUT_EDIT);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao enviar informações do "Sobre Nós".');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Preencha algo no campo de informações.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+      
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
   return (
     <>
+      <ToastContainer />
       {loading && <Loading />}
       <main className="primary-container p-5 d-flex">
         <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>

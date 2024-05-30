@@ -10,6 +10,8 @@ import CurrencyInput from 'react-currency-input-field';
 import CustomSelect from '../../../components/formik/CustomSelect';
 import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
 import Loading from '../../../components/common/Loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const editProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -134,8 +136,31 @@ const EditProduct = () => {
         await api.delete(`/product/images/${product?.id}`);
       }
       navigate(ROUTES.ADMIN_PRODUCTS);
-    } catch (error) {
-      console.error('Erro ao cadastrar o produto');
+    } catch (error: any) {
+      console.error('Erro ao editar o produto');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Verifique as informações inseridas e tente novamente.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+      
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -144,6 +169,7 @@ const EditProduct = () => {
   const priceAsNumber = parseFloat(product?.price.toString() || '');
   return (
     <>
+      <ToastContainer />
       {loading && <Loading />}
       <main className="primary-container p-5 d-flex">
         <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>

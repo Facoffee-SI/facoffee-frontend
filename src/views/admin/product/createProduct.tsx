@@ -9,6 +9,8 @@ import CustomSelect from '../../../components/formik/CustomSelect';
 import CurrencyInput from 'react-currency-input-field';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const createProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -81,172 +83,198 @@ const CreateProduct = () => {
         });
       }
       navigate(ROUTES.ADMIN_PRODUCT_EDIT);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao cadastrar o produto');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Verifique as informações inseridas e tente novamente.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+      
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <main className="primary-container p-5 d-flex">
-      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-2">Cadastro de Produto</h3>
-        <Formik
-          initialValues={{
-            name: '',
-            description: '',
-            brand: '',
-            price: '' as unknown as number,
-            barCode: '',
-            categoryId: '',
-            quantity: '' as unknown as number,
-            discountValue: '' as unknown as number,
-            isDiscountPercentage: false,
-          }}
-          validateOnMount
-          validationSchema={createProductSchema}
-          onSubmit={onSubmitForm}
-        >
-          {({ setFieldValue }) => (
-            <Form className="users-edit-form">
-              <div className="d-flex flex-column gap-3">
-                <Field
-                  name="name"
-                  type="string"
-                  label="Nome Completo"
-                  autoComplete="true"
-                  placeholder="Nome Completo"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <Field
-                  name="description"
-                  type="string"
-                  label="Descrição"
-                  autoComplete="true"
-                  placeholder="Descrição"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <Field
-                  name="brand"
-                  type="string"
-                  label="Marca"
-                  placeholder="Marca"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <CurrencyInput
-                  name="price"
-                  placeholder="Preço"
-                  decimalsLimit={2}
-                  prefix="R$ "
-                  intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                  onValueChange={(value) => setFieldValue('price', value)}
-                  style={{ width: '100%' }}
-                /> 
-                <div className="row">
-                  <div className="col-md-2 align-self-center">
-                      <div className="form-group p-2">
-                        <Field
-                          type="checkbox"
-                          name="isDiscountPercentage"
-                          id="isDiscountPercentage"
-                          className="form-check-input"
-                        />
-                        <div> 
-                          <label className="form-check-label" htmlFor="isDiscountPercentage">
-                            Porcentagem?
-                          </label>
+    <>
+      <ToastContainer />
+      <main className="primary-container p-5 d-flex">
+        <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+          <h3 className="text-center mb-2">Cadastro de Produto</h3>
+          <Formik
+            initialValues={{
+              name: '',
+              description: '',
+              brand: '',
+              price: '' as unknown as number,
+              barCode: '',
+              categoryId: '',
+              quantity: '' as unknown as number,
+              discountValue: '' as unknown as number,
+              isDiscountPercentage: false,
+            }}
+            validateOnMount
+            validationSchema={createProductSchema}
+            onSubmit={onSubmitForm}
+          >
+            {({ setFieldValue }) => (
+              <Form className="users-edit-form">
+                <div className="d-flex flex-column gap-3">
+                  <Field
+                    name="name"
+                    type="string"
+                    label="Nome Completo"
+                    autoComplete="true"
+                    placeholder="Nome Completo"
+                    component={CustomInput}
+                    style={{ width: '100%' }}
+                  />
+                  <Field
+                    name="description"
+                    type="string"
+                    label="Descrição"
+                    autoComplete="true"
+                    placeholder="Descrição"
+                    component={CustomInput}
+                    style={{ width: '100%' }}
+                  />
+                  <Field
+                    name="brand"
+                    type="string"
+                    label="Marca"
+                    placeholder="Marca"
+                    component={CustomInput}
+                    style={{ width: '100%' }}
+                  />
+                  <CurrencyInput
+                    name="price"
+                    placeholder="Preço"
+                    decimalsLimit={2}
+                    prefix="R$ "
+                    intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+                    onValueChange={(value) => setFieldValue('price', value)}
+                    style={{ width: '100%' }}
+                  /> 
+                  <div className="row">
+                    <div className="col-md-2 align-self-center">
+                        <div className="form-group p-2">
+                          <Field
+                            type="checkbox"
+                            name="isDiscountPercentage"
+                            id="isDiscountPercentage"
+                            className="form-check-input"
+                          />
+                          <div> 
+                            <label className="form-check-label" htmlFor="isDiscountPercentage">
+                              Porcentagem?
+                            </label>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-md-10">
-                      <Field
-                        name="discountValue"
-                        type="number"
-                        label="Desconto"
-                        placeholder="Desconto"
-                        component={CustomInput}
+                      <div className="col-md-10">
+                        <Field
+                          name="discountValue"
+                          type="number"
+                          label="Desconto"
+                          placeholder="Desconto"
+                          component={CustomInput}
+                        />
+                      </div>
+                  </div>
+                  <Field
+                    name="barCode"
+                    type="number"
+                    label="Código de barras"
+                    placeholder="Código de barras"
+                    component={CustomInput}
+                    style={{ width: '100%' }}
+                  />
+                  <Field
+                    name="categoryId"
+                    label="Categoria"
+                    options={categoriesOptions}
+                    isMulti={false}
+                    placeholder="Categoria"
+                    component={CustomSelect}
+                  />
+                  <Field
+                    name="quantity"
+                    type="number"
+                    label="Quantidade"
+                    placeholder="Quantidade"
+                    component={CustomInput}
+                    style={{ width: '100%' }} 
+                  />
+                  <div className="d-flex justify-content-center gap-4">
+                    <div
+                      style={{ width: '100%'}}>
+                      <input
+                        id="images"
+                        name="images"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        style={{ display: 'none' }}
                       />
+                      <button
+                        className="btn bg-black text-white rounded p-1"
+                        type="button"
+                        onClick={() => document.getElementById('images')?.click()}
+                        style={{ width: '100%'}}
+                      >
+                        Selecionar imagens
+                      </button>
                     </div>
-                </div>
-                <Field
-                  name="barCode"
-                  type="number"
-                  label="Código de barras"
-                  placeholder="Código de barras"
-                  component={CustomInput}
-                  style={{ width: '100%' }}
-                />
-                <Field
-                  name="categoryId"
-                  label="Categoria"
-                  options={categoriesOptions}
-                  isMulti={false}
-                  placeholder="Categoria"
-                  component={CustomSelect}
-                />
-                <Field
-                  name="quantity"
-                  type="number"
-                  label="Quantidade"
-                  placeholder="Quantidade"
-                  component={CustomInput}
-                  style={{ width: '100%' }} 
-                />
-                <div className="d-flex justify-content-center gap-4">
-                  <div
-                    style={{ width: '100%'}}>
-                    <input
-                      id="images"
-                      name="images"
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageChange}
-                      style={{ display: 'none' }}
-                    />
+                  </div>
+                  <div className="image-container">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="image-preview-container">
+                        <img src={preview} alt={`Imagem ${index + 1}`} className="image-preview" />
+                        <button
+                          type="button"
+                          className="remove-image-button"
+                          onClick={() => handleImageRemove(index)}
+                        >
+                          X
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="d-flex justify-content-center gap-4">
                     <button
                       className="btn bg-black text-white rounded p-1"
-                      type="button"
-                      onClick={() => document.getElementById('images')?.click()}
-                      style={{ width: '100%'}}
+                      type="submit"
+                      style={{ width: '100%' }}
                     >
-                      Selecionar imagens
+                      Cadastrar
                     </button>
                   </div>
                 </div>
-                <div className="image-container">
-                  {imagePreviews.map((preview, index) => (
-                    <div key={index} className="image-preview-container">
-                      <img src={preview} alt={`Imagem ${index + 1}`} className="image-preview" />
-                      <button
-                        type="button"
-                        className="remove-image-button"
-                        onClick={() => handleImageRemove(index)}
-                      >
-                        X
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <div className="d-flex justify-content-center gap-4">
-                  <button
-                    className="btn bg-black text-white rounded p-1"
-                    type="submit"
-                    style={{ width: '100%' }}
-                  >
-                    Cadastrar
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </main>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </main>
+    </>
   );
 };
 

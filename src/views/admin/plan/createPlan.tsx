@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import CustomSelect from '../../../components/formik/CustomSelect';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const createPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -64,8 +66,31 @@ const CreatePlan = () => {
         });
       }
       navigate(ROUTES.ADMIN_PLANS);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao cadastrar o plano');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Verifique as informações inseridas e tente novamente.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+      
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setSubmitting(false);
     }
@@ -85,132 +110,135 @@ const CreatePlan = () => {
   };
 
   return (
-    <main className="primary-container p-5 d-flex">
-      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-2">Cadastro de Plano</h3>
-          <Formik
-            initialValues={{
-              name: '',
-              description: '',
-              priceMonth: '' as unknown as number,
-              priceYear: '' as unknown as number,
-              active: false,
-            }}
-            validateOnMount
-            validationSchema={createPlanSchema}
-            onSubmit={onSubmitForm}
-          >
-            {({ setFieldValue }) => (
-              <Form className="users-edit-form">
-                <div className="d-flex flex-column gap-3">
-                  <Field
-                    name="name"
-                    type="string"
-                    label="Nome Completo"
-                    autoComplete="true"
-                    placeholder="Nome Completo"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
-                  />
-                  <Field
-                    name="description"
-                    type="string"
-                    label="Descrição"
-                    autoComplete="true"
-                    placeholder="Descrição"
-                    component={CustomInput}
-                    style={{ width: '100%', height: '5.375rem' }} 
-                  />
-                  <Field
-                    name="productIds"
-                    label="Produtos"
-                    options={productsOptions}
-                    isMulti={true}
-                    placeholder="Produtos"
-                    component={CustomSelect}
-                  />
-                  <div className="d-flex gap-3">
-                    <CurrencyInput
-                      name="priceMonth"
-                      placeholder="Preço mensal"
-                      decimalsLimit={2}
-                      prefix="R$ "
-                      intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                      onValueChange={(value) => setFieldValue('priceMonth', value)}
-                      style={{ width: '100%' }}
-                    />
-                    <CurrencyInput
-                      name="priceYear"
-                      placeholder="Preço anual"
-                      decimalsLimit={2}
-                      prefix="R$ "
-                      intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
-                      onValueChange={(value) => setFieldValue('priceYear', value)}
-                      style={{ width: '100%' }}
-                    />
-                  </div>
-                  <div className="d-flex align-items-center">
+    <>
+      <ToastContainer />
+      <main className="primary-container p-5 d-flex">
+        <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
+          <h3 className="text-center mb-2">Cadastro de Plano</h3>
+            <Formik
+              initialValues={{
+                name: '',
+                description: '',
+                priceMonth: '' as unknown as number,
+                priceYear: '' as unknown as number,
+                active: false,
+              }}
+              validateOnMount
+              validationSchema={createPlanSchema}
+              onSubmit={onSubmitForm}
+            >
+              {({ setFieldValue }) => (
+                <Form className="users-edit-form">
+                  <div className="d-flex flex-column gap-3">
                     <Field
-                      type="checkbox"
-                      name="active"
-                      id="active"
-                      className="form-check-input me-2"
+                      name="name"
+                      type="string"
+                      label="Nome Completo"
+                      autoComplete="true"
+                      placeholder="Nome Completo"
+                      component={CustomInput}
+                      style={{ width: '100%' }} 
                     />
-                    <label className="form-check-label" htmlFor="active">
-                      Plano Ativo?
-                    </label>
-                  </div>
-                  <div className="d-flex justify-content-center gap-4">
-                    <div
-                      style={{ width: '100%'}}>
-                      <input
-                        id="images"
-                        name="images"
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handleImageChange}
-                        style={{ display: 'none' }}
+                    <Field
+                      name="description"
+                      type="string"
+                      label="Descrição"
+                      autoComplete="true"
+                      placeholder="Descrição"
+                      component={CustomInput}
+                      style={{ width: '100%', height: '5.375rem' }} 
+                    />
+                    <Field
+                      name="productIds"
+                      label="Produtos"
+                      options={productsOptions}
+                      isMulti={true}
+                      placeholder="Produtos"
+                      component={CustomSelect}
+                    />
+                    <div className="d-flex gap-3">
+                      <CurrencyInput
+                        name="priceMonth"
+                        placeholder="Preço mensal"
+                        decimalsLimit={2}
+                        prefix="R$ "
+                        intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+                        onValueChange={(value) => setFieldValue('priceMonth', value)}
+                        style={{ width: '100%' }}
                       />
-                        <button
-                          className="btn bg-black text-white rounded p-1"
-                          type="button"
-                          onClick={() => document.getElementById('images')?.click()}
-                          style={{ width: '100%'}}
-                        >
-                          Selecionar imagens
-                        </button>
+                      <CurrencyInput
+                        name="priceYear"
+                        placeholder="Preço anual"
+                        decimalsLimit={2}
+                        prefix="R$ "
+                        intlConfig={{ locale: 'pt-BR', currency: 'BRL' }}
+                        onValueChange={(value) => setFieldValue('priceYear', value)}
+                        style={{ width: '100%' }}
+                      />
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <Field
+                        type="checkbox"
+                        name="active"
+                        id="active"
+                        className="form-check-input me-2"
+                      />
+                      <label className="form-check-label" htmlFor="active">
+                        Plano Ativo?
+                      </label>
+                    </div>
+                    <div className="d-flex justify-content-center gap-4">
+                      <div
+                        style={{ width: '100%'}}>
+                        <input
+                          id="images"
+                          name="images"
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageChange}
+                          style={{ display: 'none' }}
+                        />
+                          <button
+                            className="btn bg-black text-white rounded p-1"
+                            type="button"
+                            onClick={() => document.getElementById('images')?.click()}
+                            style={{ width: '100%'}}
+                          >
+                            Selecionar imagens
+                          </button>
+                      </div>
+                    </div>
+                    <div className="image-container">
+                      {imagePreviews.map((preview, index) => (
+                        <div key={index} className="image-preview-container">
+                          <img src={preview} alt={`Imagem ${index + 1}`} className="image-preview" />
+                          <button
+                            type="button"
+                            className="remove-image-button"
+                            onClick={() => handleImageRemove(index)}
+                          >
+                            X
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="d-flex justify-content-center gap-4">
+                      <button
+                        className="btn bg-black text-white rounded p-1"
+                        type="submit"
+                        style={{ width: '100%' }}
+                      >
+                        Cadastrar
+                      </button>
                     </div>
                   </div>
-                  <div className="image-container">
-                    {imagePreviews.map((preview, index) => (
-                      <div key={index} className="image-preview-container">
-                        <img src={preview} alt={`Imagem ${index + 1}`} className="image-preview" />
-                        <button
-                          type="button"
-                          className="remove-image-button"
-                          onClick={() => handleImageRemove(index)}
-                        >
-                          X
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="d-flex justify-content-center gap-4">
-                    <button
-                      className="btn bg-black text-white rounded p-1"
-                      type="submit"
-                      style={{ width: '100%' }}
-                    >
-                      Cadastrar
-                    </button>
-                  </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
-      </div>
-    </main>
+                </Form>
+              )}
+            </Formik>
+        </div>
+      </main>
+    </>
   );
 };
 
