@@ -23,6 +23,7 @@ const createProductSchema = Yup.object({
 const CreateProduct = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [categories, setCategories] = useState<CategoryObject[]>([]);
 
   useEffect(() => {
@@ -45,7 +46,15 @@ const CreateProduct = () => {
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImages = Array.from(event.target.files || []);
-    setImages(selectedImages);
+    const selectedPreviews = selectedImages.map((image) => URL.createObjectURL(image));
+
+    setImages((prevImages) => [...prevImages, ...selectedImages]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...selectedPreviews]);
+  };
+
+  const handleImageRemove = (index: number) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
   const onSubmitForm = async (values: ProductObject,
@@ -55,22 +64,21 @@ const CreateProduct = () => {
         values.price.toString().replace(/\./g, '').replace(',', '.')
       );
 
-      if (values.isDiscountPercentage === false) {
+      if (!values.discountValue) {
         delete values.discountValue;
       }
 
       const response = await api.post('product', values);
       if (images.length > 0) {
-        const imageUploadPromises = images.map((image) => {
-          const formData = new FormData();
-          formData.append('image', image);
-          return api.post(`/product/image/${response.data.id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
+        const formData = new FormData();
+        images.map((image) => {
+          formData.append('images', image);
         });
-        await Promise.all(imageUploadPromises);
+        await api.post(`/product/images/${response.data.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       }
       navigate(ROUTES.ADMIN_PRODUCT_EDIT);
     } catch (error) {
@@ -174,10 +182,10 @@ const CreateProduct = () => {
                 />
                 <Field
                   name="categoryId"
-                  label="Categorias"
+                  label="Categoria"
                   options={categoriesOptions}
                   isMulti={false}
-                  placeholder="Categorias"
+                  placeholder="Categoria"
                   component={CustomSelect}
                 />
                 <Field
@@ -211,13 +219,17 @@ const CreateProduct = () => {
                   </div>
                 </div>
                 <div className="image-container">
-                  {images.map((image, index) => (
-                    <img
-                      key={index}
-                      src={URL.createObjectURL(image)}
-                      alt={`Imagem ${index + 1}`}
-                      className="image-preview"
-                    />
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="image-preview-container">
+                      <img src={preview} alt={`Imagem ${index + 1}`} className="image-preview" />
+                      <button
+                        type="button"
+                        className="remove-image-button"
+                        onClick={() => handleImageRemove(index)}
+                      >
+                        X
+                      </button>
+                    </div>
                   ))}
                 </div>
                 <div className="d-flex justify-content-center gap-4">

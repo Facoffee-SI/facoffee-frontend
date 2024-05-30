@@ -20,6 +20,7 @@ const createPlanSchema = Yup.object({
 const CreatePlan = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [products, setProducts] = useState<ProductEditObject[]>([]);
 
   useEffect(() => {
@@ -52,16 +53,15 @@ const CreatePlan = () => {
 
       const response = await api.post('plan', values);
       if (images.length > 0) {
-        const imageUploadPromises = images.map((image) => {
-          const formData = new FormData();
-          formData.append('image', image);
-          return api.post(`/plan/image/${response.data.id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
+        const formData = new FormData();
+        images.map((image) => {
+          formData.append('images', image);
         });
-        await Promise.all(imageUploadPromises);
+        await api.post(`/plan/images/${response.data.id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       }
       navigate(ROUTES.ADMIN_PLANS);
     } catch (error) {
@@ -73,7 +73,15 @@ const CreatePlan = () => {
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImages = Array.from(event.target.files || []);
-    setImages(selectedImages);
+    const selectedPreviews = selectedImages.map((image) => URL.createObjectURL(image));
+
+    setImages((prevImages) => [...prevImages, ...selectedImages]);
+    setImagePreviews((prevPreviews) => [...prevPreviews, ...selectedPreviews]);
+  };
+
+  const handleImageRemove = (index: number) => {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
   return (
@@ -175,13 +183,17 @@ const CreatePlan = () => {
                     </div>
                   </div>
                   <div className="image-container">
-                    {images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={URL.createObjectURL(image)}
-                        alt={`Imagem ${index + 1}`}
-                        className="image-preview"
-                      />
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="image-preview-container">
+                        <img src={preview} alt={`Imagem ${index + 1}`} className="image-preview" />
+                        <button
+                          type="button"
+                          className="remove-image-button"
+                          onClick={() => handleImageRemove(index)}
+                        >
+                          X
+                        </button>
+                      </div>
                     ))}
                   </div>
                   <div className="d-flex justify-content-center gap-4">
