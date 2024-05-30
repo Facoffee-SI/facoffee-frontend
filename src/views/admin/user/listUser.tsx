@@ -75,30 +75,33 @@ const Users = () => {
 
   return (
     <>
-      {loading && <Loading />}
       <ToastContainer />
-      <main className="primary-container p-5">
-        <div className="secondary-container p-5">
-          <div className="tertiary-container">
-            <h3 className="text-center m-4">Usuários</h3>
-            <div className="p-4">
-              <div className="d-flex justify-content-end">
-                <button
-                  className="btn bg-black text-white rounded p-2"
-                  onClick={createUser}
-                >
-                  Criar novo usuário
-                </button>
-              </div>
-              <div className='user-list-container'>
-                <Row>
-                  <UserList userList={userList}></UserList>
-                </Row>
+      {loading ? (
+        <Loading />
+      ) : (
+        <main className="primary-container p-5">
+          <div className="secondary-container p-5">
+            <div className="tertiary-container">
+              <h3 className="text-center m-4">Usuários</h3>
+              <div className="p-4">
+                <div className="d-flex justify-content-end">
+                  <button
+                    className="btn bg-black text-white rounded p-2"
+                    onClick={createUser}
+                  >
+                    Criar novo usuário
+                  </button>
+                </div>
+                <div className='user-list-container'>
+                  <Row>
+                    <UserList userList={userList}></UserList>
+                  </Row>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      )}
     </>
   );
 };
