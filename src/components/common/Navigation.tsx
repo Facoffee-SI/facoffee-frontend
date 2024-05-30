@@ -34,7 +34,7 @@ const Navigation = () => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className={`collapse navbar-collapse ${collapseOpen ? 'show' : ''}`} id="navbarNavAltMarkup">
-        <ul className="navbar-nav">
+        <ul className={`navbar-nav ${collapseOpen ? 'nav-expanded' : ''}`}>
           {token ? (
             <>
               <li className="nav-item">
