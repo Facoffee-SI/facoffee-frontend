@@ -29,4 +29,4 @@ export const ADMIN_ABOUT_EDIT = '/admin/about/edit'
 
 // CUSTOMER
 
-export const CUSTOMER_ = '/admin/users';
+export const CUSTOMER_LOGIN = '/customer/login';

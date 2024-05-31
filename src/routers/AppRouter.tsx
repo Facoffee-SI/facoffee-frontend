@@ -19,6 +19,7 @@ import Products from '../views/admin/product/listProduct';
 import Plans from '../views/admin/plan/listPlan';
 import CreateAbout from '../views/admin/about/createAbout';
 import EditAbout from '../views/admin/about/editAbout';
+import CustomerLogin from '../views/customer/customer/loginCustomer';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -26,70 +27,23 @@ const AppRouter = () => (
     <Routes>
       <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin></AdminLogin>}></Route>
       <Route path={ROUTES.ADMIN_USERS} element={<Users></Users>}></Route>
-      <Route
-        path={ROUTES.ADMIN_USERS_EDIT}
-        element={<EditUser></EditUser>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_USERS_CREATE}
-        element={<CreateUser></CreateUser>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_PRODUCTS}
-        element={<Products></Products>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_PRODUCT_ADD}
-        element={<CreateProduct></CreateProduct>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_PRODUCT_EDIT}
-        element={<EditProduct></EditProduct>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_PLANS}
-        element={<Plans></Plans>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_PLAN_ADD}
-        element={<CreatePlan></CreatePlan>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_PLAN_EDIT}
-        element={<EditPlan></EditPlan>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_CONTACT_ADD}
-        element={<CreateContact></CreateContact>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_CONTACT_EDIT}
-        element={<EditContact></EditContact>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_CATEGORIES}
-        element={<Categories></Categories>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_CATEGORY_ADD}
-        element={<CreateCategory></CreateCategory>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_ROLES}
-        element={<Roles></Roles>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_ROLE_ADD}
-        element={<CreateRole></CreateRole>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_ABOUT_ADD}
-        element={<CreateAbout></CreateAbout>}
-      ></Route>
-      <Route
-        path={ROUTES.ADMIN_ABOUT_EDIT}
-        element={<EditAbout></EditAbout>}
-      ></Route>
+      <Route path={ROUTES.ADMIN_USERS_EDIT} element={<EditUser></EditUser>}></Route>
+      <Route path={ROUTES.ADMIN_USERS_CREATE} element={<CreateUser></CreateUser>} ></Route>
+      <Route path={ROUTES.ADMIN_PRODUCTS} element={<Products></Products>} ></Route>
+      <Route path={ROUTES.ADMIN_PRODUCT_ADD} element={<CreateProduct></CreateProduct>} ></Route>
+      <Route path={ROUTES.ADMIN_PRODUCT_EDIT} element={<EditProduct></EditProduct>} ></Route>
+      <Route path={ROUTES.ADMIN_PLANS} element={<Plans></Plans>} ></Route>
+      <Route path={ROUTES.ADMIN_PLAN_ADD} element={<CreatePlan></CreatePlan>} ></Route>
+      <Route path={ROUTES.ADMIN_PLAN_EDIT} element={<EditPlan></EditPlan>} ></Route>
+      <Route path={ROUTES.ADMIN_CONTACT_ADD} element={<CreateContact></CreateContact>} ></Route>
+      <Route path={ROUTES.ADMIN_CONTACT_EDIT} element={<EditContact></EditContact>} ></Route>
+      <Route path={ROUTES.ADMIN_CATEGORIES} element={<Categories></Categories>} ></Route>
+      <Route path={ROUTES.ADMIN_CATEGORY_ADD} element={<CreateCategory></CreateCategory>} ></Route>
+      <Route path={ROUTES.ADMIN_ROLES} element={<Roles></Roles>} ></Route>
+      <Route path={ROUTES.ADMIN_ROLE_ADD} element={<CreateRole></CreateRole>} ></Route>
+      <Route path={ROUTES.ADMIN_ABOUT_ADD} element={<CreateAbout></CreateAbout>} ></Route>
+      <Route path={ROUTES.ADMIN_ABOUT_EDIT} element={<EditAbout></EditAbout>} ></Route>
+      <Route path={ROUTES.CUSTOMER_LOGIN} element={<CustomerLogin></CustomerLogin>} ></Route>
     </Routes>
   </BrowserRouter>
 );

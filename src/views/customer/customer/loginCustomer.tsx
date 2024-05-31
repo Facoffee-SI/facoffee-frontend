@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import * as ROUTES from '../../../constants/routes';
 import api from '../../../services/Api';
@@ -26,12 +26,12 @@ const CustomerLogin = () => {
 
   const fetchLogin = async (user: { email: string; password: string }) => {
     try {
-      const response = await api.post(ROUTES.AUTH_USER, {
+      const response = await api.post('auth/customer', {
         email: user.email,
         password: user.password,
       });
   
-      localStorage.setItem('token', JSON.stringify(response.data.token));
+      localStorage.setItem('tokenCustomer', JSON.stringify(response.data.token));
       navigate(ROUTES.ADMIN_USERS);
     } catch (error: any) {
       console.error('Erro ao logar.')
@@ -99,6 +99,15 @@ const CustomerLogin = () => {
                     >
                       Entrar
                     </button>
+                    <span>
+                      Não tem uma conta?
+                      <Link
+                        style={{ marginLeft:'3px', textDecoration: 'underline', color: 'black' }}
+                        to={ROUTES.ADMIN_USERS}
+                      >
+                        Faça seu cadastro
+                      </Link>
+                    </span>
                   </div>
                 </Form>
               )}
