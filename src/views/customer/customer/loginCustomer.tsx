@@ -103,7 +103,7 @@ const CustomerLogin = () => {
                       Não tem uma conta?
                       <Link
                         style={{ marginLeft:'3px', textDecoration: 'underline', color: 'black' }}
-                        to={ROUTES.ADMIN_USERS}
+                        to={ROUTES.CUSTOMER_REGISTER}
                       >
                         Faça seu cadastro
                       </Link>
