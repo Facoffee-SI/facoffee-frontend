@@ -11,13 +11,13 @@ import * as ROUTES from '../../../constants/routes';
 import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import * as lodash from 'lodash'
 
 const userEditSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   email: Yup.string()
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
-  roles: Yup.array().min(1, 'Obrigatório preencher cargos'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
     .min(6, 'A senha deve ter no mínimo 6 caracteres'),
@@ -41,11 +41,13 @@ const UsersEdit = () => {
   
   const userRoles = userObject?.userRoles.map((item) => ({
     value: item.roleId,
-    label: item.roleName
+    label: item.roleName,
   })) || [];
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string | File>(userObject?.user.profilePicture ?? userImageDefault);
+  const [profileImage, setProfileImage] = useState<string | File>(
+    userObject?.user.profilePicture ?? userImageDefault
+  );
   const [rolesList, setRolesList] = useState<Role[]>([]);
   const [isRemoving, setIsRemoving] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -110,13 +112,16 @@ const UsersEdit = () => {
     }
   };
 
-  const onSubmitForm = async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
+  const onSubmitForm = async (
+    values: FormValues,
+    formikHelpers: FormikHelpers<FormValues>
+  ) => {
     try {
       const userUpdatePayload = {
         name: values.name,
         email: values.email,
         password: values.password,
-        roleIds: values.roles,
+        roleIds: !(lodash.isEqual(values.roles, userRoles)) ? values.roles : userObject?.userRoles.map((role) => role.roleId),
       };
       await api.patch(`/user/${userObject?.user.id}`, userUpdatePayload);
 
@@ -125,7 +130,7 @@ const UsersEdit = () => {
         formData.append('profilePicture', values.profileImage);
         await api.post(`/user/image/${userObject?.user.id}`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
           },
         });
       }
@@ -137,7 +142,9 @@ const UsersEdit = () => {
       if (error.response) {
         if (error.response.status === 401) {
           errorMessage = 'Cargo não autorizado a realizar essa ação.';
-        } if (error.response.status === 400 || error.response.status === 404) {
+        } if (error.response.status === 400 ||
+          error.response.status === 404
+        ) {
           errorMessage = 'Verifique as informações inseridas e tente novamente.';
         } else {
           errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
