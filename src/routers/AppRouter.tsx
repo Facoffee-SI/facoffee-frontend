@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navigation from '../components/common/Navigation';
-import AdminLogin from '../views/admin/user/login';
+import AdminLogin from '../views/admin/user/loginUser';
 import Users from '../views/admin/user/listUser';
 import EditUser from '../views/admin/user/editUser';
 import CreateUser from '../views/admin/user/createUser';

@@ -2,7 +2,7 @@ import { Row } from 'react-bootstrap';
 import '../../../styles/style.css';
 import * as ROUTES from '../../../constants/routes';
 import { useNavigate } from 'react-router-dom';
-import { UserList } from '../../../components/user/UserList';
+import { UserList } from './components/UserList';
 import { UserObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import { useEffect, useState } from 'react';

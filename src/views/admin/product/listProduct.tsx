@@ -6,7 +6,7 @@ import { ProductEditObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import * as ROUTES from '../../../constants/routes';
 import './styles.css'
-import ProductCard from './ProductCard';
+import ProductCard from './components/ProductCard';
 
 const Products = () => {
     const navigate = useNavigate();
