@@ -6,3 +6,8 @@
 .navbar-brand {
   background-color: var(--clr-quinary);
 }
+
+.nav-expanded .nav-link {
+  font-weight: bold;
+  padding: 8px 16px 8px 24px;
+}

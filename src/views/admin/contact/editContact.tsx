@@ -1,6 +1,18 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import * as ROUTES from '../../../constants/routes';
+import api from '../../../services/Api';
+import { ContactObject } from '../../../components/common/Models';
+import { useEffect, useRef, useState } from 'react';
+import Loading from '../../../components/common/Loading';
+import FroalaEditor from 'froala-editor';
+import 'froala-editor/js/plugins.pkgd.min.js';
+import 'froala-editor/css/froala_editor.pkgd.min.css';
+import 'froala-editor/css/froala_style.min.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const editContactSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -8,101 +20,184 @@ const editContactSchema = Yup.object({
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
   phone: Yup.string().required('Obrigatório preencher o telefone'),
-  description: Yup.string().required('Obrigatório preencher a descrição'),
   address: Yup.string().required('Obrigatório preencher o endereço'),
-  maps: Yup.string().required('Obrigatório preencher o link do Google Maps'),
+  linkGoogleMaps: Yup.string().required('Obrigatório preencher o link do Google Maps'),
 });
 
-const onSubmitForm = () => {};
+const EditContact = () => {
+  const navigate = useNavigate();
+  const [contact, setContact] = useState<ContactObject>();
+  const [loading, setLoading] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [editorInstance, setEditorInstance] = useState<FroalaEditor | null>(null);
 
-const CreateContact = () => {
+  useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('contact');
+        if (response.data.length) {
+          setContact(response.data[0]);
+        } else {
+          navigate(ROUTES.ADMIN_CONTACT_ADD);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Erro ao buscar contato.');
+        setLoading(false);
+      }
+    };
+
+    fetchContact();
+  }, [setContact, navigate]);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      const froala = new FroalaEditor(editorRef.current, {
+        placeholderText: 'Insira a descrição...',
+        events: {
+          'initialized': () => {
+            if (contact) {
+              froala.html.set(contact.description);
+            }
+          }
+        }
+      });
+      setEditorInstance(froala);
+      return () => {
+        froala.destroy();
+      };
+    }
+  }, [contact]);
+
+  const onSubmitForm = async (
+    values: ContactObject,
+    { setSubmitting }: FormikHelpers<ContactObject>
+  ) => {
+    try {
+      const editorContent = editorInstance?.html.get();
+      await api.patch(`contact/${contact?.id}`, {
+        ...values,
+        description: editorContent,
+      });
+      navigate(ROUTES.ADMIN_CONTACT_ADD);
+    } catch (error: any) {
+      console.error('Erro ao cadastrar ou editar o contato');
+      let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = 'Cargo não autorizado a realizar essa ação.';
+        } if (error.response.status === 400 || error.response.status === 404) {
+          errorMessage = 'Verifique as informações inseridas e tente novamente.';
+        } else {
+          errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
+        }
+      } else if (error.request) {
+        errorMessage = 'Sem resposta do servidor. Por favor, tente novamente mais tarde.';
+      } else {
+        errorMessage = 'Erro ao enviar a requisição. Por favor, tente novamente mais tarde.';
+      }
+      
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <main className="primary-container p-5 d-flex">
-      <div className="card bg-white p-5" style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}>
-        <h3 className="text-center mb-4">Edição de Informações de Contato</h3>
-          <Formik
-            initialValues={{
-              name: '',
-              email: '',
-              phone: '',
-              description: '',
-              address: '',
-              maps: '',
-            }}
-            validateOnMount
-            validationSchema={editContactSchema}
-            onSubmit={onSubmitForm}
-          >
-            {() => (
-              <Form className="users-edit-form">
-                <div className="d-flex flex-column gap-3">
-                  <Field
-                    name="name"
-                    type="string"
-                    label="Nome"
-                    autoComplete="true"
-                    placeholder="Nome"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
-                  />
-                  <div className="d-flex gap-3">
+    <>
+      <ToastContainer />
+      {loading && <Loading />}
+      <main className="primary-container p-5 d-flex">
+        <div
+          className="card bg-white p-5"
+          style={{ maxWidth: '50.75rem', width: '100%', boxSizing: 'border-box' }}
+        >
+          <h3 className="text-center mb-4">Editar de Informações de Contato</h3>
+          {contact && (
+            <Formik
+              initialValues={{
+                name: contact.name,
+                email: contact.email,
+                phone: contact.phone,
+                description: '',
+                address: contact.address,
+                linkGoogleMaps: contact.linkGoogleMaps,
+              }}
+              validateOnMount
+              validationSchema={editContactSchema}
+              onSubmit={onSubmitForm}
+            >
+              {() => (
+                <Form className="users-edit-form">
+                  <div className="d-flex flex-column gap-3">
                     <Field
-                      name="email"
+                      name="name"
                       type="string"
-                      label="Email"
-                      placeholder="Email"
+                      label="Nome"
+                      autoComplete="true"
+                      placeholder="Nome"
                       component={CustomInput}
-                    />
-                    <Field
-                      name="phone"
-                      type="string"
-                      label="Telefone"
-                      placeholder="Telefone"
-                      component={CustomInput}
-                    />
-                  </div>
-                  <Field
-                    name="description"
-                    type="string"
-                    label="Descrição"
-                    autoComplete="true"
-                    placeholder="Descrição"
-                    component={CustomInput}
-                    style={{ width: '100%', height: '5.375rem' }} 
-                  />
-                  <Field
-                    name="address"
-                    type="string"
-                    label="Endereço"
-                    placeholder="Endereço"
-                    component={CustomInput}
-                    style={{ width: '100%' }} 
-                  />
-                  <Field
-                    name="maps"
-                    type="string"
-                    label="GoogleMaps"
-                    placeholder="Google Maps (Link)"
-                    component={CustomInput}
-                    disabled="true"
-                    style={{ width: '100%' }} 
-                  />
-                  <div className="d-flex justify-content-center gap-4">
-                    <button
-                      className="btn bg-black text-white rounded p-1"
-                      type="submit"
                       style={{ width: '100%' }}
-                    >
-                      Editar informações de Contato
-                    </button>
+                    />
+                    <div className="d-flex gap-3">
+                      <Field
+                        name="email"
+                        type="string"
+                        label="Email"
+                        placeholder="Email"
+                        component={CustomInput}
+                      />
+                      <Field
+                        name="phone"
+                        type="number"
+                        label="Telefone"
+                        placeholder="Telefone"
+                        component={CustomInput}
+                      />
+                    </div>
+                    <div id="froala-editor" ref={editorRef}></div>
+                    <Field
+                      name="address"
+                      type="string"
+                      label="Endereço"
+                      placeholder="Endereço"
+                      component={CustomInput}
+                      style={{ width: '100%' }}
+                    />
+                    <Field
+                      name="linkGoogleMaps"
+                      type="string"
+                      label="Google Maps"
+                      placeholder="Google Maps (Link)"
+                      component={CustomInput}
+                      style={{ width: '100%' }}
+                    />
+                    <div className="d-flex justify-content-center gap-4">
+                      <button
+                        className="btn bg-black text-white rounded p-1"
+                        type="submit"
+                        style={{ width: '100%' }}
+                      >
+                        Editar informações de Contato
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </Form>
-            )}
-          </Formik>
-      </div>
-    </main>
+                </Form>
+              )}
+            </Formik>
+          )}
+        </div>
+      </main>
+    </>
   );
 };
 
-export default CreateContact;
+export default EditContact;
