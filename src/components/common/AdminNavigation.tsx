@@ -3,7 +3,7 @@ import * as ROUTES from '../../constants/routes';
 import '../../styles/navigation.css';
 import { useEffect, useState } from 'react';
 
-const Navigation = () => {
+const AdminNavigation = () => {
   const [collapseOpen, setCollapseOpen] = useState(false);
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
@@ -116,4 +116,4 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default AdminNavigation;

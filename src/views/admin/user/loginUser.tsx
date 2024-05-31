@@ -30,7 +30,8 @@ const AdminLogin = () => {
         email: user.email,
         password: user.password,
       });
-  
+
+      localStorage.removeItem('tokenCustomer');
       localStorage.setItem('token', JSON.stringify(response.data.token));
       navigate(ROUTES.ADMIN_USERS);
     } catch (error: any) {

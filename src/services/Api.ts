@@ -5,6 +5,11 @@ function getTokenFromLocalStorage() {
   return token ? JSON.parse(token) : null;
 }
 
+function getCustomerTokenFromLocalStorage() {
+  const token = localStorage.getItem('tokenCustomer');
+  return token ? JSON.parse(token) : null;
+}
+
 const api = axios.create({
   baseURL: "http://localhost:3000",
   headers: {
@@ -18,7 +23,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-  const token = getTokenFromLocalStorage();
+  const token = getTokenFromLocalStorage() ? getTokenFromLocalStorage() : getCustomerTokenFromLocalStorage();
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

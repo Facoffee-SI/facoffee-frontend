@@ -31,6 +31,7 @@ const CustomerLogin = () => {
         password: user.password,
       });
   
+      localStorage.removeItem('token');
       localStorage.setItem('tokenCustomer', JSON.stringify(response.data.token));
       navigate(ROUTES.ADMIN_USERS);
     } catch (error: any) {
