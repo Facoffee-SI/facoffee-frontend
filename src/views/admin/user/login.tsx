@@ -1,14 +1,14 @@
 import { Field, Form, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import * as ROUTES from '../../constants/routes';
-import api from '../../services/Api';
-import CustomInput from '../../components/formik/CustomInput';
-import '../../styles/style.css';
+import * as ROUTES from '../../../constants/routes';
+import api from '../../../services/Api';
+import CustomInput from '../../../components/formik/CustomInput';
+import '../../../styles/style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const SignInSchema = Yup.object({
+const loginSchema = Yup.object({
   email: Yup.string()
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
@@ -17,7 +17,7 @@ const SignInSchema = Yup.object({
     .min(6, 'A senha deve ter no mínimo 6 caracteres'),
 });
 
-const SignIn = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
 
   const onSubmitForm = (user: { email: string; password: string }) => {
@@ -68,11 +68,11 @@ const SignIn = () => {
             <Formik
               initialValues={{ email: '', password: '' }}
               validateOnMount
-              validationSchema={SignInSchema}
+              validationSchema={loginSchema}
               onSubmit={onSubmitForm}
             >
               {() => (
-                <Form className="signin-form">
+                <Form className="login-form">
                   <h3 className="text-center">Login</h3>
                   <div className="form-group">
                     <Field
@@ -110,4 +110,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default AdminLogin;

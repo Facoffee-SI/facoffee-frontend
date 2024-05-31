@@ -16,7 +16,7 @@ const Navigation = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate(ROUTES.SIGNIN);
+    navigate(ROUTES.ADMIN_LOGIN);
   };
 
   return (
@@ -73,14 +73,14 @@ const Navigation = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.SIGNIN} onClick={handleLogout}>
+                <Link className="nav-link" to={ROUTES.ADMIN_LOGIN} onClick={handleLogout}>
                   Deslogar
                 </Link>
               </li>
             </>
           ) : (
             <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.SIGNIN} onClick={toggleCollapse}>
+              <Link className="nav-link" to={ROUTES.ADMIN_LOGIN} onClick={toggleCollapse}>
                 Login
               </Link>
             </li>
@@ -100,14 +100,14 @@ const Navigation = () => {
         <Link
           className="btn bg-black text-white rounded p-2"
           onClick={handleLogout}
-          to={ROUTES.SIGNIN}
+          to={ROUTES.ADMIN_LOGIN}
         >
           Deslogar
         </Link>
       ) : (
         <Link
           className="btn bg-black text-white rounded p-2"
-          to={ROUTES.SIGNIN}
+          to={ROUTES.ADMIN_LOGIN}
         >
           Login
         </Link>

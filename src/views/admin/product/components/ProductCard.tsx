@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
-import { ProductEditObject } from '../../../components/common/Models';
-import { ConfirmationModal } from '../../../components/common/ConfirmationModal';
-import api from '../../../services/Api';
-import './styles.css';
+import { ProductEditObject } from '../../../../components/common/Models';
+import { ConfirmationModal } from '../../../../components/common/ConfirmationModal';
+import api from '../../../../services/Api';
+import '../styles.css';
 import { useNavigate } from 'react-router-dom';
-import * as ROUTES from '../../../constants/routes';
+import * as ROUTES from '../../../../constants/routes';
 
 interface ProductCardProps {
   product: ProductEditObject;

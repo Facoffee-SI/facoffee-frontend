@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Button, Col } from "react-bootstrap";
-import { PermissionObject, RolesResponse } from "../../../components/common/Models";
-import { ConfirmationModal } from "../../../components/common/ConfirmationModal";
-import api from "../../../services/Api";
-import './styles.css'
+import { PermissionObject, RolesResponse } from "../../../../components/common/Models";
+import { ConfirmationModal } from "../../../../components/common/ConfirmationModal";
+import api from "../../../../services/Api";
+import '../styles.css'
 
 interface RoleCardProps {
   role: RolesResponse;

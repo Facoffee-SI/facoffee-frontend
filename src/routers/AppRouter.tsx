@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navigation from '../components/common/Navigation';
-import SignIn from '../views/auth/signIn';
+import AdminLogin from '../views/admin/user/login';
 import Users from '../views/admin/user/listUser';
 import EditUser from '../views/admin/user/editUser';
 import CreateUser from '../views/admin/user/createUser';
@@ -24,7 +24,7 @@ const AppRouter = () => (
   <BrowserRouter>
     <Navigation />
     <Routes>
-      <Route path={ROUTES.SIGNIN} element={<SignIn></SignIn>}></Route>
+      <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin></AdminLogin>}></Route>
       <Route path={ROUTES.ADMIN_USERS} element={<Users></Users>}></Route>
       <Route
         path={ROUTES.ADMIN_USERS_EDIT}

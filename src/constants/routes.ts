@@ -1,10 +1,11 @@
-export const SIGNIN = '/';
+export const ADMIN_LOGIN = '/admin/login';
 export const AUTH_USER = '/auth/user';
+
+// ADMIN
 export const ADMIN_USERS = '/admin/users';
 export const ADMIN_USERS_EDIT = '/admin/users/edit';
 export const ADMIN_USERS_CREATE = '/admin/users/create';
 
-export const SIGNUP = '/signup';
 export const ADMIN_DASHBOARD = '/admin/dashboard';
 export const ADMIN_PRODUCTS = '/admin/products';
 export const ADMIN_PRODUCT_ADD = '/admin/product/add';
@@ -26,5 +27,6 @@ export const ADMIN_CONTACT_EDIT = '/admin/contact/edit';
 export const ADMIN_ABOUT_ADD = '/admin/about/add';
 export const ADMIN_ABOUT_EDIT = '/admin/about/edit'
 
-export const SEARCH = '/search/:searchKey';
-export const FORGOT_PASSWORD = '/forgotPassword';
+// CUSTOMER
+
+export const CUSTOMER_ = '/admin/users';
