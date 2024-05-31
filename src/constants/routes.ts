@@ -31,3 +31,4 @@ export const ADMIN_ABOUT_EDIT = '/admin/about/edit'
 
 export const CUSTOMER_LOGIN = '/customer/login';
 export const CUSTOMER_REGISTER = '/customer/register';
+export const CUSTOMER_EDIT = '/customer/edit';

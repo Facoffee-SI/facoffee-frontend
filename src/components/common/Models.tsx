@@ -107,3 +107,14 @@ export interface PlanObject {
   description: string;
   active: boolean;
 }
+
+export interface CustomerObject {
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  cep: string;
+  address: string;
+  password: string;
+  profileImage: string | File;
+}

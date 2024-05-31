@@ -43,7 +43,7 @@ const CustomerNavigation = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+                <Link className="nav-link" to={ROUTES.CUSTOMER_EDIT} onClick={toggleCollapse}>
                   Editar cadastro
                 </Link>
               </li>

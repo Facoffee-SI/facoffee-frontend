@@ -99,14 +99,21 @@ const RegisterCustomer = () => {
         phone: values.phone,
         address: values.address,
       };
-      const response = await api.post('customer/register', customerPostPayload);
+      await api.post('customer/register', customerPostPayload);
 
+      const tokenCustomer = await api.post('auth/customer',
+        {
+          email: customerPostPayload.email,
+          password: customerPostPayload.password
+        }
+      );
       if (values.profileImage instanceof File) {
         const formData = new FormData();
         formData.append('profilePicture', values.profileImage);
-        await api.post(`/customer/image/${response.data.id}`, formData, {
+        await api.post(`/customer/image/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${tokenCustomer.data.token}`
           },
         });
       }
