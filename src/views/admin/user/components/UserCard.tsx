@@ -16,7 +16,8 @@ function UserCard({ userObject }: Props) {
     .join(' | ');
 
   const profileImage = userObject.user.profilePicture 
-    ?? userImageDefault;
+    ? userObject.user.profilePicture
+    : userImageDefault;
 
   const editUser = () => {
     return navigate(ROUTES.ADMIN_USERS_EDIT, { state: { userObject } });

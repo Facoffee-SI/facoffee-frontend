@@ -6,13 +6,14 @@ import { useEffect, useState } from 'react';
 const CustomerNavigation = () => {
   const [collapseOpen, setCollapseOpen] = useState(false);
   const tokenCustomer = localStorage.getItem('tokenCustomer');
+  const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
   const toggleCollapse = () => {
     setCollapseOpen(!collapseOpen);
   };
 
-  useEffect(() => {}, [tokenCustomer]);
+  useEffect(() => {}, [tokenCustomer, token]);
 
   const handleLogout = () => {
     localStorage.removeItem('tokenCustomer');

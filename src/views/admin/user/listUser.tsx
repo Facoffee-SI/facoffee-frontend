@@ -24,23 +24,7 @@ const Users = () => {
       try {
         setLoading(true);
         const response = await api.get('user');
-        const usersWithImages: UserObject[] = await Promise.all(response.data.map(async (user: UserObject) => {
-          try {
-            const imageResponse = await api.get(`/user/image/${user.user.id}`);
-            if(imageResponse.data.data) {
-              const uint8Array = new Uint8Array(imageResponse.data.data);
-              const blob = new Blob([uint8Array], { type: 'image/jpeg' });
-              const imageUrl = URL.createObjectURL(blob);
-              user.user.profilePicture = imageUrl;
-            }
-            return user;
-          } catch (error) {
-            console.error('Error fetching image for user:', error);
-            user.user.profilePicture = null;
-            return user;
-          }
-        }));
-        setUserList(usersWithImages);
+        setUserList(response.data);
         setLoading(false);
       } catch (error: any) {
         console.error('Erro ao buscar usuários.');

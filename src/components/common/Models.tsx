@@ -116,5 +116,14 @@ export interface CustomerObject {
   cep: string;
   address: string;
   password: string;
-  profileImage: string | File;
+  profilePicture: string | File;
+}
+
+export interface ContactObject {
+  name: string;
+  address: string;
+  phone: string;
+  description: string;
+  email: string;
+  linkGoogleMaps: string;
 }

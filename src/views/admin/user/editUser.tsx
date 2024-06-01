@@ -49,12 +49,12 @@ const UsersEdit = () => {
   })) || [];
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string | File>(
-    userObject?.user.profilePicture ?? userImageDefault
-  );
   const [rolesList, setRolesList] = useState<Role[]>([]);
   const [isRemoving, setIsRemoving] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | File>(
+    userObject?.user.profilePicture ? userObject.user.profilePicture : userImageDefault
+  );
 
   useEffect(() => {
     if (!userObject) {

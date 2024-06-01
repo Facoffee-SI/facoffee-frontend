@@ -29,7 +29,8 @@ import ContactInfo from '../views/customer/contact/contact';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
-  useEffect(() => {}, [token]);
+  const tokenCustomer = localStorage.getItem('tokenCustomer');
+  useEffect(() => {}, [token, tokenCustomer]);
 
   return (
     <BrowserRouter>

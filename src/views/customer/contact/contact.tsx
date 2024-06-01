@@ -2,15 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../../../services/Api';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../components/common/Loading';
-
-interface ContactObject {
-  name: string;
-  address: string;
-  phone: string;
-  description: string;
-  email: string;
-  linkGoogleMaps: string;
-}
+import { ContactObject } from '../../../components/common/Models';
 
 const ContactInfo = () => {
   const [contact, setContact] = useState<ContactObject>();
@@ -38,7 +30,7 @@ const ContactInfo = () => {
         <>
           <main className="primary-container p-3 d-flex justify-content-center align-items-center">
             <div className="card p-5" style={{ maxWidth: '70.75rem' }}>
-              <h2 className="text-center mb-2">Contato</h2>
+              <h1 className="text-center mb-2">Contato</h1>
               {contact ? (
                 <div className="row" style={{ marginTop: '20px' }}>
                   <div className="col-md-6">
@@ -54,7 +46,7 @@ const ContactInfo = () => {
                       <strong>Telefone:</strong> {contact?.phone}
                     </p>
                     <p>
-                      <strong>Email:</strong>{'  '}
+                      <strong>Email:</strong>{' '}
                       {contact?.email ? (
                         <a href={`mailto:${contact.email}`}>{contact.email}</a>
                       ) : (
@@ -62,7 +54,7 @@ const ContactInfo = () => {
                       )}
                     </p>
                     <p>
-                      <strong>Localização:</strong>{'  '}
+                      <strong>Localização:</strong>{' '}
                       {contact?.linkGoogleMaps ? (
                         <a href={contact.linkGoogleMaps} target="_blank" rel="noopener noreferrer">
                           Ver no Google Maps

@@ -43,13 +43,13 @@ interface FormValues {
   address: string;
   password: string;
   confirmPassword: string;
-  profileImage: string | File;
+  profilePicture: string | File;
 }
 
 const RegisterCustomer = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string | File>(userImageDefault);
+  const [profilePicture, setprofilePicture] = useState<string | File>(userImageDefault);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -61,10 +61,10 @@ const RegisterCustomer = () => {
     setFieldValue: (field: string, value: unknown) => void) => {
     const file = event.target.files?.[0];
     if (file) {
-      setFieldValue('profileImage', file);
+      setFieldValue('profilePicture', file);
       const reader = new FileReader();
       reader.onload = () => {
-        setProfileImage(reader.result as string);
+        setprofilePicture(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -111,9 +111,9 @@ const RegisterCustomer = () => {
           password: customerPostPayload.password
         }
       );
-      if (values.profileImage instanceof File) {
+      if (values.profilePicture instanceof File) {
         const formData = new FormData();
-        formData.append('profilePicture', values.profileImage);
+        formData.append('profilePicture', values.profilePicture);
         await api.post(`/customer/image/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -168,7 +168,7 @@ const RegisterCustomer = () => {
               address: '',
               password: '',
               confirmPassword: '',
-              profileImage: profileImage,
+              profilePicture: profilePicture,
             }}
             validateOnMount
             validationSchema={customerRegisterSchema}
@@ -179,7 +179,7 @@ const RegisterCustomer = () => {
                 <div className="d-flex flex-column gap-3">
                   <div className="d-flex flex-column align-items-center">
                     <img
-                      src={typeof profileImage === 'string' ? profileImage : URL.createObjectURL(profileImage)}
+                      src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
                       alt="Imagem de perfil"
                       height="100px"
                       width="100px"
