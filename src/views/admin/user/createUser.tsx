@@ -19,7 +19,11 @@ const userEditSchema = Yup.object({
   roles: Yup.array().min(1, 'Obrigatório preencher cargos'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+    .min(6, 'A senha deve ter no mínimo 6 caracteres')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
+      "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'As senhas devem ser iguais')
     .required('Obrigatório confirmar a senha'),

@@ -82,18 +82,17 @@ const CustomerNavigation = () => {
                 Sobre Nós
               </Link>
             </li>
-            {tokenCustomer ? (
+            <li className="nav-item">
+              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+                Contato
+              </Link>
+            </li>
+            {tokenCustomer && (
               <li className="nav-item">
                 <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={handleLogout}>
                   Sair
                 </Link>
               </li>
-            ) : (
-              <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
-                Login
-              </Link>
-            </li>
             )}
         </ul>
       </div>

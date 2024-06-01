@@ -18,7 +18,11 @@ const customerRegisterSchema = Yup.object({
     .required('Obrigatório preencher o email'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+    .min(6, 'A senha deve ter no mínimo 6 caracteres')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
+      "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'As senhas devem ser iguais')
     .required('Obrigatório confirmar a senha'),
@@ -26,8 +30,8 @@ const customerRegisterSchema = Yup.object({
     .required('Obrigatório preencher o CPF')
     .test({ message: 'CPF inserido é inválido', test: ((value) => validateCPF(value)) }),
   phone: Yup.string().required('Obrigatório preencher o telefone'),
-  cep: Yup.string().required('Obrigatório preencher o CEP'),
-  address: Yup.string().required('Obrigatório preencher o Endereço'),
+  cep: Yup.string(),
+  address: Yup.string().required('Insira o CEP para buscar o endereço'),
 });
 
 interface FormValues {

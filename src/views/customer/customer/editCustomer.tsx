@@ -21,7 +21,11 @@ const customerEditSchema = Yup.object({
     .required('Obrigatório preencher o email'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+    .min(6, 'A senha deve ter no mínimo 6 caracteres')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
+      "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'As senhas devem ser iguais')
     .required('Obrigatório confirmar a senha'),
@@ -29,8 +33,8 @@ const customerEditSchema = Yup.object({
     .required('Obrigatório preencher o CPF')
     .test({ message: 'CPF inserido é inválido', test: ((value) => validateCPF(value)) }),
   phone: Yup.string().required('Obrigatório preencher o telefone'),
-  cep: Yup.string().required('Obrigatório preencher o CEP'),
-  address: Yup.string().required('Obrigatório preencher o Endereço'),
+  cep: Yup.string(),
+  address: Yup.string().required('Insira o CEP para buscar o endereço'),
 });
 
 const customerRemoveSchema = Yup.object();
@@ -62,6 +66,15 @@ const EditCustomer = () => {
         setLoading(true);
         const response = await api.get('customer');
         setCustomer(response.data);
+
+        if (response.data.profilePicture?.data) {
+          const blob = new Blob([new Uint8Array(response.data.profilePicture.data)], { type: 'image/jpeg' });
+          const url = URL.createObjectURL(blob);
+          setProfileImage(url);
+        } else {
+          setProfileImage(userImageDefault);
+        }
+
         setLoading(false);
       } catch (error) {
         console.error('Erro ao buscar o Cliente');
@@ -124,7 +137,7 @@ const EditCustomer = () => {
         phone: values.phone,
         address: values.address,
       };
-      await api.post('customer/register', customerPatchPayload);
+      await api.patch('customer', customerPatchPayload);
 
       if (values.profileImage instanceof File) {
         const formData = new FormData();
@@ -169,6 +182,7 @@ const EditCustomer = () => {
   const handleDeleteCustomer = async () => {
     try {
       await api.delete(`/customer`);
+      localStorage.removeItem('tokenCustomer');
       navigate(ROUTES.CUSTOMER_LOGIN);
       setIsRemoving(false);
       setShowModal(false);
@@ -320,7 +334,7 @@ const EditCustomer = () => {
                           className="btn bg-black text-white rounded p-1 w-100"
                           type="submit"
                         >
-                          Editar
+                          Salvar alterações
                         </button>
                     </div>
                     </div>
