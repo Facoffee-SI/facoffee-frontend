@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import * as ROUTES from '../constants/routes';
 import AdminNavigation from '../components/common/AdminNavigation';
 import AdminLogin from '../views/admin/user/loginUser';
 import Users from '../views/admin/user/listUser';
 import EditUser from '../views/admin/user/editUser';
 import CreateUser from '../views/admin/user/createUser';
-import * as ROUTES from '../constants/routes';
 import CreateProduct from '../views/admin/product/createProduct';
 import EditProduct from '../views/admin/product/editProduct';
 import CreatePlan from '../views/admin/plan/createPlan';
@@ -22,8 +23,9 @@ import EditAbout from '../views/admin/about/editAbout';
 import CustomerLogin from '../views/customer/customer/loginCustomer';
 import RegisterCustomer from '../views/customer/customer/register';
 import CustomerNavigation from '../components/common/CustomerNavigation';
-import { useEffect } from 'react';
 import EditCustomer from '../views/customer/customer/editCustomer';
+import AboutInfo from '../views/customer/about/about';
+import ContactInfo from '../views/customer/contact/contact';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -54,6 +56,8 @@ const AppRouter = () => {
         <Route path={ROUTES.CUSTOMER_LOGIN} element={<CustomerLogin></CustomerLogin>}></Route>
         <Route path={ROUTES.CUSTOMER_REGISTER} element={<RegisterCustomer></RegisterCustomer>}></Route>
         <Route path={ROUTES.CUSTOMER_EDIT} element={<EditCustomer></EditCustomer>}></Route>
+        <Route path={ROUTES.CUSTOMER_ABOUT} element={<AboutInfo></AboutInfo>}></Route>
+        <Route path={ROUTES.CUSTOMER_CONTACT} element={<ContactInfo></ContactInfo>}></Route>
       </Routes>
     </BrowserRouter>
   );

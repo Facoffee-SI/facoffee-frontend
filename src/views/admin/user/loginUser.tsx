@@ -26,7 +26,7 @@ const AdminLogin = () => {
 
   const fetchLogin = async (user: { email: string; password: string }) => {
     try {
-      const response = await api.post(ROUTES.AUTH_USER, {
+      const response = await api.post('auth/user', {
         email: user.email,
         password: user.password,
       });

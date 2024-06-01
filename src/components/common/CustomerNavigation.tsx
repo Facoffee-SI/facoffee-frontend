@@ -78,12 +78,12 @@ const CustomerNavigation = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+              <Link className="nav-link" to={ROUTES.CUSTOMER_ABOUT} onClick={toggleCollapse}>
                 Sobre Nós
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+              <Link className="nav-link" to={ROUTES.CUSTOMER_CONTACT} onClick={toggleCollapse}>
                 Contato
               </Link>
             </li>
