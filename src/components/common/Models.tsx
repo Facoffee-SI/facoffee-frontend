@@ -127,3 +127,23 @@ export interface ContactObject {
   email: string;
   linkGoogleMaps: string;
 }
+
+export interface ProductCustomer {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  barCode: string;
+  description: string;
+  quantity: number;
+  discountValue: number;
+  isDiscountPercentage: boolean;
+  categoryId: string;
+  category?: CategoryObject;
+  images: ImageObject[];
+}
+
+export interface ImageObject {
+  id: string;
+  imageUrl: string;
+}

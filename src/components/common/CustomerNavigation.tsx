@@ -69,7 +69,7 @@ const CustomerNavigation = () => {
             </>
           )}
             <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+              <Link className="nav-link" to={ROUTES.CUSTOMER_PRODUCTS} onClick={toggleCollapse}>
                 Catálogo de Produtos
               </Link>
             </li>

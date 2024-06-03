@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useEffect, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
-import { userImageDefault } from '../../../components/common/userImageDefault';
+import { userImageDefault } from '../../../assets/userImageDefault';
 import { Role, RolesResponse } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import CustomSelect from '../../../components/formik/CustomSelect';

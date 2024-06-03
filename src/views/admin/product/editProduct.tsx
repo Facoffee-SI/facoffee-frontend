@@ -3,7 +3,7 @@ import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CategoryObject, ProductEditObject, ProductObject } from '../../../components/common/Models';
+import { CategoryObject, ImageObject, ProductEditObject, ProductObject } from '../../../components/common/Models';
 import * as ROUTES from '../../../constants/routes';
 import api from '../../../services/Api';
 import CurrencyInput from 'react-currency-input-field';
@@ -42,9 +42,10 @@ const EditProduct = () => {
         const response = await api.get(`/product/${product?.id}`);
         const productData = response.data;
 
-        const initialImages = productData.images.map((img: { id: string, imageUrl: string }) => {
-          return new File([new Blob([], { type: 'image/jpeg' })], img.id, { type: 'image/jpeg' });
-        });
+        const initialImages = await Promise.all(productData.images.map(async (img: ImageObject) => {
+          const blob = img.imageUrl;
+          return new File([blob], img.id, { type: 'image/jpeg' });
+        }));
 
         setImages(initialImages);
         setImagePreviews(productData.images.map((img: { imageUrl: string }) => img.imageUrl));

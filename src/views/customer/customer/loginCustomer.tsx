@@ -33,7 +33,7 @@ const CustomerLogin = () => {
   
       localStorage.removeItem('token');
       localStorage.setItem('tokenCustomer', JSON.stringify(response.data.token));
-      navigate(ROUTES.ADMIN_USERS);
+      navigate(ROUTES.CUSTOMER_PRODUCTS);
     } catch (error: any) {
       console.error('Erro ao logar.')
       let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';

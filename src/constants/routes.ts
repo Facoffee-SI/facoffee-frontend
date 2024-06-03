@@ -30,3 +30,4 @@ export const CUSTOMER_REGISTER = '/customer/register';
 export const CUSTOMER_EDIT = '/customer/edit';
 export const CUSTOMER_ABOUT = '/customer/about';
 export const CUSTOMER_CONTACT = '/customer/contact';
+export const CUSTOMER_PRODUCTS = '/customer/products';
