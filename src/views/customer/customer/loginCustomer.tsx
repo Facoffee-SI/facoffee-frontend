@@ -7,6 +7,7 @@ import CustomInput from '../../../components/formik/CustomInput';
 import '../../../styles/style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
 const loginSchema = Yup.object({
   email: Yup.string()
@@ -19,6 +20,19 @@ const loginSchema = Yup.object({
 
 const CustomerLogin = () => {
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('token');
+  const tokenCustomer = localStorage.getItem('tokenCustomer');
+
+  useEffect(() => {
+    if (token) {
+      navigate(ROUTES.ADMIN_USERS);
+    }
+
+    if (tokenCustomer) {
+      navigate(ROUTES.CUSTOMER_PRODUCTS);
+    }
+  }, [token, tokenCustomer, navigate]);
 
   const onSubmitForm = (user: { email: string; password: string }) => {
     fetchLogin(user);

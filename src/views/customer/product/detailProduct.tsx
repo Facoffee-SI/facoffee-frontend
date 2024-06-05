@@ -95,21 +95,21 @@ const ProductPage = () => {
             <div className="tertiary-container p-5">
               <div className="product-container">
                 <div className="product-image">
-                <Carousel>
-                  {product.images.length > 0 ? (
-                    product.images.map((img, index) => (
-                      <div key={index}>
-                        <img src={img.imageUrl} alt={product.name} />
-                      </div>
-                    ))
-                  ) : (
-                    [
-                      <div>
-                        <img src={noImage} alt="No image available" />
-                      </div>
-                    ]
-                  )}
-                </Carousel>
+                  <Carousel showThumbs={false} showArrows={true} infiniteLoop={true}>
+                    {product.images.length > 0 ? (
+                      product.images.map((img, index) => (
+                        <div key={index}>
+                          <img src={img.imageUrl} alt={product.name} style={{ maxHeight: "450px" }}/>
+                        </div>
+                      ))
+                    ) : (
+                      [
+                        <div>
+                          <img src={noImage} alt="No image available" />
+                        </div>
+                      ]
+                    )}
+                  </Carousel>
                 </div>
                 <div className="product-details">
                   <h3 className="product-name">{product?.name}</h3>
@@ -124,9 +124,11 @@ const ProductPage = () => {
                       <span className="product-price">{originalPrice}</span>
                     )}
                   </div>
-                  <p className="product-description">
-                    {product?.description}
-                  </p>
+                  {product?.description ? (
+                    <div className="product-description" dangerouslySetInnerHTML={{ __html: product.description }} />
+                    ) : (
+                      <p>Produto sem descrição.</p>
+                    )}
                   <div className="product-buttons">
                     <button className="product-buttons">Comprar</button>
                     <button className="product-buttons">Adicionar ao carrinho</button>

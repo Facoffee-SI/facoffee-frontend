@@ -103,6 +103,8 @@
 .product-description {
   font-size: 1rem;
   margin-bottom: 1rem;
+  overflow-y: auto;
+  max-height: 300px;
 }
 
 .product-buttons {
@@ -118,6 +120,6 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  background-color: #8B8481;
+  background-color: #8b8481;
   color: #fff;
 }
