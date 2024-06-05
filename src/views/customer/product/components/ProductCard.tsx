@@ -13,7 +13,7 @@ function ProductCard({ productObject }: Props) {
   const navigate = useNavigate();
 
   const productDetail = () => {
-    return navigate(ROUTES.CUSTOMER_ABOUT);
+    return navigate(ROUTES.CUSTOMER_PRODUCT, { state: { productId: productObject.id } });
   };
 
   const formatPrice = (price: number) => {

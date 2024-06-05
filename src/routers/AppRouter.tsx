@@ -27,6 +27,7 @@ import EditCustomer from '../views/customer/customer/editCustomer';
 import AboutInfo from '../views/customer/about/about';
 import ContactInfo from '../views/customer/contact/contact';
 import ProductsCustomer from '../views/customer/product/listProducts';
+import ProductPage from '../views/customer/product/detailProduct';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -61,6 +62,8 @@ const AppRouter = () => {
         <Route path={ROUTES.CUSTOMER_ABOUT} element={<AboutInfo></AboutInfo>}></Route>
         <Route path={ROUTES.CUSTOMER_CONTACT} element={<ContactInfo></ContactInfo>}></Route>
         <Route path={ROUTES.CUSTOMER_PRODUCTS} element={<ProductsCustomer></ProductsCustomer>}></Route>
+        <Route path={ROUTES.CUSTOMER_PRODUCT} element={<ProductPage></ProductPage>}></Route>
+        <Route path={ROUTES.HOME} element={<CustomerLogin></CustomerLogin>}></Route>
       </Routes>
     </BrowserRouter>
   );

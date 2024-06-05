@@ -25,9 +25,11 @@ export const ADMIN_ABOUT_ADD = '/admin/about/add';
 export const ADMIN_ABOUT_EDIT = '/admin/about/edit'
 
 // CUSTOMER
+export const HOME = '/';
 export const CUSTOMER_LOGIN = '/customer/login';
 export const CUSTOMER_REGISTER = '/customer/register';
 export const CUSTOMER_EDIT = '/customer/edit';
 export const CUSTOMER_ABOUT = '/customer/about';
 export const CUSTOMER_CONTACT = '/customer/contact';
 export const CUSTOMER_PRODUCTS = '/customer/products';
+export const CUSTOMER_PRODUCT = '/customer/product'
