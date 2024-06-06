@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 const CustomerNavigation = () => {
   const [collapseOpen, setCollapseOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const tokenCustomer = localStorage.getItem('tokenCustomer');
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
@@ -20,10 +21,20 @@ const CustomerNavigation = () => {
     navigate(ROUTES.CUSTOMER_LOGIN);
   };
 
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`${ROUTES.CUSTOMER_PRODUCTS}?search=${searchQuery}`);
+      setSearchQuery('');
+      setCollapseOpen(false);
+    }
+  };
+
   return (
     <nav className="navbar-container navbar p-2">
       <button
         className="navbar-toggler"
+        style={{ marginRight: '10px' }}
         type="button"
         data-bs-toggle="collapse"
         data-bs-target="#navbarNavAltMarkup"
@@ -36,6 +47,21 @@ const CustomerNavigation = () => {
       </button>
       <div className={`collapse navbar-collapse ${collapseOpen ? 'show' : ''}`} id="navbarNavAltMarkup">
         <ul className={`navbar-nav ${collapseOpen ? 'nav-expanded' : ''}`}>
+          <li className="nav-item">
+            <form className="d-flex ml-auto search-input" onSubmit={handleSearch}>
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Buscar produto"
+                aria-label="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button className="btn btn-success" type="submit">
+                Buscar
+              </button>
+            </form>
+          </li>
           {tokenCustomer ? (
             <>
               <li className="nav-item">
@@ -68,33 +94,33 @@ const CustomerNavigation = () => {
               </li>
             </>
           )}
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.CUSTOMER_PRODUCTS} onClick={toggleCollapse}>
+              Catálogo de Produtos
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+              Catálogo de Planos
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.CUSTOMER_ABOUT} onClick={toggleCollapse}>
+              Sobre Nós
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" to={ROUTES.CUSTOMER_CONTACT} onClick={toggleCollapse}>
+              Contato
+            </Link>
+          </li>
+          {tokenCustomer && (
             <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_PRODUCTS} onClick={toggleCollapse}>
-                Catálogo de Produtos
+              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={handleLogout}>
+                Sair
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
-                Catálogo de Planos
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_ABOUT} onClick={toggleCollapse}>
-                Sobre Nós
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to={ROUTES.CUSTOMER_CONTACT} onClick={toggleCollapse}>
-                Contato
-              </Link>
-            </li>
-            {tokenCustomer && (
-              <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={handleLogout}>
-                  Sair
-                </Link>
-              </li>
-            )}
+          )}
         </ul>
       </div>
       <a className="navbar-brand rounded">

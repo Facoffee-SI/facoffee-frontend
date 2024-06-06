@@ -95,7 +95,7 @@ const ProductPage = () => {
             <div className="tertiary-container p-5">
               <div className="product-container">
                 <div className="product-image">
-                  <Carousel showThumbs={false} showArrows={true} infiniteLoop={true}>
+                  <Carousel showThumbs={false} showArrows={true} infiniteLoop={true} showStatus={false}>
                     {product.images.length > 0 ? (
                       product.images.map((img, index) => (
                         <div key={index}>

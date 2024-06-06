@@ -11,3 +11,9 @@
   font-weight: bold;
   padding: 8px 16px 8px 24px;
 }
+
+.search-input {
+  max-width: 350px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
