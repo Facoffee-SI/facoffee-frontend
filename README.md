@@ -1,4 +1,4 @@
-# 🎥 Facoffee
+# ☕ Facoffee
  
  ## 📋 Sobre
   Esse projeto foi desenvolvido na disciplina de Construção de Software.
