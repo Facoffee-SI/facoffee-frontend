@@ -65,6 +65,7 @@ export interface ProductEditObject {
   isDiscountPercentage: boolean;
   categoryId: string;
   category?: CategoryObject;
+  images?: [];
 }
 
 export interface ProductObject {

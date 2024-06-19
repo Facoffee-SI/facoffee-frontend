@@ -3,7 +3,7 @@ import { CustomInput } from '../../../components/formik';
 import CurrencyInput from 'react-currency-input-field';
 import * as Yup from 'yup';
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { PlanEditObject, ProductEditObject } from '../../../components/common/Models';
+import { ImageObject, PlanEditObject, ProductEditObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import CustomSelect from '../../../components/formik/CustomSelect';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -28,6 +28,7 @@ const EditPlan = () => {
   const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<ImageObject[]>([]);
   const [products, setProducts] = useState<ProductEditObject[]>([]);
   const plan = location.state?.plan as PlanEditObject | undefined;
   const [showModal, setShowModal] = useState(false);
@@ -52,23 +53,18 @@ const EditPlan = () => {
   }, [editorInstance]);
 
   useEffect(() => {
+    setLoading(true);
     const fetchPlan = async () => {
       try {
-        setLoading(true);
         const response = await api.get(`/plan/${plan?.id}`);
-        const planData = response.data;
-
-        const initialImages = planData.images.map((img: { id: string, imageUrl: string }) => {
-          return new File([new Blob([], { type: 'image/jpeg' })], img.id, { type: 'image/jpeg' });
-        });
+        const productData = response.data;
 
         if (editorInstance && plan?.description) {
           editorInstance.html.set(plan?.description);
         }
 
-        setImages(initialImages);
-        setImagePreviews(planData.images.map((img: { imageUrl: string }) => img.imageUrl));
-        setLoading(false);
+        setExistingImages(productData.images);
+        setImagePreviews(productData.images.map((img: ImageObject) => img.imageUrl));
       } catch (error) {
         setLoading(false);
         console.error('Erro ao buscar produto', error);
@@ -76,6 +72,7 @@ const EditPlan = () => {
     };
 
     fetchPlan();
+    setLoading(false);
   }, [plan, editorInstance]);
   
   useEffect(() => {
@@ -106,22 +103,25 @@ const EditPlan = () => {
     { setSubmitting }: FormikHelpers<PlanEditObject>) => {
     try {
       const { id, ...patchPayload} = values;
+
       const editorContent = editorInstance?.html.get();
       patchPayload.description = editorContent ? editorContent : '';
-      const response = await api.patch(`plan/${id}`, patchPayload);
+
+      await api.patch(`plan/${id}`, patchPayload);
+
+      const formData = new FormData();
+      images.map((image) => {
+        formData.append('images', image);
+      });
+
       if (images.length > 0) {
-        const formData = new FormData();
-        images.map((image) => {
-          formData.append('images', image);
-        });
-        await api.post(`/plan/images/${response.data.id}`, formData, {
+        await api.post(`/plan/images/${id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-      } else {
-        await api.delete(`/plan/images/${plan?.id}`);
       }
+
       navigate(ROUTES.ADMIN_PLANS);
     } catch (error: any) {
       console.error('Erro ao editar o plano');
@@ -174,8 +174,25 @@ const EditPlan = () => {
     setImagePreviews((prevPreviews) => [...prevPreviews, ...selectedPreviews]);
   };
 
-  const handleImageRemove = (index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  const handleImageRemove = async (index: number, isExisting: boolean, imageId?: string) => {
+    if (isExisting && imageId) {
+      try {
+        await api.delete(`/plan/images/${imageId}`);
+        setExistingImages((prevImages) => prevImages.filter((_, i) => i !== index));
+      } catch (error) {
+        console.error('Erro ao remover imagem', error);
+        toast.error('Erro ao remover imagem. Por favor, tente novamente mais tarde.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+    } else {
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index - existingImages.length));
+    }
     setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
@@ -298,7 +315,7 @@ const EditPlan = () => {
                           <button
                             type="button"
                             className="remove-image-button"
-                            onClick={() => handleImageRemove(index)}
+                            onClick={() => handleImageRemove(index, index < existingImages.length, existingImages[index]?.id)}
                           >
                             X
                           </button>

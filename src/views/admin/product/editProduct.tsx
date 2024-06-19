@@ -31,6 +31,7 @@ const EditProduct = () => {
   const product = location.state?.product as ProductEditObject | undefined;
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<ImageObject[]>([]);
   const [categories, setCategories] = useState<CategoryObject[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
@@ -54,31 +55,25 @@ const EditProduct = () => {
   }, [editorInstance]);
 
   useEffect(() => {
+    setLoading(true);
     const fetchProduct = async () => {
       try {
-        setLoading(true);
         const response = await api.get(`/product/${product?.id}`);
         const productData = response.data;
-
-        const initialImages = await Promise.all(productData.images.map(async (img: ImageObject) => {
-          const blob = img.imageUrl;
-          return new File([blob], img.id, { type: 'image/jpeg' });
-        }));
 
         if (editorInstance && product?.description) {
           editorInstance.html.set(product?.description);
         }
 
-        setImages(initialImages);
-        setImagePreviews(productData.images.map((img: { imageUrl: string }) => img.imageUrl));
-        setLoading(false);
+        setExistingImages(productData.images);
+        setImagePreviews(productData.images.map((img: ImageObject) => img.imageUrl));
       } catch (error) {
         setLoading(false);
         console.error('Erro ao buscar produto', error);
       }
     };
-
     fetchProduct();
+    setLoading(false);
   }, [product, editorInstance]);
 
   useEffect(() => {
@@ -124,8 +119,25 @@ const EditProduct = () => {
     setImagePreviews((prevPreviews) => [...prevPreviews, ...selectedPreviews]);
   };
 
-  const handleImageRemove = (index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  const handleImageRemove = async (index: number, isExisting: boolean, imageId?: string) => {
+    if (isExisting && imageId) {
+      try {
+        await api.delete(`/product/images/${imageId}`);
+        setExistingImages((prevImages) => prevImages.filter((_, i) => i !== index));
+      } catch (error) {
+        console.error('Erro ao remover imagem', error);
+        toast.error('Erro ao remover imagem. Por favor, tente novamente mais tarde.', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+    } else {
+      setImages((prevImages) => prevImages.filter((_, i) => i !== index - existingImages.length));
+    }
     setImagePreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
   };
 
@@ -143,19 +155,20 @@ const EditProduct = () => {
       const editorContent = editorInstance?.html.get();
       values.description = editorContent ? editorContent : '';
       await api.patch(`product/${product?.id}`, values);
+
+      const formData = new FormData();
+      images.map((image) => {
+        formData.append('images', image);
+      });
+
       if (images.length > 0) {
-        const formData = new FormData();
-        images.map((image) => {
-          formData.append('images', image);
-        });
         await api.post(`/product/images/${product?.id}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-      } else {
-        await api.delete(`/product/images/${product?.id}`);
       }
+
       navigate(ROUTES.ADMIN_PRODUCTS);
     } catch (error: any) {
       console.error('Erro ao editar o produto');
@@ -332,7 +345,7 @@ const EditProduct = () => {
                         <button
                           type="button"
                           className="remove-image-button"
-                          onClick={() => handleImageRemove(index)}
+                          onClick={() => handleImageRemove(index, index < existingImages.length, existingImages[index]?.id)}
                         >
                           X
                         </button>

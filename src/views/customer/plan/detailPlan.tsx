@@ -5,7 +5,7 @@ import Loading from '../../../components/common/Loading';
 import { PlanCustomer, ProductCustomer } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import './style.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import noImage from '../../../assets/noImage.png';
 import * as ROUTES from '../../../constants/routes';
 import { Carousel } from 'react-responsive-carousel';
@@ -113,7 +113,7 @@ const PlanPage = () => {
                       ))
                     ) : (
                       [
-                        <div>
+                        <div key="no-image">
                           <img src={noImage} alt="No image available" />
                         </div>
                       ]
@@ -147,7 +147,15 @@ const PlanPage = () => {
                       <ul>
                         {products.map((product) => (
                           <li key={product.id}>
-                            {product.name}
+                            <Link
+                              to={{
+                                pathname: ROUTES.CUSTOMER_PRODUCT,
+                              }}
+                              state={{ productId: product.id }}
+                              style={{ textDecoration: 'none', color: 'inherit' }}
+                            >
+                              {product.name}
+                            </Link>
                           </li>
                         ))}
                       </ul>
