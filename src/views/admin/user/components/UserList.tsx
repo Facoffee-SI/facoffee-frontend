@@ -1,7 +1,7 @@
 import { Col } from 'react-bootstrap';
 import UserCard from './UserCard';
 import React from 'react';
-import { UserObject } from '../common/Models';
+import { UserObject } from '../../../../components/common/Models';
 
 export interface Props {
   userList: UserObject[];

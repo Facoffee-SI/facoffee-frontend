@@ -1,9 +1,9 @@
 import { Card, CardHeader, CardImg } from 'react-bootstrap';
-import '../../styles/users.css';
-import { UserObject, UserRole } from '../common/Models';
-import { userImageDefault } from '../../views/admin/user/userImageDefault';
+import '../../../../styles/style.css';
+import { UserObject, UserRole } from '../../../../components/common/Models';
+import { userImageDefault } from '../../../../assets/userImageDefault';
 import { useNavigate } from 'react-router-dom';
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from '../../../../constants/routes';
 
 export interface Props {
   userObject: UserObject;
@@ -16,7 +16,8 @@ function UserCard({ userObject }: Props) {
     .join(' | ');
 
   const profileImage = userObject.user.profilePicture 
-    ?? userImageDefault;
+    ? userObject.user.profilePicture
+    : userImageDefault;
 
   const editUser = () => {
     return navigate(ROUTES.ADMIN_USERS_EDIT, { state: { userObject } });

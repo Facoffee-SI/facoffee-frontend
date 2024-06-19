@@ -6,7 +6,7 @@ import { RolesResponse } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import * as ROUTES from '../../../constants/routes';
 import './styles.css'
-import RoleCard from './RoleCard';
+import RoleCard from './components/RoleCard';
 
 const Roles = () => {
   const navigate = useNavigate();

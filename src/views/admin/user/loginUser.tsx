@@ -1,14 +1,15 @@
 import { Field, Form, Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
-import * as ROUTES from '../../constants/routes';
-import api from '../../services/Api';
-import CustomInput from '../../components/formik/CustomInput';
-import '../../styles/style.css';
+import * as ROUTES from '../../../constants/routes';
+import api from '../../../services/Api';
+import CustomInput from '../../../components/formik/CustomInput';
+import '../../../styles/style.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
-const SignInSchema = Yup.object({
+const loginSchema = Yup.object({
   email: Yup.string()
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
@@ -17,8 +18,20 @@ const SignInSchema = Yup.object({
     .min(6, 'A senha deve ter no mínimo 6 caracteres'),
 });
 
-const SignIn = () => {
+const AdminLogin = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const tokenCustomer = localStorage.getItem('tokenCustomer');
+
+  useEffect(() => {
+    if (token) {
+      navigate(ROUTES.ADMIN_USERS);
+    }
+
+    if (tokenCustomer) {
+      navigate(ROUTES.CUSTOMER_PRODUCTS);
+    }
+  }, [token, tokenCustomer, navigate]);
 
   const onSubmitForm = (user: { email: string; password: string }) => {
     fetchLogin(user);
@@ -26,13 +39,15 @@ const SignIn = () => {
 
   const fetchLogin = async (user: { email: string; password: string }) => {
     try {
-      const response = await api.post(ROUTES.AUTH_USER, {
+      const response = await api.post('auth/user', {
         email: user.email,
         password: user.password,
       });
-  
+
+      localStorage.removeItem('tokenCustomer');
       localStorage.setItem('token', JSON.stringify(response.data.token));
       navigate(ROUTES.ADMIN_USERS);
+      window.location.reload();
     } catch (error: any) {
       console.error('Erro ao logar.')
       let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
@@ -68,12 +83,13 @@ const SignIn = () => {
             <Formik
               initialValues={{ email: '', password: '' }}
               validateOnMount
-              validationSchema={SignInSchema}
+              validationSchema={loginSchema}
               onSubmit={onSubmitForm}
             >
               {() => (
-                <Form className="signin-form">
+                <Form className="login-form">
                   <h3 className="text-center">Login</h3>
+                  <h5 className="text-center">Painel de Administrador</h5>
                   <div className="form-group">
                     <Field
                       name="email"
@@ -110,4 +126,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default AdminLogin;

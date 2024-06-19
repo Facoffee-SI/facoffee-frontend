@@ -41,20 +41,16 @@ const EditPlan = () => {
         const response = await api.get(`/plan/${plan?.id}`);
         const planData = response.data;
 
-        const initialImages = await Promise.all(
-          planData.images.map(async (img: { id: string, image: { data: ArrayBuffer } }) => {
-            const blob = new Blob([new Uint8Array(img.image.data)], { type: 'image/jpeg' });
-            const file = new File([blob], img.id, { type: 'image/jpeg' });
-            return { file, url: URL.createObjectURL(blob) };
-          })
-        );
+        const initialImages = planData.images.map((img: { id: string, imageUrl: string }) => {
+          return new File([new Blob([], { type: 'image/jpeg' })], img.id, { type: 'image/jpeg' });
+        });
 
-        setImages(initialImages.map(img => img.file));
-        setImagePreviews(initialImages.map(img => img.url));
+        setImages(initialImages);
+        setImagePreviews(planData.images.map((img: { imageUrl: string }) => img.imageUrl));
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.error('Erro ao buscar plano');
+        console.error('Erro ao buscar produto', error);
       }
     };
 

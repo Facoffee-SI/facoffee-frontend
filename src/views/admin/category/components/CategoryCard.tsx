@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Button, Col } from "react-bootstrap";
-import { CategoryObject } from "../../../components/common/Models";
-import { ConfirmationModal } from "../../../components/common/ConfirmationModal";
-import api from "../../../services/Api";
-import './styles.css'
+import { CategoryObject } from "../../../../components/common/Models";
+import { ConfirmationModal } from "../../../../components/common/ConfirmationModal";
+import api from "../../../../services/Api";
+import '../styles.css'
 
 interface CategoryCardProps {
   category: CategoryObject;

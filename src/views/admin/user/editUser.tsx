@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import { useEffect, useRef, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
-import { userImageDefault } from './userImageDefault';
+import { userImageDefault } from '../../../assets/userImageDefault';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Role, RolesResponse, UserObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
@@ -20,7 +20,11 @@ const userEditSchema = Yup.object({
     .required('Obrigatório preencher o email'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
-    .min(6, 'A senha deve ter no mínimo 6 caracteres'),
+    .min(6, 'A senha deve ter no mínimo 6 caracteres')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
+      "A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial."
+    ),
   confirmPassword: Yup.string().required('Obrigatório confirmar a senha')
     .oneOf([Yup.ref('password')], 'As senhas devem ser iguais'),
 });
@@ -45,12 +49,12 @@ const UsersEdit = () => {
   })) || [];
   
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string | File>(
-    userObject?.user.profilePicture ?? userImageDefault
-  );
   const [rolesList, setRolesList] = useState<Role[]>([]);
   const [isRemoving, setIsRemoving] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | File>(
+    userObject?.user.profilePicture ? userObject.user.profilePicture : userImageDefault
+  );
 
   useEffect(() => {
     if (!userObject) {

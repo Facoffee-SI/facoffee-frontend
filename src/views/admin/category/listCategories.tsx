@@ -6,7 +6,7 @@ import { CategoryObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import * as ROUTES from '../../../constants/routes';
 import './styles.css'
-import CategoryCard from './CategoryCard';
+import CategoryCard from './components/CategoryCard';
 
 const Categories = () => {
   const navigate = useNavigate();

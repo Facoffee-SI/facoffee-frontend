@@ -6,7 +6,7 @@ import { PlanEditObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import * as ROUTES from '../../../constants/routes';
 import './styles.css'
-import PlanCard from './PlanCard';
+import PlanCard from './components/PlanCard';
 
 const Plans = () => {
     const navigate = useNavigate();

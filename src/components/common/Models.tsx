@@ -107,3 +107,43 @@ export interface PlanObject {
   description: string;
   active: boolean;
 }
+
+export interface CustomerObject {
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  cep: string;
+  address: string;
+  password: string;
+  profilePicture: string | File;
+}
+
+export interface ContactObject {
+  name: string;
+  address: string;
+  phone: string;
+  description: string;
+  email: string;
+  linkGoogleMaps: string;
+}
+
+export interface ProductCustomer {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  barCode: string;
+  description: string;
+  quantity: number;
+  discountValue: number;
+  isDiscountPercentage: boolean;
+  categoryId: string;
+  category?: CategoryObject;
+  images: ImageObject[];
+}
+
+export interface ImageObject {
+  id: string;
+  imageUrl: string;
+}

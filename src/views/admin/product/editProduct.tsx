@@ -1,9 +1,9 @@
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CategoryObject, ProductEditObject, ProductObject } from '../../../components/common/Models';
+import { CategoryObject, ImageObject, ProductEditObject, ProductObject } from '../../../components/common/Models';
 import * as ROUTES from '../../../constants/routes';
 import api from '../../../services/Api';
 import CurrencyInput from 'react-currency-input-field';
@@ -12,6 +12,7 @@ import { ConfirmationModal } from '../../../components/common/ConfirmationModal'
 import Loading from '../../../components/common/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FroalaEditor from 'froala-editor';
 
 const editProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
@@ -34,6 +35,23 @@ const EditProduct = () => {
   const [showModal, setShowModal] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [editorInstance, setEditorInstance] = useState<FroalaEditor | null>(null);
+
+  const initFroalaEditor = () => {
+    const froala = new FroalaEditor('#froala-editor', {
+      placeholderText: 'Descrição do produto',
+    });
+    setEditorInstance(froala);
+  };
+
+  useLayoutEffect(() => {
+    initFroalaEditor();
+    return () => {
+      if (editorInstance) {
+        editorInstance.destroy();
+      }
+    };
+  }, [editorInstance]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -42,25 +60,26 @@ const EditProduct = () => {
         const response = await api.get(`/product/${product?.id}`);
         const productData = response.data;
 
-        const initialImages = await Promise.all(
-          productData.images.map(async (img: { id: string, image: { data: ArrayBuffer } }) => {
-            const blob = new Blob([new Uint8Array(img.image.data)], { type: 'image/jpeg' });
-            const file = new File([blob], img.id, { type: 'image/jpeg' });
-            return { file, url: URL.createObjectURL(blob) };
-          })
-        );
+        const initialImages = await Promise.all(productData.images.map(async (img: ImageObject) => {
+          const blob = img.imageUrl;
+          return new File([blob], img.id, { type: 'image/jpeg' });
+        }));
 
-        setImages(initialImages.map(img => img.file));
-        setImagePreviews(initialImages.map(img => img.url));
+        if (editorInstance && product?.description) {
+          editorInstance.html.set(product?.description);
+        }
+
+        setImages(initialImages);
+        setImagePreviews(productData.images.map((img: { imageUrl: string }) => img.imageUrl));
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.error('Erro ao buscar produto');
+        console.error('Erro ao buscar produto', error);
       }
     };
 
     fetchProduct();
-  }, [product]);
+  }, [product, editorInstance]);
 
   useEffect(() => {
     if (!product) {
@@ -121,6 +140,8 @@ const EditProduct = () => {
         delete values.discountValue;
       }
 
+      const editorContent = editorInstance?.html.get();
+      values.description = editorContent ? editorContent : '';
       await api.patch(`product/${product?.id}`, values);
       if (images.length > 0) {
         const formData = new FormData();
@@ -212,15 +233,6 @@ const EditProduct = () => {
                     style={{ width: '100%' }}
                   />
                   <Field
-                    name="description"
-                    type="string"
-                    label="Descrição"
-                    autoComplete="true"
-                    placeholder="Descrição"
-                    component={CustomInput}
-                    style={{ width: '100%' }}
-                  />
-                  <Field
                     name="brand"
                     type="string"
                     label="Marca"
@@ -228,6 +240,7 @@ const EditProduct = () => {
                     component={CustomInput}
                     style={{ width: '100%' }}
                   />
+                  <div id="froala-editor"/>
                   <CurrencyInput
                     name="price"
                     placeholder={product ? `R$ ${product.price}` : "Preço"}

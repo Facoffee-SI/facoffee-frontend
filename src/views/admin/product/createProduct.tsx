@@ -1,7 +1,7 @@
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import './styles.css'
 import { CategoryObject, ProductObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
@@ -11,10 +11,10 @@ import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FroalaEditor from 'froala-editor';
 
 const createProductSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
-  description: Yup.string().required('Obrigatório preencher a descrição'),
   brand: Yup.string().required('Obrigatório preencher a marca'),
   price: Yup.string().required('Obrigatório preencher o preço'),
   barCode: Yup.number().required('Preencha corretamente o código de barras'),
@@ -27,6 +27,23 @@ const CreateProduct = () => {
   const [images, setImages] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [categories, setCategories] = useState<CategoryObject[]>([]);
+  const [editorInstance, setEditorInstance] = useState<FroalaEditor | null>(null);
+
+  const initFroalaEditor = () => {
+    const froala = new FroalaEditor('#froala-editor', {
+      placeholderText: 'Descrição do produto',
+    });
+    setEditorInstance(froala);
+  };
+
+  useLayoutEffect(() => {
+    initFroalaEditor();
+    return () => {
+      if (editorInstance) {
+        editorInstance.destroy();
+      }
+    };
+  }, [editorInstance]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -70,6 +87,8 @@ const CreateProduct = () => {
         delete values.discountValue;
       }
 
+      const editorContent = editorInstance?.html.get();
+      values.description = editorContent ? editorContent : '';
       const response = await api.post('product', values);
       if (images.length > 0) {
         const formData = new FormData();
@@ -148,15 +167,6 @@ const CreateProduct = () => {
                     style={{ width: '100%' }}
                   />
                   <Field
-                    name="description"
-                    type="string"
-                    label="Descrição"
-                    autoComplete="true"
-                    placeholder="Descrição"
-                    component={CustomInput}
-                    style={{ width: '100%' }}
-                  />
-                  <Field
                     name="brand"
                     type="string"
                     label="Marca"
@@ -164,6 +174,7 @@ const CreateProduct = () => {
                     component={CustomInput}
                     style={{ width: '100%' }}
                   />
+                  <div id="froala-editor"/>
                   <CurrencyInput
                     name="price"
                     placeholder="Preço"

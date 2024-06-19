@@ -1,22 +1,21 @@
 import * as Yup from 'yup';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import { userImageDefault } from '../../../assets/userImageDefault';
-import { Role, RolesResponse } from '../../../components/common/Models';
 import api from '../../../services/Api';
-import CustomSelect from '../../../components/formik/CustomSelect';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { validate as validateCPF } from 'cpf-check';
+import axios from 'axios';
 
-const userEditSchema = Yup.object({
+const customerRegisterSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
   email: Yup.string()
     .email('Email inválido')
     .required('Obrigatório preencher o email'),
-  roles: Yup.array().min(1, 'Obrigatório preencher cargos'),
   password: Yup.string()
     .required('Obrigatório preencher a senha')
     .min(6, 'A senha deve ter no mínimo 6 caracteres')
@@ -27,38 +26,30 @@ const userEditSchema = Yup.object({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password')], 'As senhas devem ser iguais')
     .required('Obrigatório confirmar a senha'),
+  cpf: Yup.string()
+    .required('Obrigatório preencher o CPF')
+    .test({ message: 'CPF inserido é inválido', test: ((value) => validateCPF(value)) }),
+  phone: Yup.string().required('Obrigatório preencher o telefone'),
+  cep: Yup.string(),
+  address: Yup.string().required('Insira o CEP para buscar o endereço'),
 });
 
 interface FormValues {
   name: string;
   email: string;
-  roles: { value: string; label: string }[];
+  cpf: string;
+  phone: string;
+  cep: string;
+  address: string;
   password: string;
   confirmPassword: string;
-  profileImage: string | File;
+  profilePicture: string | File;
 }
 
-const CreateUser = () => {
+const RegisterCustomer = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [profileImage, setProfileImage] = useState<string | File>(userImageDefault);
-  const [rolesList, setRolesList] = useState<Role[]>([]);
-
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await api.get('role');
-        const rolesList = response.data.map((item: RolesResponse) => ({
-          value: item.role.id,
-          label: item.role.name,
-        }));
-        setRolesList(rolesList);
-      } catch (error) {
-        console.error('Erro ao buscar os cargos');
-      }
-    };
-    fetchRoles();
-  }, []);
+  const [profilePicture, setprofilePicture] = useState<string | File>(userImageDefault);
 
   const handleImageClick = () => {
     if (fileInputRef.current) {
@@ -70,44 +61,74 @@ const CreateUser = () => {
     setFieldValue: (field: string, value: unknown) => void) => {
     const file = event.target.files?.[0];
     if (file) {
-      setFieldValue('profileImage', file);
+      setFieldValue('profilePicture', file);
       const reader = new FileReader();
       reader.onload = () => {
-        setProfileImage(reader.result as string);
+        setprofilePicture(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleSearchCep = async (cep: string,
+    setFieldValue: (field: string, value: unknown) => void,
+    setFieldError: (field: string, message: string) => void
+  ) => {
+    const errorMessage = 'Erro ao buscar endereço, digite outro CEP';
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      if (response.data.erro) {
+        setFieldError('cep', errorMessage);
+        return;
+      }
+      setFieldValue(
+        'address',
+        `${response.data.logradouro}, ${response.data.bairro} - ${response.data.localidade} / ${response.data.uf}`
+      );
+      setFieldError('cep', '');
+    } catch (error) {
+      console.error('Erro ao buscar o endereço pelo CEP.', error);
+      setFieldError('cep', errorMessage);
+    }
+  };
+  
+
   const onSubmitForm = async (values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) => {
     try {
-      const userPostPayload = {
+      const customerPostPayload = {
         name: values.name,
         email: values.email,
         password: values.password,
-        roleIds: values.roles,
+        cpf: values.cpf,
+        phone: values.phone,
+        address: values.address,
       };
-      const userResponse = await api.post('user', userPostPayload);
+      await api.post('customer/register', customerPostPayload);
 
-      if (values.profileImage instanceof File) {
+      const tokenCustomer = await api.post('auth/customer',
+        {
+          email: customerPostPayload.email,
+          password: customerPostPayload.password
+        }
+      );
+      if (values.profilePicture instanceof File) {
         const formData = new FormData();
-        formData.append('profilePicture', values.profileImage);
-        await api.post(`/user/image/${userResponse.data.id}`, formData, {
+        formData.append('profilePicture', values.profilePicture);
+        await api.post(`/customer/image/`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${tokenCustomer.data.token}`
           },
         });
       }
 
-      navigate(ROUTES.ADMIN_USERS);
+      navigate(ROUTES.CUSTOMER_LOGIN);
     } catch (error: any) {
-      console.error('Erro ao cadastrar o usuário');
+      console.error('Erro ao cadastrar o cliente');
       let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';
 
       if (error.response) {
-        if (error.response.status === 401) {
-          errorMessage = 'Cargo não autorizado a realizar essa ação.';
-        } if (error.response.status === 400 || error.response.status === 404) {
+        if (error.response.status === 400 || error.response.status === 404) {
           errorMessage = 'Verifique as informações inseridas e tente novamente.';
         } else {
           errorMessage = 'Erro no servidor. Por favor, tente novamente mais tarde.';
@@ -136,26 +157,29 @@ const CreateUser = () => {
       <ToastContainer />
       <main className="primary-container p-3 d-flex justify-content-center align-items-center">
         <div className="card p-5" style={{ maxWidth: '50.75rem' }}>
-          <h3 className="text-center mb-2">Cadastro de Usuário</h3>
+          <h3 className="text-center mb-2">Cadastro</h3>
           <Formik
             initialValues={{
               name: '',
               email: '',
-              roles: [{ value: '', label: '' }],
+              cpf: '',
+              phone: '',
+              cep: '',
+              address: '',
               password: '',
               confirmPassword: '',
-              profileImage: profileImage,
+              profilePicture: profilePicture,
             }}
             validateOnMount
-            validationSchema={userEditSchema}
+            validationSchema={customerRegisterSchema}
             onSubmit={onSubmitForm}
           >
-            {({ setFieldValue }) => (
+            {({ setFieldValue, setFieldError, values }) => (
               <Form className="users-edit-form">
                 <div className="d-flex flex-column gap-3">
                   <div className="d-flex flex-column align-items-center">
                     <img
-                      src={typeof profileImage === 'string' ? profileImage : URL.createObjectURL(profileImage)}
+                      src={typeof profilePicture === 'string' ? profilePicture : URL.createObjectURL(profilePicture)}
                       alt="Imagem de perfil"
                       height="100px"
                       width="100px"
@@ -185,14 +209,6 @@ const CreateUser = () => {
                     placeholder="Email"
                     component={CustomInput}
                   />
-                  <Field
-                    name="roles"
-                    label="Cargos"
-                    options={rolesList}
-                    isMulti
-                    placeholder="Selecione os cargos"
-                    component={CustomSelect}
-                  />
                   <div className="d-flex flex-column flex-md-row gap-3">
                     <Field
                       name="password"
@@ -211,11 +227,53 @@ const CreateUser = () => {
                       component={CustomInput}
                     />
                   </div>
-                  <div className="d-flex justify-content-center gap-4">
-                    <button className="btn bg-black text-white rounded p-1 w-100" type="submit">
-                      Cadastrar
+                  <div className="d-flex flex-column flex-md-row gap-3">
+                    <Field
+                      name="cpf"
+                      type="string"
+                      label="CPF"
+                      autoComplete="true"
+                      placeholder="CPF"
+                      component={CustomInput}
+                    />
+                    <Field
+                      name="phone"
+                      type="number"
+                      label="Telefone"
+                      autoComplete="true"
+                      placeholder="Telefone"
+                      component={CustomInput}
+                    />
+                  </div>
+                  <Field
+                    name="address"
+                    type="string"
+                    label="Endereço"
+                    autoComplete="true"
+                    placeholder="Endereço"
+                    component={CustomInput}
+                    disabled
+                  />
+                  <div className="d-flex flex-column flex-md-row gap-3 align-items-start">
+                    <Field
+                      name="cep"
+                      type="number"
+                      label="CEP"
+                      autoComplete="true"
+                      placeholder="CEP"
+                      component={CustomInput}
+                    />
+                    <button
+                      className="btn bg-secondary text-white rounded p-2 w-50"
+                      type="button"
+                      onClick={() => handleSearchCep(values.cep, setFieldValue, setFieldError)}
+                    >
+                      Procurar CEP
                     </button>
                   </div>
+                  <button className="btn bg-black text-white rounded p-1 w-100" type="submit">
+                    Criar conta
+                  </button>
                 </div>
               </Form>
             )}
@@ -226,4 +284,4 @@ const CreateUser = () => {
   );
 };
 
-export default CreateUser;
+export default RegisterCustomer;
