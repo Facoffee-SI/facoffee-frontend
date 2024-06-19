@@ -100,7 +100,7 @@ const CustomerNavigation = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+            <Link className="nav-link" to={ROUTES.CUSTOMER_PLANS} onClick={toggleCollapse}>
               Catálogo de Planos
             </Link>
           </li>
@@ -138,7 +138,7 @@ const CustomerNavigation = () => {
           onClick={handleLogout}
           to={ROUTES.CUSTOMER_LOGIN}
         >
-          Deslogar
+          Sair
         </Link>
       ) : (
         <Link

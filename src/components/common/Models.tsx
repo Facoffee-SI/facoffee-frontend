@@ -53,6 +53,7 @@ export interface RolePayload {
 }
 
 export interface ProductEditObject {
+  product: any;
   id: string;
   name: string;
   brand: string;
@@ -146,4 +147,16 @@ export interface ProductCustomer {
 export interface ImageObject {
   id: string;
   imageUrl: string;
+}
+
+export interface PlanCustomer {
+  id: string;
+  name: string;
+  priceMonth: number;
+  priceYear: number;
+  description: string;
+  active: boolean;
+  images: ImageObject[];
+  productIds: string[],
+  products?: ProductEditObject[];
 }

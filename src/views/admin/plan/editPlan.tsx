@@ -2,7 +2,7 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { CustomInput } from '../../../components/formik';
 import CurrencyInput from 'react-currency-input-field';
 import * as Yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { PlanEditObject, ProductEditObject } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import CustomSelect from '../../../components/formik/CustomSelect';
@@ -12,10 +12,10 @@ import { ConfirmationModal } from '../../../components/common/ConfirmationModal'
 import Loading from '../../../components/common/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import FroalaEditor from 'froala-editor';
 
 const editPlanSchema = Yup.object({
   name: Yup.string().required('Obrigatório preencher o nome'),
-  description: Yup.string().required('Obrigatório preencher a descrição'),
   priceMonth: Yup.string().required('Obrigatório preencher o preço mensal'),
   priceYear: Yup.string().required('Obrigatório preencher o preço anual'),
   active: Yup.string().required('Obrigatório preencher o status'),
@@ -33,6 +33,23 @@ const EditPlan = () => {
   const [showModal, setShowModal] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [editorInstance, setEditorInstance] = useState<FroalaEditor | null>(null);
+
+  const initFroalaEditor = () => {
+    const froala = new FroalaEditor('#froala-editor', {
+      placeholderText: 'Descrição do plano',
+    });
+    setEditorInstance(froala);
+  };
+
+  useLayoutEffect(() => {
+    initFroalaEditor();
+    return () => {
+      if (editorInstance) {
+        editorInstance.destroy();
+      }
+    };
+  }, [editorInstance]);
 
   useEffect(() => {
     const fetchPlan = async () => {
@@ -45,6 +62,10 @@ const EditPlan = () => {
           return new File([new Blob([], { type: 'image/jpeg' })], img.id, { type: 'image/jpeg' });
         });
 
+        if (editorInstance && plan?.description) {
+          editorInstance.html.set(plan?.description);
+        }
+
         setImages(initialImages);
         setImagePreviews(planData.images.map((img: { imageUrl: string }) => img.imageUrl));
         setLoading(false);
@@ -55,7 +76,7 @@ const EditPlan = () => {
     };
 
     fetchPlan();
-  }, [plan]);
+  }, [plan, editorInstance]);
   
   useEffect(() => {
     if (!plan) {
@@ -85,6 +106,8 @@ const EditPlan = () => {
     { setSubmitting }: FormikHelpers<PlanEditObject>) => {
     try {
       const { id, ...patchPayload} = values;
+      const editorContent = editorInstance?.html.get();
+      patchPayload.description = editorContent ? editorContent : '';
       const response = await api.patch(`plan/${id}`, patchPayload);
       if (images.length > 0) {
         const formData = new FormData();
@@ -198,15 +221,7 @@ const EditPlan = () => {
                       component={CustomInput}
                       style={{ width: '100%' }} 
                     />
-                    <Field
-                      name="description"
-                      type="string"
-                      label="Descrição"
-                      autoComplete="true"
-                      placeholder="Descrição"
-                      component={CustomInput}
-                      style={{ width: '100%', height: '5.375rem' }}
-                    />
+                    <div id="froala-editor"></div>
                     <Field
                       name="productIds"
                       label="Produtos"

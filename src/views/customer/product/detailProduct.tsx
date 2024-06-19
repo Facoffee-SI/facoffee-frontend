@@ -127,7 +127,9 @@ const ProductPage = () => {
                   {product?.description ? (
                     <div className="product-description" dangerouslySetInnerHTML={{ __html: product.description }} />
                     ) : (
-                      <p>Produto sem descrição.</p>
+                      <div>
+                        <p>Produto sem descrição.</p>
+                      </div>
                     )}
                   <div className="product-buttons">
                     <button className="product-buttons">Comprar</button>

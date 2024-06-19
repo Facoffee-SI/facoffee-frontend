@@ -33,3 +33,5 @@ export const CUSTOMER_ABOUT = '/customer/about';
 export const CUSTOMER_CONTACT = '/customer/contact';
 export const CUSTOMER_PRODUCTS = '/customer/products';
 export const CUSTOMER_PRODUCT = '/customer/product'
+export const CUSTOMER_PLANS = '/customer/plans'
+export const CUSTOMER_PLAN = '/customer/plan'
