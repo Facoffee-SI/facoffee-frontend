@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardImg, CardBody, CardTitle, CardText, Button } from 'react-bootstrap';
 import '../style.css';
-import { ProductCustomer } from '../../../../components/common/Models';
+import { CartItem, ProductCustomer } from '../../../../components/common/Models';
 import { useNavigate } from 'react-router-dom';
 import * as ROUTES from '../../../../constants/routes';
 import noImage from '../../../../assets/noImage.png';
@@ -34,12 +34,30 @@ function ProductCard({ productObject }: Props) {
     return discount;
   }
 
+  const handleAddCart = () => {
+    const cart: CartItem[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingProductIndex = cart.findIndex(item => item.productId === productObject.id);
+
+    if (existingProductIndex !== -1) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push({ productId: productObject.id, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+  };
+
+  const handleBuy = () => {
+    handleAddCart();
+    navigate(ROUTES.CUSTOMER_CART);
+  }
+
   const hasDiscount = productObject.discountValue > 0;
   const originalPrice = formatPrice(productObject.price);
   const discountedPrice = formatPrice(calculateDiscount());
 
   return (
-    <Card onClick={productDetail} className="product-card">
+    <Card className="product-card">
       <div className="d-flex flex-column h-100">
         <CardHeader className="product-card-header">
           <CardImg
@@ -67,9 +85,9 @@ function ProductCard({ productObject }: Props) {
             )}
           </div>
           <div className="d-flex justify-content-between mt-2">
-            <Button variant="success">Comprar</Button>
+            <Button onClick={productDetail} variant="secondary btn-add">Visualizar</Button>
             <span className="mx-1"></span>
-            <Button variant="secondary btn-add">Adicionar</Button>
+            <Button onClick={handleBuy} variant="success">Comprar</Button>
           </div>
         </CardBody>
       </div>

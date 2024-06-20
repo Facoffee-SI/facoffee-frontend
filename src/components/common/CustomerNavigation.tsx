@@ -65,7 +65,7 @@ const CustomerNavigation = () => {
           {tokenCustomer ? (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+                <Link className="nav-link" to={ROUTES.CUSTOMER_CART} onClick={toggleCollapse}>
                   Carrinho
                 </Link>
               </li>

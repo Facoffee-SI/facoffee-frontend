@@ -165,7 +165,6 @@ const EditPlan = () => {
     }
   };
 
-
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedImages = Array.from(event.target.files || []);
     const selectedPreviews = selectedImages.map((image) => URL.createObjectURL(image));

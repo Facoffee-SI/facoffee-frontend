@@ -35,3 +35,4 @@ export const CUSTOMER_PRODUCTS = '/customer/products';
 export const CUSTOMER_PRODUCT = '/customer/product'
 export const CUSTOMER_PLANS = '/customer/plans'
 export const CUSTOMER_PLAN = '/customer/plan'
+export const CUSTOMER_CART = '/customer/cart'

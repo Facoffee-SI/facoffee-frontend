@@ -30,6 +30,7 @@ import ProductsCustomer from '../views/customer/product/listProducts';
 import ProductPage from '../views/customer/product/detailProduct';
 import PlansCustomer from '../views/customer/plan/listPlans';
 import PlanPage from '../views/customer/plan/detailPlan';
+import CartCustomer from '../views/customer/cart/cartCustomer';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -67,6 +68,7 @@ const AppRouter = () => {
         <Route path={ROUTES.CUSTOMER_PRODUCT} element={<ProductPage></ProductPage>}></Route>
         <Route path={ROUTES.CUSTOMER_PLANS} element={<PlansCustomer></PlansCustomer>}></Route>
         <Route path={ROUTES.CUSTOMER_PLAN} element={<PlanPage></PlanPage>}></Route>
+        <Route path={ROUTES.CUSTOMER_CART} element={<CartCustomer></CartCustomer>}></Route>
         <Route path={ROUTES.HOME} element={<CustomerLogin></CustomerLogin>}></Route>
       </Routes>
     </BrowserRouter>

@@ -161,3 +161,8 @@ export interface PlanCustomer {
   productIds: string[],
   products?: ProductEditObject[];
 }
+
+export interface CartItem {
+  quantity: number;
+  productId: string;
+}

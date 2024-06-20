@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from '../../../components/common/Loading';
-import { ProductCustomer } from '../../../components/common/Models';
+import { CartItem, ProductCustomer } from '../../../components/common/Models';
 import api from '../../../services/Api';
 import './style.css';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -65,6 +65,32 @@ const ProductPage = () => {
       style: 'currency',
       currency: 'BRL'
     }).format(price);
+  }
+
+  const handleAddCart = () => {
+    const cart: CartItem[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingProductIndex = cart.findIndex(item => item.productId === productId);
+
+    if (existingProductIndex !== -1) {
+      cart[existingProductIndex].quantity += 1;
+    } else {
+      cart.push({ productId: product.id, quantity: 1 });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    toast.success('Produto adicionado ao carrinho.', {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
+  const handleBuy = () => {
+    handleAddCart();
+    navigate(ROUTES.CUSTOMER_CART);
   }
 
   const calculateDiscount = () => {
@@ -132,8 +158,8 @@ const ProductPage = () => {
                       </div>
                     )}
                   <div className="product-buttons">
-                    <button className="product-buttons">Comprar</button>
-                    <button className="product-buttons">Adicionar ao carrinho</button>
+                    <button className="product-buttons" onClick={handleBuy}>Comprar</button>
+                    <button className="product-buttons" onClick={handleAddCart}>Adicionar ao carrinho</button>
                   </div>
               </div>
               </div>
