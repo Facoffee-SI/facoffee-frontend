@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import api from '../../../services/Api';
 import 'react-toastify/dist/ReactToastify.css';
 import { CartItem, ProductCustomer } from '../../../components/common/Models';
-import './cartCustomer.css'
+import './cartCustomer.css';
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
+import ProgressTracker from './components/ProgressTracker';
 
 const CartCustomer = () => {
   const [cartProducts, setCartProducts] = useState<ProductCustomer[]>([]);
@@ -65,6 +66,7 @@ const CartCustomer = () => {
   return (
     <main className="primary-container p-3 d-flex justify-content-center align-items-center">
       <div className="card p-5" style={{ maxWidth: '80.75rem', backgroundColor: '#F4F4F4'}}>
+        <ProgressTracker currentStep={1} />
         <div className="row">
           <div className="section-cart col-md-8 border p-3">
             <h3>Carrinho</h3>
@@ -118,9 +120,7 @@ const CartCustomer = () => {
                 <span style={{ marginRight: '6px' }}>⬅️</span>Continuar comprando
             </Link>
           </div>
-          <div className="col-md-1">
-
-          </div>
+          <div className="col-md-1"></div>
           <div className="section-cart col-md-3 border p-3" style={{ height: '100%' }}>
             <h4>Resumo</h4>
               <div className="total-p">
