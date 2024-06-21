@@ -118,7 +118,10 @@ const CartCustomer = () => {
                 <span style={{ marginRight: '6px' }}>⬅️</span>Continuar comprando
             </Link>
           </div>
-          <div className="section-cart col-md-4 border p-3">
+          <div className="col-md-1">
+
+          </div>
+          <div className="section-cart col-md-3 border p-3" style={{ height: '100%' }}>
             <h4>Resumo</h4>
               <div className="total-p">
                 <span className="span-title">Sub-total</span>
