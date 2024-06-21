@@ -1,0 +1,86 @@
+/* COUNTER BUTTON */
+
+.btn-group-counter {
+  width: 110px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #191C1F;
+  transition: border 0.3s ease;
+}
+
+.btn-group-counter button p {
+  font-size:larger;
+}
+
+.btn-group-counter button {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #191C1F;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-group-counter button:hover {
+  background-color: #F4F4F4;
+}
+
+.btn-group-counter p {
+  margin-bottom: inherit;
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid #F5F8FB;
+  border-right: 1px solid #F5F8FB;
+}
+
+/* FINISH COUNTER BUTTON */
+
+.section-cart {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cart {
+  margin-right: 12px;
+}
+
+
+.total-p {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.span-title {
+  color: #5F6C72;
+}
+
+.button-total {
+  margin-top: 5px;
+  width: 100%;
+  border-radius: 15px;
+}
+
+.button-continue-shopp {
+  margin-top: 5px;
+  width: 35%;
+  border-radius: 15px;
+}
+
+.total-text {
+  font-weight: bold;
+}
+
+.cart-text {
+  margin-top: 10px;
+}

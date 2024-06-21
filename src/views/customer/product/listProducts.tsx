@@ -18,7 +18,6 @@ const ProductsCustomer = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        console.log(searchQuery)
         setLoading(true);
         if (searchQuery) {
           const response = await api.get(`/product/customer`, {

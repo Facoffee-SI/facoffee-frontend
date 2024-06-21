@@ -1,7 +1,3 @@
-.tertiary-container {
-  padding: 20px;
-}
-
 .product-card {
   margin-bottom: 20px;
   cursor: pointer;
@@ -51,12 +47,6 @@
 .product-card-discount span {
   font-weight: normal;
   margin-left: 0.25rem;
-}
-
-@media (max-width: 1330px) {
-  .btn-add {
-    display: none !important;
-  }
 }
 
 /* PRODUCT PAGE */

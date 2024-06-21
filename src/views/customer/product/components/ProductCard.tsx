@@ -85,9 +85,9 @@ function ProductCard({ productObject }: Props) {
             )}
           </div>
           <div className="d-flex justify-content-between mt-2">
-            <Button onClick={productDetail} variant="secondary btn-add">Visualizar</Button>
+            <Button onClick={productDetail} variant="secondary">Visualizar</Button>
             <span className="mx-1"></span>
-            <Button onClick={handleBuy} variant="success">Comprar</Button>
+            <Button onClick={handleBuy} variant="success btn-add">Comprar</Button>
           </div>
         </CardBody>
       </div>
