@@ -50,9 +50,8 @@ function PlanCard({ planObject }: Props) {
                 </CardText>
               </div>
             </div>
-          <div className="d-flex justify-content-between mt-2"> 
-            <Button variant="success btn-add">Assinar</Button>
-            <Button variant="secondary">Visualizar</Button>
+          <div className="mt-3">
+            <Button variant="success btn-subcription" onClick={productDetail}>Assinar</Button>
           </div>
         </CardBody>
       </div>

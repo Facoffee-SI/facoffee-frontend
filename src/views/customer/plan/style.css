@@ -53,10 +53,8 @@
   margin-left: 0.25rem;
 }
 
-@media (max-width: 1330px) {
-  .btn-add {
-    display: none !important;
-  }
+.btn-subcription {
+  width: 100%;
 }
 
 /* PLAN PAGE */
