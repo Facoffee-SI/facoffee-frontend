@@ -27,21 +27,6 @@ const CartCustomer = () => {
     fetchCartProducts();
   }, [cartItems]);
 
-  const calculateTotal = () => {
-    let total = 0;
-    cartProducts.forEach(product => {
-      total += product.price * (cartItems.find(item => item.productId === product.id)?.quantity || 0);
-    });
-    return total;
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    }).format(price);
-  };
-
   const updateLocalStorage = (updatedCartItems: CartItem[]) => {
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
     setCartItems(updatedCartItems);
@@ -59,6 +44,21 @@ const CartCustomer = () => {
       item.productId === productId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
     );
     updateLocalStorage(updatedCartItems);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(price);
+  };
+
+  const calculateTotal = () => {
+    let total = 0;
+    cartProducts.forEach(product => {
+      total += product.price * (cartItems.find(item => item.productId === product.id)?.quantity || 0);
+    });
+    return total;
   };
 
   const totalFormatted = formatPrice(calculateTotal());
@@ -142,7 +142,7 @@ const CartCustomer = () => {
               </div>
               <Link
                 className="btn bg-black text-white rounded p-2 button-total"
-                to={ROUTES.HOME}
+                to={ROUTES.CUSTOMER_ADDRESS_CART}
               >
                 Endereço de entrega<span style={{ marginLeft: '6px' }}>➡️</span>
               </Link>

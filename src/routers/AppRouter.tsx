@@ -32,6 +32,8 @@ import PlansCustomer from '../views/customer/plan/listPlans';
 import PlanPage from '../views/customer/plan/detailPlan';
 import CartCustomer from '../views/customer/cart/cartCustomer';
 import PrivateRoute from '../components/common/PrivateRoute';
+import AddressCartCustomer from '../views/customer/cart/addressCustomer';
+import FinalizeCartCustomer from '../views/customer/cart/finalizeCartCustomer';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -161,6 +163,16 @@ const AppRouter = () => {
         <Route path={ROUTES.CUSTOMER_CART} element={
           <PrivateRoute customer={true}>
             <CartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_ADDRESS_CART} element={
+          <PrivateRoute customer={true}>
+            <AddressCartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_FINALIZE_CART} element={
+          <PrivateRoute customer={true}>
+            <FinalizeCartCustomer />
           </PrivateRoute>
         } />
       </Routes>
