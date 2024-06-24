@@ -34,6 +34,7 @@ import CartCustomer from '../views/customer/cart/cartCustomer';
 import PrivateRoute from '../components/common/PrivateRoute';
 import AddressCartCustomer from '../views/customer/cart/addressCustomer';
 import FinalizeCartCustomer from '../views/customer/cart/finalizeCartCustomer';
+import OrderCustomer from '../views/customer/order/orderCustomer';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -173,6 +174,11 @@ const AppRouter = () => {
         <Route path={ROUTES.CUSTOMER_FINALIZE_CART} element={
           <PrivateRoute customer={true}>
             <FinalizeCartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_ORDERS} element={
+          <PrivateRoute customer={true}>
+            <OrderCustomer />
           </PrivateRoute>
         } />
       </Routes>

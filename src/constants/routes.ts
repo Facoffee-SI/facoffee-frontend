@@ -38,3 +38,4 @@ export const CUSTOMER_PLAN = '/customer/plan'
 export const CUSTOMER_CART = '/customer/cart'
 export const CUSTOMER_ADDRESS_CART = '/customer/cart/address'
 export const CUSTOMER_FINALIZE_CART = '/customer/cart/finalize'
+export const CUSTOMER_ORDERS = '/customer/orders';

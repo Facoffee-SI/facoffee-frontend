@@ -166,3 +166,11 @@ export interface CartItem {
   quantity: number;
   productId: string;
 }
+
+export interface OrderObjectCustomer {
+  id: number;
+  total: number;
+  situation: string;
+  createdAt: string;
+  customer: string;
+}
