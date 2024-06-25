@@ -7,7 +7,7 @@ import Loading from '../../../components/common/Loading';
 import { PlanCustomer } from '../../../components/common/Models';
 import { ToastContainer, toast } from 'react-toastify';
 import api from '../../../services/Api';
-import ProgressTracker from './components/ProgressTracker';
+import ProgressTrackerPlan from './components/ProgressTrackerPlan';
 
 const planCustomer = {
   id: '',
@@ -104,7 +104,7 @@ const FinalizeSubscriptionPlan = () => {
       <ToastContainer />
       <main className="primary-container p-3 d-flex justify-content-center align-items-center">
         <div className="card p-5" style={{ maxWidth: '30.75rem'}}>
-          <ProgressTracker currentStep={2} />
+          <ProgressTrackerPlan currentStep={2} />
           <div className="section-cart border p-3" style={{ height: '100%' }}>
             <h4 className="text-center mb-3">Assinatura de Plano</h4>
               <div className="total-p">

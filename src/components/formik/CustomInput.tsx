@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import PropType from 'prop-types';
 
 interface CustomInput {

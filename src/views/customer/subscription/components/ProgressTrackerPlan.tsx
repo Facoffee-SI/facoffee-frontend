@@ -1,6 +1,6 @@
-import './progressTracker.css';
+import './progressTrackerPlan.css';
 
-const ProgressTracker = ({ currentStep }: any) => {
+const ProgressTrackerPlan = ({ currentStep }: any) => {
   return (
     <div className="progress-tracker">
       <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
@@ -16,4 +16,4 @@ const ProgressTracker = ({ currentStep }: any) => {
   );
 };
 
-export default ProgressTracker;
+export default ProgressTrackerPlan;

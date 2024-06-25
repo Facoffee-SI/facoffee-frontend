@@ -174,3 +174,9 @@ export interface OrderObjectCustomer {
   createdAt: string;
   customer: string;
 }
+
+export interface SubscriptionObject {
+  id: string;
+  expirationDate: string;
+  plan: PlanCustomer;
+}
