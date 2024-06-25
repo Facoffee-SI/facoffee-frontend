@@ -46,6 +46,8 @@ const CustomerLogin = () => {
       });
   
       localStorage.removeItem('token');
+      localStorage.removeItem('cart')
+      localStorage.removeItem('deliveryAddress')
       localStorage.setItem('tokenCustomer', JSON.stringify(response.data.token));
       navigate(ROUTES.CUSTOMER_PRODUCTS);
     } catch (error: any) {

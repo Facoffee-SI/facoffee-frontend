@@ -16,6 +16,10 @@ function PlanCard({ planObject }: Props) {
     return navigate(ROUTES.CUSTOMER_PLAN, { state: { planId: planObject.id } });
   };
 
+  const confirmSubscription = () => {
+    return navigate(ROUTES.CUSTOMER_SUBSCRIPTION, { state: { planId: planObject.id } });
+  }
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -51,7 +55,7 @@ function PlanCard({ planObject }: Props) {
               </div>
             </div>
           <div className="mt-3">
-            <Button variant="success btn-subcription" onClick={productDetail}>Assinar</Button>
+            <Button variant="success btn-subcription" onClick={confirmSubscription}>Assinar</Button>
           </div>
         </CardBody>
       </div>

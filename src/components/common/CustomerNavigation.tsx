@@ -17,6 +17,8 @@ const CustomerNavigation = () => {
   useEffect(() => {}, [tokenCustomer, token]);
 
   const handleLogout = () => {
+    localStorage.removeItem('cart')
+    localStorage.removeItem('deliveryAddress')
     localStorage.removeItem('tokenCustomer');
     navigate(ROUTES.CUSTOMER_LOGIN);
   };

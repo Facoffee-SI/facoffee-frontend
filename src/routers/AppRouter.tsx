@@ -35,6 +35,10 @@ import PrivateRoute from '../components/common/PrivateRoute';
 import AddressCartCustomer from '../views/customer/cart/addressCustomer';
 import FinalizeCartCustomer from '../views/customer/cart/finalizeCartCustomer';
 import OrderCustomer from '../views/customer/order/orderCustomer';
+import ConfirmSubscriptionPlan from '../views/customer/subscription/confirmSubscriptionPlan';
+import FinalizeSubscriptionPlan from '../views/customer/subscription/finalizeSubscriptionPlan';
+import PostSubscriptionPlan from '../views/customer/subscription/postSubscriptionPlan';
+import PostCartCustomer from '../views/customer/cart/postCartCustomer';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -161,6 +165,21 @@ const AppRouter = () => {
             <PlanPage />
           </PrivateRoute>
         } />
+        <Route path={ROUTES.CUSTOMER_SUBSCRIPTION} element={
+          <PrivateRoute customer={true}>
+            <ConfirmSubscriptionPlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_SUBSCRIPTION_FINALIZE} element={
+          <PrivateRoute customer={true}>
+            <FinalizeSubscriptionPlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_SUBSCRIPTION_POST} element={
+          <PrivateRoute customer={true}>
+            <PostSubscriptionPlan />
+          </PrivateRoute>
+        } />
         <Route path={ROUTES.CUSTOMER_CART} element={
           <PrivateRoute customer={true}>
             <CartCustomer />
@@ -174,6 +193,11 @@ const AppRouter = () => {
         <Route path={ROUTES.CUSTOMER_FINALIZE_CART} element={
           <PrivateRoute customer={true}>
             <FinalizeCartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_POST_CART} element={
+          <PrivateRoute customer={true}>
+            <PostCartCustomer />
           </PrivateRoute>
         } />
         <Route path={ROUTES.CUSTOMER_ORDERS} element={

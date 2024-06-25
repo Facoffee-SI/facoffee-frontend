@@ -83,6 +83,10 @@ const PlanPage = () => {
     navigate(ROUTES.CUSTOMER_PRODUCTS);
   }
 
+  const confirmSubscription = () => {
+    return navigate(ROUTES.CUSTOMER_SUBSCRIPTION, { state: { planId: plan.id } });
+  }
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -138,7 +142,7 @@ const PlanPage = () => {
                       </div>
                     )}
                   <div className="plan-buttons">
-                    <button className="plan-buttons">Assinar</button>
+                    <button className="plan-buttons" onClick={confirmSubscription}>Assinar</button>
                     <button className="plan-buttons">Cancelar assinatura</button>
                   </div>
                   {products.length > 0 ? (

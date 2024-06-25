@@ -56,7 +56,7 @@ const FinalizeCartCustomer = () => {
       total: calculateTotal(),
       situation: "FINALIZADO"
     });
-    navigate(ROUTES.CUSTOMER_ORDERS);
+    navigate(ROUTES.CUSTOMER_POST_CART);
   }
 
   if (loading) {
