@@ -58,7 +58,7 @@ const Categories = () => {
                 Criar nova categoria
               </Button>
             </div>
-            <div className="category-list-container">
+            <div>
               {categories.map((category) => (
                 <CategoryCard
                   key={category.id}

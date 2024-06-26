@@ -39,6 +39,7 @@ import ConfirmSubscriptionPlan from '../views/customer/subscription/confirmSubsc
 import FinalizeSubscriptionPlan from '../views/customer/subscription/finalizeSubscriptionPlan';
 import PostSubscriptionPlan from '../views/customer/subscription/postSubscriptionPlan';
 import PostCartCustomer from '../views/customer/cart/postCartCustomer';
+import ReportAdmin from '../views/admin/report/report';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -133,6 +134,11 @@ const AppRouter = () => {
         <Route path={ROUTES.ADMIN_ABOUT_EDIT} element={
           <PrivateRoute customer={false}>
             <EditAbout />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_REPORTS} element={
+          <PrivateRoute customer={false}>
+            <ReportAdmin />
           </PrivateRoute>
         } />
         <Route path={ROUTES.CUSTOMER_LOGIN} element={<CustomerLogin />} />
