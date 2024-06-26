@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import api from '../../../services/Api';
 import 'react-toastify/dist/ReactToastify.css';
-import { CartItem, ProductCustomer } from '../../../components/common/Models';
+import { CartItem, ProductCustomer, SubscriptionObject } from '../../../components/common/Models';
 import './cartCustomer.css';
 import { Link } from 'react-router-dom';
 import * as ROUTES from '../../../constants/routes';
@@ -10,6 +10,7 @@ import ProgressTracker from './components/ProgressTracker';
 const CartCustomer = () => {
   const [cartProducts, setCartProducts] = useState<ProductCustomer[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>(JSON.parse(localStorage.getItem('cart') || '[]'));
+  const [subscription, setSubscription] = useState<SubscriptionObject>();
 
   useEffect(() => {
     const fetchCartProducts = async () => {
@@ -24,6 +25,18 @@ const CartCustomer = () => {
       }
     };
 
+    const fetchSubscription = async () => {
+      try {
+        const response: { data: SubscriptionObject } = await api.get(`customer/subscription`);
+        if (response.data) {
+          setSubscription(response.data);
+        }
+      } catch (error) {
+        console.log('Erro ao buscar assinatura', error);
+      }
+    };
+
+    fetchSubscription();
     fetchCartProducts();
   }, [cartItems]);
 
@@ -53,14 +66,43 @@ const CartCustomer = () => {
     }).format(price);
   };
 
+  const calculateDiscountedPrice = (price: number, discountValue: number, isDiscountPercentage: boolean) => {
+    if (isDiscountPercentage) {
+      return price - (price * (discountValue / 100));
+    } else {
+      return price - discountValue;
+    }
+  };
+
+  const calculateTotalDiscount = () => {
+    let totalDiscount = 0;
+    cartProducts.forEach(product => {
+      const originalPrice = product.price;
+      const discountedPrice = calculateDiscountedPrice(originalPrice, product.discountValue, product.isDiscountPercentage);
+      totalDiscount += (originalPrice - discountedPrice) * (cartItems.find(item => item.productId === product.id)?.quantity || 0);
+    });
+    return totalDiscount;
+  };
+
+  const calculateSubTotal = () => {
+    let subTotal = 0;
+    cartProducts.forEach(product => {
+      subTotal += product.price * (cartItems.find(item => item.productId === product.id)?.quantity || 0);
+    });
+    return subTotal;
+  };
+
   const calculateTotal = () => {
     let total = 0;
     cartProducts.forEach(product => {
-      total += product.price * (cartItems.find(item => item.productId === product.id)?.quantity || 0);
+      const discountedPrice = subscription ? calculateDiscountedPrice(product.price, product.discountValue, product.isDiscountPercentage) : product.price;
+      total += discountedPrice * (cartItems.find(item => item.productId === product.id)?.quantity || 0);
     });
     return total;
   };
 
+  const subTotalFormatted = formatPrice(calculateSubTotal());
+  const totalDiscountFormatted = subscription ? formatPrice(calculateTotalDiscount()) : 'R$ 0,00';
   const totalFormatted = formatPrice(calculateTotal());
 
   return (
@@ -91,7 +133,10 @@ const CartCustomer = () => {
                           </td>
                           <td>
                             <p className="cart-text">
-                              {formatPrice(product.price)}
+                              {formatPrice(
+                                subscription
+                                ? calculateDiscountedPrice(product.price, product.discountValue, product.isDiscountPercentage)
+                                : product.price)}
                             </p>
                           </td>
                           <td>
@@ -107,7 +152,9 @@ const CartCustomer = () => {
                           </td>
                           <td>
                             <p className="cart-text">
-                              {formatPrice(product.price * (cartItem?.quantity || 0))}
+                              {formatPrice((subscription
+                                ? calculateDiscountedPrice(product.price, product.discountValue, product.isDiscountPercentage)
+                                : product.price) * (cartItem?.quantity || 0))}
                             </p>
                           </td>
                         </tr>
@@ -127,7 +174,7 @@ const CartCustomer = () => {
                 <h4>Resumo</h4>
                   <div className="total-p">
                     <span className="span-title">Sub-total</span>
-                    <span>{totalFormatted}</span>
+                    <span>{subTotalFormatted}</span>
                   </div>
                   <div className="total-p">
                     <span className="span-title">Frete</span>
@@ -135,7 +182,7 @@ const CartCustomer = () => {
                   </div>
                   <div className="total-p">
                     <span className="span-title">Desconto</span>
-                    <span>R$ 0,00</span>
+                    <span>{totalDiscountFormatted}</span>
                   </div>
                   <hr />
                   <div className="total-p">
