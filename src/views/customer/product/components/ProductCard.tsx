@@ -58,15 +58,16 @@ function ProductCard({ productObject }: Props) {
               <div>
                 <CardText className="text-muted product-card-text">{originalPrice}</CardText>
                 <CardText className="text-success product-card-discount">
-                  {discountedPrice} <span>Assinatura</span>
+                  {discountedPrice}
+                  <span>Assinatura</span>
                 </CardText>
               </div>
             ) : (
               <CardText className="text-muted product-card-text">{originalPrice}</CardText>
             )}
           </div>
-          <div className="d-flex justify-content-start mt-2">
-            <Button variant="success">Comprar</Button>
+          <div className="mt-3">
+            <Button variant="success btn-buy">Comprar</Button>
           </div>
         </CardBody>
       </div>

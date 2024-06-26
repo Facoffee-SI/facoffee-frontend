@@ -74,7 +74,7 @@ const AdminNavigation = () => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to={ROUTES.ADMIN_LOGIN} onClick={handleLogout}>
-                  Deslogar
+                  Sair
                 </Link>
               </li>
             </>
@@ -102,7 +102,7 @@ const AdminNavigation = () => {
           onClick={handleLogout}
           to={ROUTES.ADMIN_LOGIN}
         >
-          Deslogar
+          Sair
         </Link>
       ) : (
         <Link

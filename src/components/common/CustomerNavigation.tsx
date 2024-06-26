@@ -17,6 +17,8 @@ const CustomerNavigation = () => {
   useEffect(() => {}, [tokenCustomer, token]);
 
   const handleLogout = () => {
+    localStorage.removeItem('cart')
+    localStorage.removeItem('deliveryAddress')
     localStorage.removeItem('tokenCustomer');
     navigate(ROUTES.CUSTOMER_LOGIN);
   };
@@ -65,7 +67,7 @@ const CustomerNavigation = () => {
           {tokenCustomer ? (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+                <Link className="nav-link" to={ROUTES.CUSTOMER_CART} onClick={toggleCollapse}>
                   Carrinho
                 </Link>
               </li>
@@ -75,7 +77,7 @@ const CustomerNavigation = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+                <Link className="nav-link" to={ROUTES.CUSTOMER_ORDERS} onClick={toggleCollapse}>
                   Pedidos
                 </Link>
               </li>
@@ -100,7 +102,7 @@ const CustomerNavigation = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to={ROUTES.CUSTOMER_LOGIN} onClick={toggleCollapse}>
+            <Link className="nav-link" to={ROUTES.CUSTOMER_PLANS} onClick={toggleCollapse}>
               Catálogo de Planos
             </Link>
           </li>
@@ -138,7 +140,7 @@ const CustomerNavigation = () => {
           onClick={handleLogout}
           to={ROUTES.CUSTOMER_LOGIN}
         >
-          Deslogar
+          Sair
         </Link>
       ) : (
         <Link

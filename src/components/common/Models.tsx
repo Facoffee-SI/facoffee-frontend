@@ -53,6 +53,7 @@ export interface RolePayload {
 }
 
 export interface ProductEditObject {
+  product: any;
   id: string;
   name: string;
   brand: string;
@@ -64,6 +65,7 @@ export interface ProductEditObject {
   isDiscountPercentage: boolean;
   categoryId: string;
   category?: CategoryObject;
+  images?: [];
 }
 
 export interface ProductObject {
@@ -146,4 +148,35 @@ export interface ProductCustomer {
 export interface ImageObject {
   id: string;
   imageUrl: string;
+}
+
+export interface PlanCustomer {
+  id: string;
+  name: string;
+  priceMonth: number;
+  priceYear: number;
+  description: string;
+  active: boolean;
+  images: ImageObject[];
+  productIds: string[],
+  products?: ProductEditObject[];
+}
+
+export interface CartItem {
+  quantity: number;
+  productId: string;
+}
+
+export interface OrderObjectCustomer {
+  id: number;
+  total: number;
+  situation: string;
+  createdAt: string;
+  customer: string;
+}
+
+export interface SubscriptionObject {
+  id: string;
+  expirationDate: string;
+  plan: PlanCustomer;
 }

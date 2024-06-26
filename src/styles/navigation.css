@@ -5,6 +5,7 @@
 
 .navbar-brand {
   background-color: var(--clr-quinary);
+  padding: 5px;
 }
 
 .nav-expanded .nav-link {

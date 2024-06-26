@@ -28,6 +28,17 @@ import AboutInfo from '../views/customer/about/about';
 import ContactInfo from '../views/customer/contact/contact';
 import ProductsCustomer from '../views/customer/product/listProducts';
 import ProductPage from '../views/customer/product/detailProduct';
+import PlansCustomer from '../views/customer/plan/listPlans';
+import PlanPage from '../views/customer/plan/detailPlan';
+import CartCustomer from '../views/customer/cart/cartCustomer';
+import PrivateRoute from '../components/common/PrivateRoute';
+import AddressCartCustomer from '../views/customer/cart/addressCustomer';
+import FinalizeCartCustomer from '../views/customer/cart/finalizeCartCustomer';
+import OrderCustomer from '../views/customer/order/orderCustomer';
+import ConfirmSubscriptionPlan from '../views/customer/subscription/confirmSubscriptionPlan';
+import FinalizeSubscriptionPlan from '../views/customer/subscription/finalizeSubscriptionPlan';
+import PostSubscriptionPlan from '../views/customer/subscription/postSubscriptionPlan';
+import PostCartCustomer from '../views/customer/cart/postCartCustomer';
 
 const AppRouter = () => {
   const token = localStorage.getItem('token');
@@ -38,35 +49,165 @@ const AppRouter = () => {
     <BrowserRouter>
       {token ? <AdminNavigation /> : <CustomerNavigation />}
       <Routes>
-        <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin></AdminLogin>}></Route>
-        <Route path={ROUTES.ADMIN_USERS} element={<Users></Users>}></Route>
-        <Route path={ROUTES.ADMIN_USERS_EDIT} element={<EditUser></EditUser>}></Route>
-        <Route path={ROUTES.ADMIN_USERS_CREATE} element={<CreateUser></CreateUser>}></Route>
-        <Route path={ROUTES.ADMIN_PRODUCTS} element={<Products></Products>}></Route>
-        <Route path={ROUTES.ADMIN_PRODUCT_ADD} element={<CreateProduct></CreateProduct>}></Route>
-        <Route path={ROUTES.ADMIN_PRODUCT_EDIT} element={<EditProduct></EditProduct>}></Route>
-        <Route path={ROUTES.ADMIN_PLANS} element={<Plans></Plans>}></Route>
-        <Route path={ROUTES.ADMIN_PLAN_ADD} element={<CreatePlan></CreatePlan>}></Route>
-        <Route path={ROUTES.ADMIN_PLAN_EDIT} element={<EditPlan></EditPlan>}></Route>
-        <Route path={ROUTES.ADMIN_CONTACT_ADD} element={<CreateContact></CreateContact>}></Route>
-        <Route path={ROUTES.ADMIN_CONTACT_EDIT} element={<EditContact></EditContact>}></Route>
-        <Route path={ROUTES.ADMIN_CATEGORIES} element={<Categories></Categories>}></Route>
-        <Route path={ROUTES.ADMIN_CATEGORY_ADD} element={<CreateCategory></CreateCategory>}></Route>
-        <Route path={ROUTES.ADMIN_ROLES} element={<Roles></Roles>}></Route>
-        <Route path={ROUTES.ADMIN_ROLE_ADD} element={<CreateRole></CreateRole>}></Route>
-        <Route path={ROUTES.ADMIN_ABOUT_ADD} element={<CreateAbout></CreateAbout>}></Route>
-        <Route path={ROUTES.ADMIN_ABOUT_EDIT} element={<EditAbout></EditAbout>}></Route>
-        <Route path={ROUTES.CUSTOMER_LOGIN} element={<CustomerLogin></CustomerLogin>}></Route>
-        <Route path={ROUTES.CUSTOMER_REGISTER} element={<RegisterCustomer></RegisterCustomer>}></Route>
-        <Route path={ROUTES.CUSTOMER_EDIT} element={<EditCustomer></EditCustomer>}></Route>
-        <Route path={ROUTES.CUSTOMER_ABOUT} element={<AboutInfo></AboutInfo>}></Route>
-        <Route path={ROUTES.CUSTOMER_CONTACT} element={<ContactInfo></ContactInfo>}></Route>
-        <Route path={ROUTES.CUSTOMER_PRODUCTS} element={<ProductsCustomer></ProductsCustomer>}></Route>
-        <Route path={ROUTES.CUSTOMER_PRODUCT} element={<ProductPage></ProductPage>}></Route>
-        <Route path={ROUTES.HOME} element={<CustomerLogin></CustomerLogin>}></Route>
+        <Route path={ROUTES.ADMIN_LOGIN} element={<AdminLogin />} />
+        <Route path={ROUTES.ADMIN_USERS} element={
+          <PrivateRoute customer={false}>
+            <Users />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_USERS_EDIT} element={
+          <PrivateRoute customer={false}>
+            <EditUser />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_USERS_CREATE} element={
+          <PrivateRoute customer={false}>
+            <CreateUser />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_PRODUCTS} element={
+          <PrivateRoute customer={false}>
+            <Products />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_PRODUCT_ADD} element={
+          <PrivateRoute customer={false}>
+            <CreateProduct />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_PRODUCT_EDIT} element={
+          <PrivateRoute customer={false}>
+            <EditProduct />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_PLANS} element={
+          <PrivateRoute customer={false}>
+            <Plans />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_PLAN_ADD} element={
+          <PrivateRoute customer={false}>
+            <CreatePlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_PLAN_EDIT} element={
+          <PrivateRoute customer={false}>
+            <EditPlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_CONTACT_ADD} element={
+          <PrivateRoute customer={false}>
+            <CreateContact />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_CONTACT_EDIT} element={
+          <PrivateRoute customer={false}>
+            <EditContact />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_CATEGORIES} element={
+          <PrivateRoute customer={false}>
+            <Categories />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_CATEGORY_ADD} element={
+          <PrivateRoute customer={false}>
+            <CreateCategory />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_ROLES} element={
+          <PrivateRoute customer={false}>
+            <Roles />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_ROLE_ADD} element={
+          <PrivateRoute customer={false}>
+            <CreateRole />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_ABOUT_ADD} element={
+          <PrivateRoute customer={false}>
+            <CreateAbout />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.ADMIN_ABOUT_EDIT} element={
+          <PrivateRoute customer={false}>
+            <EditAbout />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_LOGIN} element={<CustomerLogin />} />
+        <Route path={ROUTES.CUSTOMER_ABOUT} element={<AboutInfo />} />
+        <Route path={ROUTES.CUSTOMER_CONTACT} element={<ContactInfo /> } />
+        <Route path={ROUTES.HOME} element={<CustomerLogin />} />
+        <Route path={ROUTES.CUSTOMER_REGISTER} element={<RegisterCustomer />} />
+        <Route path={ROUTES.CUSTOMER_EDIT} element={
+          <PrivateRoute customer={true}>
+            <EditCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_PRODUCTS} element={
+          <PrivateRoute customer={true}>
+            <ProductsCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_PRODUCT} element={
+          <PrivateRoute customer={true}>
+            <ProductPage />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_PLANS} element={
+          <PrivateRoute customer={true}>
+            <PlansCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_PLAN} element={
+          <PrivateRoute customer={true}>
+            <PlanPage />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_SUBSCRIPTION} element={
+          <PrivateRoute customer={true}>
+            <ConfirmSubscriptionPlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_SUBSCRIPTION_FINALIZE} element={
+          <PrivateRoute customer={true}>
+            <FinalizeSubscriptionPlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_SUBSCRIPTION_POST} element={
+          <PrivateRoute customer={true}>
+            <PostSubscriptionPlan />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_CART} element={
+          <PrivateRoute customer={true}>
+            <CartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_ADDRESS_CART} element={
+          <PrivateRoute customer={true}>
+            <AddressCartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_FINALIZE_CART} element={
+          <PrivateRoute customer={true}>
+            <FinalizeCartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_POST_CART} element={
+          <PrivateRoute customer={true}>
+            <PostCartCustomer />
+          </PrivateRoute>
+        } />
+        <Route path={ROUTES.CUSTOMER_ORDERS} element={
+          <PrivateRoute customer={true}>
+            <OrderCustomer />
+          </PrivateRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default AppRouter;
