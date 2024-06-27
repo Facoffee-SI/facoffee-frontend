@@ -50,6 +50,12 @@
 
   - Link para o Painel de Administrador:
     - http://localhost:5173/admin/login
+    - Foi criado um usuário admin padrão com o Login:
+      ```
+      Email: adminuser@mailinator.com
+      Senha: 123456789Ab!
+      ```
 
   - Link para o Painel de Usuário:
     - http://localhost:5173/customer/login
+  
