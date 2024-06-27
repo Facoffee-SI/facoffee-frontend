@@ -2,6 +2,7 @@ import { Button, Col } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import api from '../../../services/Api';
 
 const ReportAdmin = () => {
@@ -11,17 +12,17 @@ const ReportAdmin = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await api.get('product');
+      const response = await api.get('report/products');
       setProducts(response.data);
     };
 
     const fetchOrders = async () => {
-      const response = await api.get('order');
+      const response = await api.get('report/orders');
       setOrders(response.data);
     };
 
     const fetchSubscriptions = async () => {
-      const response = await api.get('subscription');
+      const response = await api.get('report/plans');
       setSubscriptions(response.data);
     };
 
@@ -39,16 +40,14 @@ const ReportAdmin = () => {
     link.click();
   };
 
-  const downloadPDF = (data: any[], filename: string) => {
+  const downloadPDF = (data: any[], filename: string, title: string | string[]) => {
     const doc = new jsPDF();
-    let y = 10;
-
-    data.forEach((row: { [s: string]: unknown; } | ArrayLike<unknown>) => {
-      const text = Object.values(row).join(' ');
-      doc.text(text, 10, y);
-      y += 10;
+    doc.text(title, 10, 10);
+    autoTable(doc, {
+      startY: 20,
+      head: [Object.keys(data[0])],
+      body: data.map((row: { [s: string]: unknown; } | ArrayLike<unknown>) => Object.values(row).map(value => String(value))),
     });
-
     doc.save(`${filename}.pdf`);
   };
 
@@ -67,7 +66,7 @@ const ReportAdmin = () => {
                     <Button variant="success" onClick={() => downloadCSV(products, 'produtos-cadastrados')}>
                       Download CSV
                     </Button>
-                    <Button variant="danger" onClick={() => downloadPDF(products, 'produtos-cadastrados')}>
+                    <Button variant="danger" onClick={() => downloadPDF(products, 'produtos-cadastrados', 'Produtos Cadastrados')}>
                       Download PDF
                     </Button>
                   </div>
@@ -81,7 +80,7 @@ const ReportAdmin = () => {
                     <Button variant="success" onClick={() => downloadCSV(orders, 'venda-produtos')}>
                       Download CSV
                     </Button>
-                    <Button variant="danger" onClick={() => downloadPDF(orders, 'venda-produtos')}>
+                    <Button variant="danger" onClick={() => downloadPDF(orders, 'venda-produtos', 'Venda de Produtos')}>
                       Download PDF
                     </Button>
                   </div>
@@ -95,7 +94,7 @@ const ReportAdmin = () => {
                     <Button variant="success" onClick={() => downloadCSV(subscriptions, 'planos-cadastrados')}>
                       Download CSV
                     </Button>
-                    <Button variant="danger" onClick={() => downloadPDF(subscriptions, 'planos-cadastrados')}>
+                    <Button variant="danger" onClick={() => downloadPDF(subscriptions, 'planos-cadastrados', 'Planos de Assinatura')}>
                       Download PDF
                     </Button>
                   </div>

@@ -17,6 +17,7 @@
     "formik": "^2.4.5",
     "froala-editor": "^4.2.0",
     "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "lodash": "^4.17.21",
     "papaparse": "^5.4.1",
     "prop-types": "^15.8.1",
