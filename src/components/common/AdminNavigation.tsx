@@ -73,6 +73,11 @@ const AdminNavigation = () => {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link className="nav-link" to={ROUTES.ADMIN_REPORTS} onClick={toggleCollapse}>
+                  Gerar Relatórios
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link className="nav-link" to={ROUTES.ADMIN_LOGIN} onClick={handleLogout}>
                   Sair
                 </Link>

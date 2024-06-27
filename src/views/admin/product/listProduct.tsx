@@ -49,7 +49,7 @@ const Products = () => {
                 Criar novo produto
               </Button>
             </div>
-            <div className="category-list-container">
+            <div>
               {products.map((product) => (
                 <ProductCard
                 key={product.id}

@@ -49,7 +49,7 @@ const Plans = () => {
                 Criar novo plano
               </Button>
             </div>
-            <div className="category-list-container">
+            <div>
               {plans.map((plan) => (
                 <PlanCard
                 key={plan.id}

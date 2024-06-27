@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/papaparse": "^5.3.14",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "cpf-check": "^3.0.0",
     "formik": "^2.4.5",
     "froala-editor": "^4.2.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "lodash": "^4.17.21",
+    "papaparse": "^5.4.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",

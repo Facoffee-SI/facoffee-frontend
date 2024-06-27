@@ -24,6 +24,8 @@ export const ADMIN_CONTACT_EDIT = '/admin/contact/edit';
 export const ADMIN_ABOUT_ADD = '/admin/about/add';
 export const ADMIN_ABOUT_EDIT = '/admin/about/edit'
 
+export const ADMIN_REPORTS = '/admin/reports'
+
 // CUSTOMER
 export const HOME = '/';
 export const CUSTOMER_LOGIN = '/customer/login';

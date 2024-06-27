@@ -29,9 +29,9 @@ const ConfirmSubscriptionPlan = () => {
   const planId: string | null = location.state?.planId;
 
   useEffect(() => {
-    setLoading(true);
     const fetchPlan = async () => {
       try {
+        setLoading(true);
         const response = await api.get(`plan/customer/${planId}`);
         setPlan(response.data);
       } catch (error) {
@@ -44,17 +44,22 @@ const ConfirmSubscriptionPlan = () => {
           draggable: true,
         });
         console.log('Erro ao buscar plano', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     const fetchSubscription = async () => {
       try {
+        setLoading(true);
         const response: { data: SubscriptionObject } = await api.get(`customer/subscription`);
         if (response.data) {
           setSubscription(response.data);
         }
       } catch (error) {
         console.log('Erro ao buscar assinatura', error);
+      } finally {
+        setLoading(false);
       }
     };
 
