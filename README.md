@@ -23,7 +23,7 @@
 
 ## 📚 Funcionalidades
 
-- A definir.
+- [PDF dos requisitos de negócio](https://drive.google.com/file/d/1YJU86FUfpad_ISTTdoCKdDNRFaiKg0X8/view?usp=drive_link)
 
 ## 👨‍💻 Como instalar e rodar o projeto
 
@@ -47,23 +47,16 @@
       Assim o projeto já estará rodando pronto para o uso.
       OBS: É necessário subir a API para utilizar esse projeto.
 
-## Expanding the ESLint configuration
+## 🌐 Acessando o projeto
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+  - Link para o Painel de Administrador:
+    - http://localhost:5173/admin/login
+    - Foi criado um usuário admin padrão com o Login:
+      ```
+      Email: adminuser@mailinator.com
+      Senha: 123456789Ab!
+      ```
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+  - Link para o Painel de Usuário:
+    - http://localhost:5173/customer/login
+  
