@@ -45,6 +45,7 @@
         yarn dev
     
       Assim o projeto já estará rodando pronto para o uso.
+      OBS: É necessário subir a API para utilizar esse projeto.
 
 ## Expanding the ESLint configuration
 
