@@ -22,6 +22,7 @@ const CreateAbout = () => {
   const initFroalaEditor = () => {
     const froala = new FroalaEditor('#froala-editor', {
       placeholderText: 'Escreva algo...',
+      toolbarSticky: false,
     });
     setEditorInstance(froala);
   };

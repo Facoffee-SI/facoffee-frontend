@@ -48,7 +48,8 @@ const CreateContact = () => {
 
   const initFroalaEditor = () => {
     const froala = new FroalaEditor('#froala-editor', {
-      placeholderText: 'Insira a descrição...'
+      placeholderText: 'Insira a descrição...',
+      toolbarSticky: false,
     });
     setEditorInstance(froala);
   };

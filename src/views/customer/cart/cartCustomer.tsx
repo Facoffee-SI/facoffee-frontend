@@ -53,10 +53,19 @@ const CartCustomer = () => {
   };
 
   const handleDecrementCounter = (productId: string) => {
-    const updatedCartItems = cartItems.map(item =>
-      item.productId === productId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-    );
-    updateLocalStorage(updatedCartItems);
+    const index = cartItems.findIndex(item => item.productId === productId);
+
+    if (index !== -1) {
+      const updatedCartItems = [...cartItems];
+      updatedCartItems[index] = {
+        ...updatedCartItems[index],
+        quantity: updatedCartItems[index].quantity - 1
+      };
+      if (updatedCartItems[index].quantity === 0) {
+        updatedCartItems.splice(index, 1);
+      }
+      updateLocalStorage(updatedCartItems);
+    }
   };
 
   const formatPrice = (price: number) => {

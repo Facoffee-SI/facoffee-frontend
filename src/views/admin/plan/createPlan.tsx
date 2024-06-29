@@ -29,6 +29,7 @@ const CreatePlan = () => {
   const initFroalaEditor = () => {
     const froala = new FroalaEditor('#froala-editor', {
       placeholderText: 'Descrição do plano',
+      toolbarSticky: false,
     });
     setEditorInstance(froala);
   };
