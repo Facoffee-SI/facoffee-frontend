@@ -32,6 +32,7 @@ const CreateProduct = () => {
   const initFroalaEditor = () => {
     const froala = new FroalaEditor('#froala-editor', {
       placeholderText: 'Descrição do produto',
+      toolbarSticky: false,
     });
     setEditorInstance(froala);
   };

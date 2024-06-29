@@ -50,6 +50,7 @@ const CustomerLogin = () => {
       localStorage.removeItem('deliveryAddress')
       localStorage.setItem('tokenCustomer', JSON.stringify(response.data.token));
       navigate(ROUTES.CUSTOMER_PRODUCTS);
+      window.location.reload();
     } catch (error: any) {
       console.error('Erro ao logar.')
       let errorMessage = 'Ocorreu um erro. Por favor, tente novamente.';

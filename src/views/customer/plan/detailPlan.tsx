@@ -103,7 +103,7 @@ const PlanPage = () => {
       await api.delete(`customer/subscription`);
       setSubscription(undefined);
       setShowModal(false);
-      toast.success('Assinatura cancelada com sucesso. Você poderá usá-la enquanto ainda durar.', {
+      toast.success('Assinatura cancelada com sucesso.', {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
