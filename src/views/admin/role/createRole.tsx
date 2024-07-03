@@ -13,6 +13,37 @@ const createCategorySchema = Yup.object({
   permissions: Yup.array().of(Yup.number().required()).min(1, 'Selecione pelo menos uma permissão')
 });
 
+type TranslationKeys = 'POST' | 'GET' | 'PATCH' | 'DELETE' | 'user' | 'category' | 'role' | 'permission' | 'product' | 'contact' | 'plan' | 'about' | 'report';
+
+type TranslationMap = {
+  [key in TranslationKeys]: string;
+};
+
+const translationMap: TranslationMap = {
+  POST: "Enviar",
+  GET: "Buscar",
+  PATCH: "Modificar",
+  DELETE: "Apagar",
+  user: "usuário",
+  category: "categoria",
+  role: "cargo",
+  permission: "permissão",
+  product: "produto",
+  contact: "contato",
+  plan: "plano",
+  about: "sobre",
+  report: "relatório",
+};
+
+
+const translateData = (dados: any[]) => {
+  return dados.map((item) => ({
+    ...item,
+    action: translationMap[item.action as TranslationKeys],
+    tableName: translationMap[item.tableName as TranslationKeys]
+  }));
+};
+
 const CreateRole = () => {
   const navigate = useNavigate();
   const [permissions, setPermissions] = useState<PermissionObject[]>([]);
@@ -21,7 +52,7 @@ const CreateRole = () => {
     const fetchPermissions = async () => {
       try {
         const response = await api.get('/permission');
-        setPermissions(response.data);
+        setPermissions(translateData(response.data));
       } catch (error) {
         console.error('Erro ao buscar permissões');
       }

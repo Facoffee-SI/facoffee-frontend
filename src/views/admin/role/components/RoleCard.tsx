@@ -13,6 +13,37 @@ interface RoleCardProps {
   setIsEditing: (newIsEditing: boolean) => void;
 }
 
+type TranslationKeys = 'POST' | 'GET' | 'PATCH' | 'DELETE' | 'user' | 'category' | 'role' | 'permission' | 'product' | 'contact' | 'plan' | 'about' | 'report';
+
+type TranslationMap = {
+  [key in TranslationKeys]: string;
+};
+
+const translationMap: TranslationMap = {
+  POST: "Enviar",
+  GET: "Buscar",
+  PATCH: "Modificar",
+  DELETE: "Apagar",
+  user: "usuário",
+  category: "categoria",
+  role: "cargo",
+  permission: "permissão",
+  product: "produto",
+  contact: "contato",
+  plan: "plano",
+  about: "sobre",
+  report: "relatório",
+};
+
+
+const translateData = (dados: any[]) => {
+  return dados.map((item) => ({
+    ...item,
+    action: translationMap[item.action as TranslationKeys],
+    tableName: translationMap[item.tableName as TranslationKeys]
+  }));
+};
+
 const RoleCard = ({ role, onEdit, onRemove, isEditing }: RoleCardProps) => {
   const [roleName, setRoleName] = useState(role.role.name);
   const [isEditingState, setIsEditingState] = useState(isEditing);
@@ -24,9 +55,10 @@ const RoleCard = ({ role, onEdit, onRemove, isEditing }: RoleCardProps) => {
     const fetchPermissions = async () => {
       try {
         const response = await api.get('/permission');
-        setPermissions(response.data);
+        const translatedPermissions = translateData(response.data);
+        setPermissions(translatedPermissions);
       } catch (error) {
-        console.error('Erro ao buscar permissões');
+        console.error('Erro ao buscar permissões.');
       }
     };
 
@@ -55,7 +87,7 @@ const RoleCard = ({ role, onEdit, onRemove, isEditing }: RoleCardProps) => {
       onEdit(role.role.id, roleName, selectedPermissions); 
       setIsEditingState(false);
     } catch (error) {
-      console.error('Erro ao salvar categoria');
+      console.error('Erro ao salvar cargo.');
     }
   };
 
@@ -64,7 +96,7 @@ const RoleCard = ({ role, onEdit, onRemove, isEditing }: RoleCardProps) => {
       await api.delete(`/role/${role.role.id}`);
       onRemove(role.role.id);
     } catch (error) {
-      console.error('Erro ao remover categoria');
+      console.error('Erro ao remover cargo.');
     }
   };
 
